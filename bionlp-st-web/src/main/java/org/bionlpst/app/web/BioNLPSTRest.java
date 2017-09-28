@@ -63,7 +63,7 @@ import org.h2.tools.RunScript;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
-@Path("api")
+@Path("")
 public class BioNLPSTRest {
 	private static final Location REST_URL_LOCATION = new Location("Request URL", 0);
 	private static final String[] TEAM_PSEUDONYMS = new String[] {
