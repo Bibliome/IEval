@@ -6,7 +6,7 @@ create table submission (
 	email varchar(512) null,
 	private boolean not null,
 	task varchar(24) not null,
-	data_set varchar(8) not null,
+	data_set varchar(10) not null,
 	description varchar(2048) null
 );
 
