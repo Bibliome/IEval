@@ -116,7 +116,8 @@ public class BioNLPSTRest {
 			host = InetAddress.getLocalHost().getHostName();
 		}
 		for (String name : getPropertiesResourceNames(user, host)) {
-			InputStream result = classLoader.getResourceAsStream("org/bionlpst/app/web/" + name + ".properties");
+			String resName = "org/bionlpst/app/web/" + name + ".properties";
+			InputStream result = classLoader.getResourceAsStream(resName);
 			if (result != null) {
 				return result;
 			}
@@ -188,7 +189,7 @@ public class BioNLPSTRest {
 		switch (set) {
 			case "train": return task.getTrainCorpus(logger);
 			case "dev": return task.getDevCorpus(logger);
-			case "traindev": return task.getTrainAndDevCorpus(logger);
+			case "train+dev": return task.getTrainAndDevCorpus(logger);
 			case "test": {
 				if (!task.hasTest()) {
 					logger.serious(REST_URL_LOCATION, "test set is not available for " + task.getName());
@@ -197,7 +198,7 @@ public class BioNLPSTRest {
 				return task.getTestCorpus(logger);
 			}
 			default: {
-				throw new RuntimeException();
+				throw new RuntimeException("unknown set: " + set);
 			}
 		}
 	}
