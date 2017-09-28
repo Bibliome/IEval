@@ -12,7 +12,6 @@ import org.bionlpst.BioNLPSTException;
 import org.bionlpst.corpus.AnnotationSetSelector;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
-import org.bionlpst.util.Location;
 import org.bionlpst.util.Util;
 import org.bionlpst.util.message.CheckLogger;
 
@@ -25,9 +24,7 @@ public abstract class CorpusSource {
 	private static final String[] EXTS_OUTPUT_ONLY = { EXT_CONTENTS, EXT_INPUT, EXT_OUTPUT };
 	
 	public void getCorpusAndReference(CheckLogger logger, Corpus corpus, boolean loadOutput) throws BioNLPSTException, IOException {
-		Location location = new Location("<<getCorpusAndReference>>", 0);
-		Collection<EntryRecord> records = collectEntries(logger, EXTS_ALL);
-		logger.information(location, "records.size() = " + records.size());
+		Collection<EntryRecord> records = collectEntries(EXTS_ALL);
 		loadDocuments(corpus, records);
 		loadInputAnnotations(logger, corpus, records);
 		if (loadOutput) {
@@ -42,19 +39,17 @@ public abstract class CorpusSource {
 	}
 	
 	public void getPredictions(CheckLogger logger, Corpus corpus) throws BioNLPSTException, IOException {
-		Collection<EntryRecord> records = collectEntries(logger, EXTS_OUTPUT_ONLY);
+		Collection<EntryRecord> records = collectEntries(EXTS_OUTPUT_ONLY);
 		loadOutputAnnotations(logger, corpus, records, AnnotationSetSelector.PREDICTION);
 	}
 	
 	protected abstract EntryIterator getEntries() throws IOException;
 
-	private Collection<EntryRecord> collectEntries(CheckLogger logger, String... exts) throws IOException {
-		Location location = new Location("<<collectEntries>>", 0);
+	private Collection<EntryRecord> collectEntries(String... exts) throws IOException {
 		Collection<EntryRecord> result = new ArrayList<EntryRecord>();
 		EntryIterator it = getEntries();
 		while (it.next()) {
 			String name = it.getName();
-			logger.information(location, "name = " + name);
 			if (matchExt(name, exts)) {
 				InputStream contents = it.getContents();
 				EntryRecord z = new EntryRecord(name, contents);

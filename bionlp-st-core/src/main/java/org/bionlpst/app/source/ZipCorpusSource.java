@@ -4,29 +4,23 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.ZipEntry;
-
-import org.apache.commons.compress.archivers.ArchiveEntry;
-import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import java.util.zip.ZipInputStream;
 
 public abstract class ZipCorpusSource extends CorpusSource {
 	@Override
 	protected EntryIterator getEntries() throws IOException {
 		InputStream is = getInputStream();
-		System.err.println("is = " + is);
-		byte[] b = new byte[2048];
-		is.read(b);
-		System.err.println("b = " + b);
-		ZipArchiveInputStream zis = new ZipArchiveInputStream(is);
+		ZipInputStream zis = new ZipInputStream(is);
 		return new ZipEntryIterator(zis);
 	}
 	
 	protected abstract InputStream getInputStream() throws IOException;
 
 	private class ZipEntryIterator implements EntryIterator {
-		private final ZipArchiveInputStream zis;
-		private ArchiveEntry currentEntry = null;
+		private final ZipInputStream zis;
+		private ZipEntry currentEntry = null;
 		
-		private ZipEntryIterator(ZipArchiveInputStream zis) {
+		private ZipEntryIterator(ZipInputStream zis) {
 			super();
 			this.zis = zis;
 		}
@@ -38,14 +32,12 @@ public abstract class ZipCorpusSource extends CorpusSource {
 
 		@Override
 		public boolean next() throws IOException {
-			currentEntry = zis.getNextZipEntry();
-			System.err.println("currentEntry = " + currentEntry);
+			currentEntry = zis.getNextEntry();
 			return currentEntry != null;
 		}
 
 		@Override
 		public void closeEntry() throws IOException {
-			
 		}
 
 		@Override

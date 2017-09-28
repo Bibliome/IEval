@@ -30,42 +30,7 @@
 	  <useIncrementalCompilation>false</useIncrementalCompilation>
 	</configuration>
       </plugin>
-      
-      <plugin>
-	<artifactId>maven-assembly-plugin</artifactId>
-	<configuration>
-          <archive>
-            <manifest>
-              <mainClass>org.bionlpst.app.cli.BioNLPSTCLI</mainClass>
-            </manifest>
-          </archive>
-          <descriptorRefs>
-          <descriptorRef>jar-with-dependencies</descriptorRef>
-          </descriptorRefs>
-	</configuration>
-      </plugin>
 
-      <!--
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <version>2.10</version>
-        <executions>
-          <execution>
-	    <id>copy-dependencies</id>
-	    <phase>package</phase>
-	    <goals>
-	      <goal>copy-dependencies</goal>
-	    </goals>
-	    <configuration>
-	      <outputDirectory>${project.build.directory}/lib</outputDirectory>
-	    </configuration>
-          </execution>
-        </executions>
-	</plugin>
-	-->
-
-      <!--
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-jar-plugin</artifactId>
@@ -76,23 +41,16 @@
 	    </manifest>
 	  </archive>
 	</configuration>
-	</plugin>
-	-->
+      </plugin>
     </plugins>
 
     <resources>
       <resource>
 	<directory>src/main/resources</directory>
-	<filtering>true</filtering>
       </resource>
     </resources>
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-compress</artifactId>
-      <version>1.14</version>
-    </dependency>
   </dependencies>
 </project>

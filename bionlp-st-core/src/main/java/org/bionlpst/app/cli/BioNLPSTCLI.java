@@ -104,7 +104,6 @@ public class BioNLPSTCLI {
 		}
 		logger.information(COMMAND_LINE_LOCATION, "loading corpus and reference data");
 		Corpus corpus = loadReference(task, evaluate);
-		System.err.println("corpus.getDocuments().size() = " + corpus.getDocuments().size());
 		flushLogger();
 
 		logger.information(COMMAND_LINE_LOCATION, "loading prediction data");
