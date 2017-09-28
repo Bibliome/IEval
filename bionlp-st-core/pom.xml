@@ -1,0 +1,72 @@
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>fr.jouy.inra.maiage.bibliome</groupId>
+    <artifactId>bionlp-st</artifactId>
+    <version>0.1</version>
+  </parent>
+  <artifactId>bionlp-st-core</artifactId>
+  <name>BioNLP-ST Core</name>
+
+  <properties>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm</maven.build.timestamp.format>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <timestamp>${maven.build.timestamp}</timestamp>
+  </properties>
+
+  <!--
+  <repositories>
+    <repository>
+      <id>bibliome</id>
+      <url>http://bibliome.jouy.inra.fr/maven-repository</url>
+    </repository>
+    </repositories>
+    -->
+
+  <build>
+    <plugins>
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-compiler-plugin</artifactId>
+	<version>3.1</version><!--$NO-MVN-MAN-VER$-->
+	<configuration>
+	  <source>1.7</source>
+	  <target>1.7</target>
+	  <useIncrementalCompilation>false</useIncrementalCompilation>
+	</configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+	    <id>copy-dependencies</id>
+	    <phase>package</phase>
+	    <goals>
+	      <goal>copy-dependencies</goal>
+	    </goals>
+	    <configuration>
+	      <outputDirectory>${project.build.directory}/lib</outputDirectory>
+	    </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
+    <resources>
+      <resource>
+	<directory>src/main/resources</directory>
+	<filtering>true</filtering>
+      </resource>
+    </resources>
+  </build>
+
+  <dependencies>
+  </dependencies>
+</project>

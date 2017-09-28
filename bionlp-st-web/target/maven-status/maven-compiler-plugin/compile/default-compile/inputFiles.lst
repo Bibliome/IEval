@@ -1,0 +1,16 @@
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/MeasureJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/ScoringJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/AnnotationJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/EvaluationJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/PairJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/CheckMessageJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/ScoringResultJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/JsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/BioNLPSTStatic.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/ListJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/BioNLPSTRest.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/TaskJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/ZipFileUploadCorpusSource.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/NumberJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/MeasureResultJsonConverter.java
+/home/rbossy/code/bionlp-st/bionlp-st-web/src/main/java/org/bionlpst/app/web/json/EvaluationResultJsonConverter.java

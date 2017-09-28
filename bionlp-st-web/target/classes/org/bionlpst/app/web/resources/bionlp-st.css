@@ -1,0 +1,368 @@
+@CHARSET "UTF-8";
+
+body {
+	background-color: #FFFFCC;
+	font-family: sans-serif;
+}
+
+#sec-menu {
+	width: 100%;
+	height: 6mm;
+}
+
+#wid-login {
+	float: right;
+	margin-right: 2mm;
+}
+
+#wid-logout {
+	float: right;
+	margin-right: 2mm;
+	display: none;
+}
+
+#wid-username {
+	float: right;
+	margin-right: 2mm;
+	display: none;
+}
+
+.jqx-link {
+	color: black !important;
+}
+
+.jqx-link:hover {
+	color: black !important;
+}
+
+.jqx-link:active {
+	color: black !important;
+}
+
+.jqx-link:focus {
+	color: black !important;
+}
+
+#sec-hero {
+	margin-top: 3mm;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#sec-hero-header {
+	font-size: 150%;
+	font-weight: bold;
+}
+
+#sec-hero-contents {
+	padding: 5mm;
+}
+
+#sec-form {
+	float: left;
+	margin-right: 5mm;
+}
+
+.help {
+	font-size: 150%;
+	font-weight: bold;
+	margin-top: 5mm;
+}
+
+#help-task {
+	
+}
+
+#wid-task {
+}
+
+.task-item {
+	width: 300;
+	padding: 2px;
+}
+
+.task-name {
+	font-size: 120%;
+	font-variant: small-caps;
+	font-weight: bold;
+}
+
+.task-name-selection {
+	margin-top: 1mm;
+}
+
+.task-description {
+	font-style: italic;
+	font-size: 80%;
+}
+
+.task-test {
+	
+}
+
+#help-set {
+	
+}
+
+#wid-set {
+}
+
+.wid-set {
+}
+
+#wid-train {
+	font-size: 120%;
+	font-weight: bold;
+	font-variant: small-caps;
+	width: 80px;
+}
+
+#wid-dev {
+	font-size: 120%;
+	font-weight: bold;
+	font-variant: small-caps;
+	width: 80px;
+}
+
+#wid-traindev {
+	font-size: 120%;
+	font-weight: bold;
+	font-variant: small-caps;
+	width: 80px;
+}
+
+#wid-test {
+	font-size: 120%;
+	font-weight: bold;
+	font-variant: small-caps;
+	width: 80px;
+}
+
+#help-action {
+	
+}
+
+#wid-action {
+}
+
+.action {
+	font-size: 80%;
+	font-variant: small-caps;
+}
+
+#help-options {
+	
+}
+
+#sec-options {
+	
+}
+
+.option-label {
+	font-weight: bold;
+	padding-left: 5mm;
+}
+
+#wid-detailed {
+	margin-top: 3mm;
+}
+
+#label-detailed {
+	margin-left: 3mm;
+}
+
+/* #wid-alternate {
+	margin-top: 5mm;
+}
+
+#label-alternate {
+	margin-left: 3mm;
+}
+ */
+#help-upload {
+	
+}
+
+#wid-upload {
+	background-color: #EEEEFF;
+}
+
+#sec-output {
+	float: left;
+	margin-top: 5mm;
+}
+
+#sec-messages {
+	width: 98%;
+	float: left;
+	margin: 1%;
+}
+
+.message {
+	margin-top: 5px;
+	padding: 2px;
+	border-radius: 3px;
+	font-family: monospace;
+}
+
+.INFORMATION {
+	background-color: #CCCCCC;
+	border: solid #000000 2px;
+}
+
+.TOLERABLE {
+	background-color: #FFCCFF;
+	border: solid #FF00FF 2px;
+}
+
+.SUSPICIOUS {
+	background-color: #FFFFCC;
+	border: solid #FF7F00 2px;
+}
+
+.SERIOUS {
+	background-color: #FFDDDD;
+	border: solid #FF0000 2px;
+}
+
+.message-location {
+	color: #444444;
+}
+
+.message-body {
+	clear: both;
+	margin-top: 2mm;
+	margin-left: 10mm;
+	font-size: 110%;
+}
+
+#sec-evaluation {
+	clear: both;
+	float: left;
+	margin-top: 5mm;
+	margin-left: 5mm;
+	margin-bottom: 5mm;
+}
+
+#sec-evaluation-notifications {
+	margin-top: 5mm;
+	margin-left: 5mm;
+	margin-right: 5mm;
+}
+
+.dismiss {
+	float: right;
+	font-size: 80%;
+}
+
+.wid-show-pairs {
+	font-size: 80%;
+}
+
+#sec-pairs {
+	float: left;
+	margin-left: 10mm;
+}
+
+#wid-pairs {
+	
+}
+
+.sec-pair-detail {
+	width: 100%;
+	height: 300px;
+}
+
+.sec-pair-detail-annotation {
+	float: left;
+	clear: both;
+	margin-top: 2mm;
+	width: 100%;
+	white-space: pre-wrap;
+}
+
+.detail-title {
+	font-weight: bold;
+	font-variant: small-caps;
+	font-size: 110%;
+}
+
+.detail-str {
+	font-style: italic;
+}
+
+.sec-pair-detail-location {
+	float: left;
+	clear: both;
+	width: 100%;
+	white-space: pre-wrap;
+}
+
+.detail-location {
+	font-family: monospace;
+}
+
+.sec-pair-detail-similarity {
+	float: left;
+	clear: both;
+	margin-top: 2mm;
+	width: 100%;
+	white-space: pre-wrap;
+}
+
+.detail-similarity {
+	font-family: monospace;
+}
+
+#sec-compare {
+}
+
+#wid-submissions {
+	margin: 3mm;
+}
+
+.my-last-submission {
+	background-color: #77FF77 !important;
+}
+
+.my-submission {
+	background-color: #DDFFDD !important;
+}
+
+.delete-submission:hover {
+	cursor: pointer;
+}
+
+.delete-submission {
+	font-size: 80%;
+	margin-top: 3px;
+	margin-left: 5px;
+	color: maroon;
+}
+
+#wid-show-tree {
+	margin-left: 3mm;
+	margin-top: 3mm;
+}
+
+#wid-delete-submissions {
+	margin-left: 10mm;
+	margin-top: 3mm;
+}
+
+#wid-tree {
+	padding: 1mm;
+}
+
+#sec-tree {
+	
+}
+
+#sec-footer {
+	clear: both;
+	width: 100%;
+	text-align: center;
+	font-size: 70%;
+	padding-top: 10mm;
+	padding-bottom: 10mm;
+}
