@@ -104,6 +104,7 @@ public class BioNLPSTCLI {
 		}
 		logger.information(COMMAND_LINE_LOCATION, "loading corpus and reference data");
 		Corpus corpus = loadReference(task, evaluate);
+		System.err.println("corpus.getDocuments().size() = " + corpus.getDocuments().size());
 		flushLogger();
 
 		logger.information(COMMAND_LINE_LOCATION, "loading prediction data");
@@ -227,6 +228,7 @@ public class BioNLPSTCLI {
 		switch (set) {
 			case "train": return task.getTrainCorpus(logger);
 			case "dev": return task.getDevCorpus(logger);
+			case "train+dev": return task.getTrainAndDevCorpus(logger);
 			case "test": {
 				if (!task.hasTest()) {
 					logger.serious(COMMAND_LINE_LOCATION, "test set is not available for " + task.getName());
@@ -287,6 +289,7 @@ public class BioNLPSTCLI {
 				}
 				case "-train":
 				case "-dev":
+				case "-train+dev":
 				case "-test": {
 					String set = opt.substring(1);
 					if (this.set != null) {
