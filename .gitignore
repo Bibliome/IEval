@@ -1,3 +1,11 @@
 bionlp-st-core/target/
 bionlp-st-web/target/
 lib/
+.project
+.settings/
+bionlp-st-core/.classpath
+bionlp-st-core/.project
+bionlp-st-core/.settings/
+bionlp-st-web/.classpath
+bionlp-st-web/.project
+bionlp-st-web/.settings/
