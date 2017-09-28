@@ -18,15 +18,6 @@
     <timestamp>${maven.build.timestamp}</timestamp>
   </properties>
 
-  <!--
-  <repositories>
-    <repository>
-      <id>bibliome</id>
-      <url>http://bibliome.jouy.inra.fr/maven-repository</url>
-    </repository>
-    </repositories>
-    -->
-
   <build>
     <plugins>
       <plugin>
@@ -40,6 +31,21 @@
 	</configuration>
       </plugin>
       
+      <plugin>
+	<artifactId>maven-assembly-plugin</artifactId>
+	<configuration>
+          <archive>
+            <manifest>
+              <mainClass>org.bionlpst.app.cli.BioNLPSTCLI</mainClass>
+            </manifest>
+          </archive>
+          <descriptorRefs>
+          <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+	</configuration>
+      </plugin>
+
+      <!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -56,7 +62,22 @@
 	    </configuration>
           </execution>
         </executions>
-      </plugin>
+	</plugin>
+	-->
+
+      <!--
+      <plugin>
+	<groupId>org.apache.maven.plugins</groupId>
+	<artifactId>maven-jar-plugin</artifactId>
+	<configuration>
+	  <archive>
+	    <manifest>
+	      <mainClass>org.bionlpst.app.cli.BioNLPSTCLI</mainClass>
+	    </manifest>
+	  </archive>
+	</configuration>
+	</plugin>
+	-->
     </plugins>
 
     <resources>
@@ -68,5 +89,10 @@
   </build>
 
   <dependencies>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <version>1.14</version>
+    </dependency>
   </dependencies>
 </project>
