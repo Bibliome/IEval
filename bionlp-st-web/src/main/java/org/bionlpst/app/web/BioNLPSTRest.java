@@ -651,7 +651,7 @@ public class BioNLPSTRest {
 		ResultSet rs = stmt.getGeneratedKeys();
 		if (rs.first()) {
 			Long result = rs.getLong(1);
-			if (result == null || result.longValue() == 0) {
+			if (result.longValue() == 0) {
 				throw new BioNLPSTException("INSERT returned nothing");
 			}
 			return result;
