@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<!-- <meta name="google-signin-client_id" content="1074131217576-go8od7l068ntmvapkh7erd7mu6c0kg96.apps.googleusercontent.com" /> -->
+
+    <title>BioNLP-ST Evaluation Services</title>
+    <link rel="stylesheet" href="lib/jqwidgets-ver3.9.0/jqwidgets/styles/jqx.base.css" type="text/css" />
+    <link rel="stylesheet" href="lib/jqwidgets-ver3.9.0/jqwidgets/styles/jqx.fresh.css" type="text/css" />
+    <link rel="stylesheet" href="lib/jqwidgets-ver3.9.0/jqwidgets/styles/jqx.highcontrast.css" type="text/css" />
+    <link rel="stylesheet" href="bionlp-st.css" type="text/css" />
+
+	<script src="https://apis.google.com/js/platform.js"></script>
+
+    <script type="text/javascript" src="lib/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxcore.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxexpander.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxbuttons.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxbuttongroup.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxradiobutton.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxcheckbox.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxswitchbutton.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxscrollbar.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxlistbox.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxdropdownlist.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxfileupload.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxdata.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxdatatable.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxtreegrid.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxmenu.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxgrid.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxgrid.columnsresize.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxgrid.sort.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxgrid.filter.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxgrid.selection.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxgrid.edit.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxgrid.grouping.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxgrid.pager.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxgrid.aggregates.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxloader.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxnotification.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxpopover.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxinput.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxpasswordinput.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxtabs.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxtree.js"></script>
+    <script type="text/javascript" src="lib/jqwidgets-ver3.9.0/jqwidgets/jqxtooltip.js"></script>
+    <script type="text/javascript" src="bionlp-st.js"></script>
+
+    <script type="text/javascript">
+    </script>
+  </head>
+<body>
+
+<div id="wid-loader"></div>
+
+<div id="wid-notification">
+    <div id="notification-contents"></div>
+</div>
+
+<div id="wid-congratulate">
+	<div>
+		<p><strong>Congratulations for your successful submission!</strong></p>
+		<p>The table below displays the evaluation results against the reference annotations in four levels:</p>
+		<ol>
+			<li>The evaluation on all documents. If you checked <em>Evaluation details</em>, the table displays the results for each document.</li>
+			<li>The reference/prediction annotation pairing scheme. If you checked <em>Evaluation details</em>, the <em>Show pairs</em> button displays reference/prediction annotation pair details.</li>
+			<li>The evaluation scheme: the first one is the main evaluation, the following ones provide more insights on your predictions.</li>
+			<li>Measures. Participants will be ranked by the first measure.</li>
+		</ol>
+		<p class="dismiss">Click to dismiss</p>
+	</div>
+</div>
+
+<div id="wid-ask-login">
+	<div>
+		<h3>You are using this service as an anonymous user</h3>
+		<p>Consider signing in with a google account (top-right of the page) to keep track of your experiments.</p>
+		
+		<h3>Privacy statement</h3>
+		<p>The only information required by this service are your identifier, name and e-mail. No other information is accessed.</p>
+		<p>Your submissions remain anonymous to other users.</p>
+		<p class="dismiss">Click to dismiss</p>
+	</div>
+</div>
+
+<div id="sec-menu">
+	<button id="wid-login">Sign in</button>
+	<button id="wid-logout">Log out</button>
+	<button id="wid-username"></button>
+</div>
+
+<div id="sec-hero">
+	<div id="sec-hero-header">BioNLP-ST 2016 Evaluation Service</div>
+	<div id="sec-hero-contents">
+		<p>
+			Evaluate your SeeDev and BB predictions, keep track of your previous experiments, and compare your results with other participants.
+		</p>
+		<p>
+			Please refer to the <a href="http://2016.bionlp-st.org/" target="_blank">BioNLP-ST 2016 homepage</a> for tasks description and datasets.
+			This service offers evaluations for <a href="http://2016.bionlp-st.org/tasks/seedev/evaluation" target="_blank">SeeDev</a>, and <a href="http://2016.bionlp-st.org/tasks/bb2/evaluation" target="_blank">BB</a> tasks.
+		</p>
+
+		<h3>Submit a prediction</h3>
+		<p>
+			The submission form is on the left. Chose the task and the working set, then upload a zip archive containing your predictions.
+		</p>
+		<p>
+			When you upload the archive, the evaluation results are displayed on the main panel. If your files are not well-formed, errors and warnings are displayed in the <em>Messages</em> tab.
+		</p>
+		
+		<h3>Compare submissions</h3>
+		<p>
+			The <em>Compare submissions</em> tab displays a table with all submissions.
+			Your last submission is highlighted in green, and if you are logged in your previous submissions are highlighted in light green.
+		</p>
+		<p>
+			You may sign in with a Google account on the top-right corner of this page to keep track of your submissions.
+		</p>
+		
+		<h3>Your privacy</h3>
+		<p>
+			When you sign in, this service only requires your basic profile on Google.
+			That means your identifier, name and e-mail.
+			No other information is accessed.
+		</p>
+		<p>
+			Your submissions remain anonymous to other users.
+		</p>
+		
+		<h3>Got it</h3>
+		<p>
+			You can hide this spiel by clicking on the header.
+		</p>
+		<p>
+			Questions and suggestions on the forums dedicated to <a href="http://2016.bionlp-st.org/tasks/seedev/seedev-forum" target="_blank">SeeDev</a> and <a href="http://2016.bionlp-st.org/tasks/bb2/bb3-forum" target="_blank">BB</a> tasks.
+		</p>
+		<p>
+			Good luck!
+		</p>
+	</div>
+</div>
+<div id="sec-form">
+	<div class="help" id="help-task">Task
+		<div id="wid-task"></div>
+	</div>
+
+	<div class="help" id="help-set">Working set
+		<div id="wid-set">
+			<button id="wid-train" class="wid-set">Train</button>
+			<button id="wid-dev" class="wid-set">Dev</button>
+			<button id="wid-traindev" class="wid-set">Train+Dev</button>
+			<button id="wid-test" class="wid-set">Test</button>
+		</div>
+	</div>
+	
+	<div class="help" id="help-action">Action
+		<div id="wid-action">
+		</div>
+	</div>
+	
+	<div class="help" id="help-options">Options</div>
+	<div id="sec-options">
+		<div id="wid-detailed">
+			<div class="option-label" id="label-detailed">Evaluation details</div>
+		</div>
+
+		<!-- <div id="wid-alternate">
+		<div class="option-label" id="label-alternate">Secondary scores</div>
+		</div> -->
+	</div>
+	
+	<div class="help" id="help-upload">Upload predictions
+		<div id="wid-upload">
+		</div>
+	</div>
+</div>
+<div id="sec-output">
+	<ul>
+		<li id="tab-result">Evaluation results</li>
+		<li id="tab-messages">Messages</li>
+		<li id="tab-compare">Compare submissions</li>
+	</ul>
+	<div id="sec-evaluation-tab">
+		<div id="sec-evaluation-notifications">
+		</div>
+		<div id="sec-evaluation">
+		</div>
+		<div id="sec-pairs">
+		</div>
+	</div>
+	<div id="sec-messages">
+	</div>
+	<div id="sec-compare">
+		<button id="wid-show-tree">Columns</button>
+		<button id="wid-delete-submissions">Delete selected</button>
+		<div id="sec-tree">
+			<div id="wid-tree"></div>
+		</div>
+		<div id="wid-submissions"></div>
+	</div>
+</div>
+
+<div id="sec-footer">
+© 2016 Institut National de la Recherche Agronomique
+</div>
+</body>
+</html>
