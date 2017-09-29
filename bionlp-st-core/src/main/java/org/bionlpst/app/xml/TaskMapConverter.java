@@ -7,9 +7,8 @@ import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.Task;
 import org.bionlpst.util.Util;
 import org.bionlpst.util.dom.DOMElementConverter;
+import org.bionlpst.util.dom.DOMUtil;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 //import com.sun.xml.internal.ws.util.DOMUtil;
 
@@ -30,18 +29,13 @@ public class TaskMapConverter implements DOMElementConverter<Map<String,Task>> {
 
 	@Override
 	public Map<String,Task> convert(Element element) throws Exception {
-		NodeList children = element.getChildNodes();
-		for (int i = 0; i < children.getLength(); ++i) {
-			Node childNode = children.item(i);
-			if (childNode instanceof Element) {
-				Element child = (Element) childNode;
-				Task task = taskConverter.convert(child);
-				String name = task.getName();
-				if (result.containsKey(name)) {
-					throw new BioNLPSTException("duplicate task: " + name);
-				}
-				result.put(name, task);
+		for (Element child : DOMUtil.getChildrenElements(element)) {
+			Task task = taskConverter.convert(child);
+			String name = task.getName();
+			if (result.containsKey(name)) {
+				throw new BioNLPSTException("duplicate task: " + name);
 			}
+			result.put(name, task);
 		}
 		if (result.isEmpty()) {
 			throw new BioNLPSTException("missing task descriptions");
