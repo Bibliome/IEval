@@ -27,1486 +27,1323 @@
 ">
 ]>
 <task-definition>
-	<task name="SeeDev-full">
-		<description>N-ary event extraction of genetic and molecular
-			mechanisms involved in plant seed development.</description>
-		<schema>
-			<text-bound type="Gene" />
-			<text-bound type="Gene_Family" />
-			<text-bound type="Box" />
-			<text-bound type="Promoter" />
-			<text-bound type="RNA" />
-			<text-bound type="Protein" />
-			<text-bound type="Protein_Family" />
-			<text-bound type="Protein_Complex" />
-			<text-bound type="Protein_Domain" />
-			<text-bound type="Hormone" />
-			<text-bound type="Regulatory_Network" />
-			<text-bound type="Pathway" />
-			<text-bound type="Genotype" />
-			<text-bound type="Tissue" />
-			<text-bound type="Development_Phase" />
-			<text-bound type="Environmental_Factor" />
-			<relation type="Binding">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Functional_Molecule,Molecule,&conditions;
-				</roles>
-				<mandatory-arguments>Functional_Molecule,Molecule</mandatory-arguments>
-				<argument-types role="Functional_Molecule">&functional-molecule;
-				</argument-types>
-				<argument-types role="Molecule">&molecule;
-				</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Primary_Structure_Composition">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>DNA_Part,DNA,&conditions;
-				</roles>
-				<mandatory-arguments>DNA_Part,DNA</mandatory-arguments>
-				<argument-types role="DNA_Part">Box,Promoter</argument-types>
-				<argument-types role="DNA">&dna;
-				</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Protein_Complex_Composition">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Amino_Acid_Sequence,Protein_Complex,&conditions;
-				</roles>
-				<mandatory-arguments>Amino_Acid_Sequence,Protein_Complex</mandatory-arguments>
-				<argument-types role="Amino_Acid_Sequence">Protein,Protein_Family,Protein_Complex,Protein_Domain</argument-types>
-				<argument-types role="Protein_Complex">Protein_Complex</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Presence_At_Stage">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Functional_Molecule,Development,&conditions;
-				</roles>
-				<mandatory-arguments>Functional_Molecule,Development</mandatory-arguments>
-				<argument-types role="Functional_Molecule">&functional-molecule;
-				</argument-types>
-				<argument-types role="Development">Development_Phase</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Presence_In_Genotype">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Molecule,Element,Genotype</roles>
-				<mandatory-arguments>Genotype</mandatory-arguments>
-				<mandatory-alternatives exclusive="true">Molecule,Element</mandatory-alternatives>
-				<argument-types role="Molecule">&molecule;
-				</argument-types>
-				<argument-types role="Element">&internal-factor;
-				</argument-types>
-				<argument-types role="Genotype">Genotype</argument-types>
-			</relation>
-			<relation type="Sequence_Identity">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Element1,Element2,&conditions;
-				</roles>
-				<mandatory-arguments>Element1,Element2</mandatory-arguments>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Interaction">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Target,&conditions;
-				</roles>
-				<mandatory-arguments>Agent,Target</mandatory-arguments>
-				<!-- <argument-types role="Agent">&molecule;,&process;,Environmental_Factor</argument-types> 
-					<argument-types role="Target">&molecule;,&process;,&factor;</argument-types> -->
-				<argument-types role="Agent">&molecule;
-				</argument-types>
-				<argument-types role="Target">&molecule;
-				</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Functional_Equivalence">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Element1,Element2,&conditions;
-				</roles>
-				<mandatory-arguments>Element1,Element2</mandatory-arguments>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Involvement_In_Process">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Participant,Process,&conditions;
-				</roles>
-				<mandatory-arguments>Participant,Process</mandatory-arguments>
-				<argument-types role="Participant">&molecule;
-				</argument-types>
-				<argument-types role="Process">&process;
-				</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Localization">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Functional_Molecule,Process,Target_Tissue,&conditions;
-				</roles>
-				<mandatory-arguments>Target_Tissue</mandatory-arguments>
-				<mandatory-alternatives exclusive="true">Functional_Molecule,Process</mandatory-alternatives>
-				<argument-types role="Functional_Molecule">&functional-molecule;
-				</argument-types>
-				<argument-types role="Process">&process;
-				</argument-types>
-				<argument-types role="Target_Tissue">Tissue</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Family_Membership">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Element,Family,&conditions;
-				</roles>
-				<mandatory-arguments>Element,Family</mandatory-arguments>
-				<argument-types role="Element">Gene,Gene_Family,Protein,Protein_Domain,Protein_Family,RNA</argument-types>
-				<argument-types role="Family">Gene_Family,Protein_Family,RNA</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Protein_Domain_Composition">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Domain,Product,&conditions;
-				</roles>
-				<mandatory-arguments>Domain,Product</mandatory-arguments>
-				<argument-types role="Domain">Protein_Domain</argument-types>
-				<argument-types role="Product">&dna-product;
-				</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Occurrence_During">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Process,Development,&conditions;
-				</roles>
-				<mandatory-arguments>Process,Development</mandatory-arguments>
-				<argument-types role="Process">&process;
-				</argument-types>
-				<argument-types role="Development">Development_Phase</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Occurrence_In_Genotype">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Process,Genotype,&conditions;
-				</roles>
-				<mandatory-arguments>Process,Genotype</mandatory-arguments>
-				<argument-types role="Process">&process;
-				</argument-types>
-				<argument-types role="Genotype">Genotype</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Regulation_Of_Accumulation">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Functional_Molecule,&conditions;
-				</roles>
-				<mandatory-arguments>Agent,Functional_Molecule</mandatory-arguments>
-				<argument-types role="Functional_Molecule">&functional-molecule;
-				</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Regulation_Of_Development_Phase">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Development,&conditions;
-				</roles>
-				<mandatory-arguments>Agent,Development</mandatory-arguments>
-				<argument-types role="Development">Development_Phase</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Regulation_Of_Expression">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,DNA,&conditions;
-				</roles>
-				<mandatory-arguments>Agent,DNA</mandatory-arguments>
-				<argument-types role="DNA">&dna;
-				</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Regulation_Of_Molecule_Activity">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Molecule,&conditions;
-				</roles>
-				<mandatory-arguments>Agent,Molecule</mandatory-arguments>
-				<argument-types role="Molecule">&molecule;
-				</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Regulation_Of_Process">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Process,&conditions;
-				</roles>
-				<mandatory-arguments>Agent,Process</mandatory-arguments>
-				<argument-types role="Process">&process;
-				</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Regulation_Of_Tissue_Development">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Target_Tissue,&conditions;
-				</roles>
-				<mandatory-arguments>Agent,Target_Tissue</mandatory-arguments>
-				<argument-types role="Target_Tissue">Tissue</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<relation type="Transcription_Or_Translation">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Source,Product,&conditions;
-				</roles>
-				<mandatory-arguments>Source,Product</mandatory-arguments>
-				<argument-types role="Source">&dna;,RNA
-				</argument-types>
-				<argument-types role="Product">&dna-product;
-				</argument-types>
-				&nominalized-condition-types;
-			</relation>
-			<modifier type="Negation">
-				<annotation-types>Binding,Primary_Structure_Composition,Protein_Complex_Composition,Presence_At_Stage,Presence_In_Genotype,Sequence_Identity,Interaction,Functional_Equivalence,Involvement_In_Process,Localization,Family_Membership,Protein_Domain_Composition,Occurrence_During,Occurrence_In_Genotype,Regulation_Of_Accumulation,Regulation_Of_Development_Phase,Regulation_Of_Expression,Regulation_Of_Molecule_Activity,Regulation_Of_Process,Regulation_Of_Tissue_Development,Transcription_Or_Translation</annotation-types>
-			</modifier>
-		</schema>
-		<evaluation name="Standard pairing">
-			<pre-filter>
-				<relation />
-			</pre-filter>
-			<matching-similarity>
-				<custom>org.bionlpst.evaluation.similarity.SeeDevFull</custom>
-			</matching-similarity>
-			<scoring name="Main scoring">
-				<measure>ser</measure>
-				<measure>mismatches</measure>
-				<measure>insertions</measure>
-				<measure>deletions</measure>
-				<measure>precision</measure>
-				<measure>recall</measure>
-			</scoring>
-			<type-scorings>
-				<types>Binds_To,Composes_Primary_Structure,Composes_Protein_Complex,Exists_At_Stage,Exists_In_Genotype,Has_Sequence_Identical_To,Interacts_With,Is_Functionally_Equivalent_To,Is_Involved_In_Process,Is_Localized_In,Is_Member_Of_Family,Is_Protein_Domain_Of,Occurs_In_Genotype,Occurs_During,Regulates_Accumulation,Regulates_Development_Phase,Regulates_Expression,Regulates_Molecule_Activity,Regulates_Process,Regulates_Tissue_Development,Transcribes_Or_Translates_To,Is_Linked_To,Is_Functionally_Equivalent_To,Has_Sequence_Identical_To</types>
-			</type-scorings>
-		</evaluation>
-		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_train.zip" />
-		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_dev.zip" />
-		<!--
-		<test
-			zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_test_WITH_ANSWERS.zip"
-			with-reference="true" />
-			-->
-	</task>
+  <task name="SeeDev-full">
+    <description>N-ary event extraction of genetic and molecular
+    mechanisms involved in plant seed development.</description>
+    <schema>
+      <text-bound type="Gene" />
+      <text-bound type="Gene_Family" />
+      <text-bound type="Box" />
+      <text-bound type="Promoter" />
+      <text-bound type="RNA" />
+      <text-bound type="Protein" />
+      <text-bound type="Protein_Family" />
+      <text-bound type="Protein_Complex" />
+      <text-bound type="Protein_Domain" />
+      <text-bound type="Hormone" />
+      <text-bound type="Regulatory_Network" />
+      <text-bound type="Pathway" />
+      <text-bound type="Genotype" />
+      <text-bound type="Tissue" />
+      <text-bound type="Development_Phase" />
+      <text-bound type="Environmental_Factor" />
+      <relation type="Binding">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Functional_Molecule,Molecule,&conditions;
+	</roles>
+	<mandatory-arguments>Functional_Molecule,Molecule</mandatory-arguments>
+	<argument-types role="Functional_Molecule">&functional-molecule;
+	</argument-types>
+	<argument-types role="Molecule">&molecule;
+	</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Primary_Structure_Composition">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>DNA_Part,DNA,&conditions;
+	</roles>
+	<mandatory-arguments>DNA_Part,DNA</mandatory-arguments>
+	<argument-types role="DNA_Part">Box,Promoter</argument-types>
+	<argument-types role="DNA">&dna;
+	</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Protein_Complex_Composition">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Amino_Acid_Sequence,Protein_Complex,&conditions;
+	</roles>
+	<mandatory-arguments>Amino_Acid_Sequence,Protein_Complex</mandatory-arguments>
+	<argument-types role="Amino_Acid_Sequence">Protein,Protein_Family,Protein_Complex,Protein_Domain</argument-types>
+	<argument-types role="Protein_Complex">Protein_Complex</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Presence_At_Stage">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Functional_Molecule,Development,&conditions;
+	</roles>
+	<mandatory-arguments>Functional_Molecule,Development</mandatory-arguments>
+	<argument-types role="Functional_Molecule">&functional-molecule;
+	</argument-types>
+	<argument-types role="Development">Development_Phase</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Presence_In_Genotype">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Molecule,Element,Genotype</roles>
+	<mandatory-arguments>Genotype</mandatory-arguments>
+	<mandatory-alternatives exclusive="true">Molecule,Element</mandatory-alternatives>
+	<argument-types role="Molecule">&molecule;
+	</argument-types>
+	<argument-types role="Element">&internal-factor;
+	</argument-types>
+	<argument-types role="Genotype">Genotype</argument-types>
+      </relation>
+      <relation type="Sequence_Identity">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Element1,Element2,&conditions;
+	</roles>
+	<mandatory-arguments>Element1,Element2</mandatory-arguments>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Interaction">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Target,&conditions;
+	</roles>
+	<mandatory-arguments>Agent,Target</mandatory-arguments>
+	<!-- <argument-types role="Agent">&molecule;,&process;,Environmental_Factor</argument-types> 
+	     <argument-types role="Target">&molecule;,&process;,&factor;</argument-types> -->
+	<argument-types role="Agent">&molecule;
+	</argument-types>
+	<argument-types role="Target">&molecule;
+	</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Functional_Equivalence">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Element1,Element2,&conditions;
+	</roles>
+	<mandatory-arguments>Element1,Element2</mandatory-arguments>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Involvement_In_Process">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Participant,Process,&conditions;
+	</roles>
+	<mandatory-arguments>Participant,Process</mandatory-arguments>
+	<argument-types role="Participant">&molecule;
+	</argument-types>
+	<argument-types role="Process">&process;
+	</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Localization">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Functional_Molecule,Process,Target_Tissue,&conditions;
+	</roles>
+	<mandatory-arguments>Target_Tissue</mandatory-arguments>
+	<mandatory-alternatives exclusive="true">Functional_Molecule,Process</mandatory-alternatives>
+	<argument-types role="Functional_Molecule">&functional-molecule;
+	</argument-types>
+	<argument-types role="Process">&process;
+	</argument-types>
+	<argument-types role="Target_Tissue">Tissue</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Family_Membership">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Element,Family,&conditions;
+	</roles>
+	<mandatory-arguments>Element,Family</mandatory-arguments>
+	<argument-types role="Element">Gene,Gene_Family,Protein,Protein_Domain,Protein_Family,RNA</argument-types>
+	<argument-types role="Family">Gene_Family,Protein_Family,RNA</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Protein_Domain_Composition">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Domain,Product,&conditions;
+	</roles>
+	<mandatory-arguments>Domain,Product</mandatory-arguments>
+	<argument-types role="Domain">Protein_Domain</argument-types>
+	<argument-types role="Product">&dna-product;
+	</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Occurrence_During">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Process,Development,&conditions;
+	</roles>
+	<mandatory-arguments>Process,Development</mandatory-arguments>
+	<argument-types role="Process">&process;
+	</argument-types>
+	<argument-types role="Development">Development_Phase</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Occurrence_In_Genotype">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Process,Genotype,&conditions;
+	</roles>
+	<mandatory-arguments>Process,Genotype</mandatory-arguments>
+	<argument-types role="Process">&process;
+	</argument-types>
+	<argument-types role="Genotype">Genotype</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Regulation_Of_Accumulation">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Functional_Molecule,&conditions;
+	</roles>
+	<mandatory-arguments>Agent,Functional_Molecule</mandatory-arguments>
+	<argument-types role="Functional_Molecule">&functional-molecule;
+	</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Regulation_Of_Development_Phase">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Development,&conditions;
+	</roles>
+	<mandatory-arguments>Agent,Development</mandatory-arguments>
+	<argument-types role="Development">Development_Phase</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Regulation_Of_Expression">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,DNA,&conditions;
+	</roles>
+	<mandatory-arguments>Agent,DNA</mandatory-arguments>
+	<argument-types role="DNA">&dna;
+	</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Regulation_Of_Molecule_Activity">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Molecule,&conditions;
+	</roles>
+	<mandatory-arguments>Agent,Molecule</mandatory-arguments>
+	<argument-types role="Molecule">&molecule;
+	</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Regulation_Of_Process">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Process,&conditions;
+	</roles>
+	<mandatory-arguments>Agent,Process</mandatory-arguments>
+	<argument-types role="Process">&process;
+	</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Regulation_Of_Tissue_Development">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Target_Tissue,&conditions;
+	</roles>
+	<mandatory-arguments>Agent,Target_Tissue</mandatory-arguments>
+	<argument-types role="Target_Tissue">Tissue</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <relation type="Transcription_Or_Translation">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Source,Product,&conditions;
+	</roles>
+	<mandatory-arguments>Source,Product</mandatory-arguments>
+	<argument-types role="Source">&dna;,RNA
+	</argument-types>
+	<argument-types role="Product">&dna-product;
+	</argument-types>
+	&nominalized-condition-types;
+      </relation>
+      <modifier type="Negation">
+	<annotation-types>Binding,Primary_Structure_Composition,Protein_Complex_Composition,Presence_At_Stage,Presence_In_Genotype,Sequence_Identity,Interaction,Functional_Equivalence,Involvement_In_Process,Localization,Family_Membership,Protein_Domain_Composition,Occurrence_During,Occurrence_In_Genotype,Regulation_Of_Accumulation,Regulation_Of_Development_Phase,Regulation_Of_Expression,Regulation_Of_Molecule_Activity,Regulation_Of_Process,Regulation_Of_Tissue_Development,Transcription_Or_Translation</annotation-types>
+      </modifier>
+    </schema>
+    <evaluation name="Standard pairing">
+      <pre-filter>
+	<relation />
+      </pre-filter>
+      <matching-similarity>
+	<custom>org.bionlpst.evaluation.similarity.SeeDevFull</custom>
+      </matching-similarity>
+      <scoring name="Main scoring">
+	<measure>ser</measure>
+	<measure>mismatches</measure>
+	<measure>insertions</measure>
+	<measure>deletions</measure>
+	<measure>precision</measure>
+	<measure>recall</measure>
+      </scoring>
+      <type-scorings>
+	<types>Binds_To,Composes_Primary_Structure,Composes_Protein_Complex,Exists_At_Stage,Exists_In_Genotype,Has_Sequence_Identical_To,Interacts_With,Is_Functionally_Equivalent_To,Is_Involved_In_Process,Is_Localized_In,Is_Member_Of_Family,Is_Protein_Domain_Of,Occurs_In_Genotype,Occurs_During,Regulates_Accumulation,Regulates_Development_Phase,Regulates_Expression,Regulates_Molecule_Activity,Regulates_Process,Regulates_Tissue_Development,Transcribes_Or_Translates_To,Is_Linked_To,Is_Functionally_Equivalent_To,Has_Sequence_Identical_To</types>
+      </type-scorings>
+    </evaluation>
+    <train zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_train.zip" />
+    <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_dev.zip" />
+    <!--
+	<test
+	zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_test_WITH_ANSWERS.zip"
+	with-reference="true" />
+    -->
+  </task>
 
-	<task name="SeeDev-binary">
-		<description>Binary event extraction of genetic and molecular
-			mechanisms involved in plant seed development.</description>
-		<schema>
-			<text-bound type="Gene" />
-			<text-bound type="Gene_Family" />
-			<text-bound type="Box" />
-			<text-bound type="Promoter" />
-			<text-bound type="RNA" />
-			<text-bound type="Protein" />
-			<text-bound type="Protein_Family" />
-			<text-bound type="Protein_Complex" />
-			<text-bound type="Protein_Domain" />
-			<text-bound type="Hormone" />
-			<text-bound type="Regulatory_Network" />
-			<text-bound type="Pathway" />
-			<text-bound type="Genotype" />
-			<text-bound type="Tissue" />
-			<text-bound type="Development_Phase" />
-			<text-bound type="Environmental_Factor" />
-			<relation type="Binds_To">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Functional_Molecule,Molecule</roles>
-				<mandatory-arguments>Functional_Molecule,Molecule</mandatory-arguments>
-				<argument-types role="Functional_Molecule">&functional-molecule;
-				</argument-types>
-				<argument-types role="Molecule">&molecule;
-				</argument-types>
-			</relation>
-			<relation type="Composes_Primary_Structure">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>DNA_Part,DNA</roles>
-				<mandatory-arguments>DNA_Part,DNA</mandatory-arguments>
-				<argument-types role="DNA_Part">Box,Promoter</argument-types>
-				<argument-types role="DNA">&dna;
-				</argument-types>
-			</relation>
-			<relation type="Composes_Protein_Complex">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Amino_Acid_Sequence,Protein_Complex</roles>
-				<mandatory-arguments>Amino_Acid_Sequence,Protein_Complex</mandatory-arguments>
-				<argument-types role="Amino_Acid_Sequence">Protein,Protein_Family,Protein_Complex,Protein_Domain</argument-types>
-				<argument-types role="Protein_Complex">Protein_Complex</argument-types>
-			</relation>
-			<relation type="Exists_At_Stage">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Functional_Molecule,Development</roles>
-				<mandatory-arguments>Functional_Molecule,Development</mandatory-arguments>
-				<argument-types role="Functional_Molecule">&functional-molecule;
-				</argument-types>
-				<argument-types role="Development">Development_Phase</argument-types>
-			</relation>
-			<relation type="Exists_In_Genotype">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Molecule,Element,Genotype</roles>
-				<mandatory-arguments>Genotype</mandatory-arguments>
-				<mandatory-alternatives exclusive="true">Molecule,Element</mandatory-alternatives>
-				<argument-types role="Molecule">&molecule;
-				</argument-types>
-				<argument-types role="Element">&internal-factor;
-				</argument-types>
-				<argument-types role="Genotype">Genotype</argument-types>
-			</relation>
-			<relation type="Has_Sequence_Identical_To">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Element1,Element2</roles>
-				<mandatory-arguments>Element1,Element2</mandatory-arguments>
-			</relation>
-			<relation type="Interacts_With">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Target</roles>
-				<mandatory-arguments>Agent,Target</mandatory-arguments>
-				<argument-types role="Agent">&molecule;,&process;,Environmental_Factor
-				</argument-types>
-				<argument-types role="Agent">&molecule;,&process;,&factor;
-				</argument-types>
-			</relation>
-			<relation type="Is_Functionally_Equivalent_To">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Element1,Element2</roles>
-				<mandatory-arguments>Element1,Element2</mandatory-arguments>
-			</relation>
-			<relation type="Is_Involved_In_Process">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Participant,Process</roles>
-				<mandatory-arguments>Participant,Process</mandatory-arguments>
-				<argument-types role="Participant">&molecule;
-				</argument-types>
-				<argument-types role="Process">&process;
-				</argument-types>
-			</relation>
-			<relation type="Is_Localized_In">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Functional_Molecule,Process,Target_Tissue</roles>
-				<mandatory-arguments>Target_Tissue</mandatory-arguments>
-				<mandatory-alternatives exclusive="true">Functional_Molecule,Process</mandatory-alternatives>
-				<argument-types role="Functional_Molecule">&functional-molecule;
-				</argument-types>
-				<argument-types role="Process">&process;
-				</argument-types>
-				<argument-types role="Target_Tissue">Tissue</argument-types>
-			</relation>
-			<relation type="Is_Member_Of_Family">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Element,Family</roles>
-				<mandatory-arguments>Element,Family</mandatory-arguments>
-				<argument-types role="Element">Gene,Gene_Family,Protein,Protein_Domain,Protein_Family,RNA</argument-types>
-				<argument-types role="Family">Gene_Family,Protein_Family,RNA</argument-types>
-			</relation>
-			<relation type="Is_Protein_Domain_Of">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Domain,Product</roles>
-				<mandatory-arguments>Domain,Product</mandatory-arguments>
-				<argument-types role="Domain">Protein_Domain</argument-types>
-				<argument-types role="Product">&dna-product;
-				</argument-types>
-			</relation>
-			<relation type="Occurs_During">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Process,Development</roles>
-				<mandatory-arguments>Process,Development</mandatory-arguments>
-				<argument-types role="Process">&process;
-				</argument-types>
-				<argument-types role="Development">Development_Phase</argument-types>
-			</relation>
-			<relation type="Occurs_In_Genotype">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Process,Genotype</roles>
-				<mandatory-arguments>Process,Genotype</mandatory-arguments>
-				<argument-types role="Process">&process;
-				</argument-types>
-				<argument-types role="Genotype">Genotype</argument-types>
-			</relation>
-			<relation type="Regulates_Accumulation">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Functional_Molecule</roles>
-				<mandatory-arguments>Agent,Functional_Molecule</mandatory-arguments>
-				<argument-types role="Functional_Molecule">&functional-molecule;
-				</argument-types>
-			</relation>
-			<relation type="Regulates_Development_Phase">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Development</roles>
-				<mandatory-arguments>Agent,Development</mandatory-arguments>
-				<argument-types role="Development">Development_Phase</argument-types>
-			</relation>
-			<relation type="Regulates_Expression">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,DNA</roles>
-				<mandatory-arguments>Agent,DNA</mandatory-arguments>
-				<argument-types role="DNA">&dna;
-				</argument-types>
-			</relation>
-			<relation type="Regulates_Molecule_Activity">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Molecule</roles>
-				<mandatory-arguments>Agent,Molecule</mandatory-arguments>
-				<argument-types role="Molecule">&molecule;
-				</argument-types>
-			</relation>
-			<relation type="Regulates_Process">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Process</roles>
-				<mandatory-arguments>Agent,Process</mandatory-arguments>
-				<argument-types role="Process">&process;
-				</argument-types>
-			</relation>
-			<relation type="Regulates_Tissue_Development">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Agent,Target_Tissue</roles>
-				<mandatory-arguments>Agent,Target_Tissue</mandatory-arguments>
-				<argument-types role="Target_Tissue">Tissue</argument-types>
-			</relation>
-			<relation type="Transcribes_Or_Translates_To">
-				<backreference-cardinality at-most="1">Negation</backreference-cardinality>
-				<roles>Source,Product</roles>
-				<mandatory-arguments>Source,Product</mandatory-arguments>
-				<argument-types role="Source">&dna;,RNA
-				</argument-types>
-				<argument-types role="Product">&dna-product;
-				</argument-types>
-			</relation>
-			<relation type="Is_Linked_To">
-				<roles>Agent1,Agent2</roles>
-				<mandatory-arguments>Agent1,Agent2</mandatory-arguments>
-			</relation>
-		</schema>
-		<evaluation name="Standard pairing">
-			<matching-similarity>
-				<same-type-and-arguments
-					commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
-					<Has_Sequence_Identical_To new-type="Is_Functionally_Equivalent_To" />
-				</same-type-and-arguments>
-			</matching-similarity>
-			<scoring name="All Relations">
-				<f1-measures/>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-				<measure>false-positives</measure>
-			</scoring>
-			<type-scorings>
-				<types>Binds_To,Composes_Primary_Structure,Composes_Protein_Complex,Exists_At_Stage,Exists_In_Genotype,Interacts_With,Is_Involved_In_Process,Is_Localized_In,Is_Member_Of_Family,Is_Protein_Domain_Of,Occurs_In_Genotype,Occurs_During,Regulates_Accumulation,Regulates_Development_Phase,Regulates_Expression,Regulates_Molecule_Activity,Regulates_Process,Regulates_Tissue_Development,Transcribes_Or_Translates_To,Is_Linked_To,Is_Functionally_Equivalent_To,Has_Sequence_Identical_To</types>
-			</type-scorings>
-		</evaluation>
-		<evaluation name="Inside sentences">
-			<matching-similarity>
-				<same-type-and-arguments
-					commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
-					<Has_Sequence_Identical_To new-type="Is_Functionally_Equivalent_To" />
-				</same-type-and-arguments>
-			</matching-similarity>
-			<pre-filter>
-				<same-sentence jar="org/bionlpst/data/SeeDev-sentences.txt" />
-			</pre-filter>
-			<scoring name="All Relations">
-				<f1-measures/>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-				<measure>false-positives</measure>
-			</scoring>
-			<type-scorings>
-				<types>Binds_To,Composes_Primary_Structure,Composes_Protein_Complex,Exists_At_Stage,Exists_In_Genotype,Interacts_With,Is_Involved_In_Process,Is_Localized_In,Is_Member_Of_Family,Is_Protein_Domain_Of,Occurs_In_Genotype,Occurs_During,Regulates_Accumulation,Regulates_Development_Phase,Regulates_Expression,Regulates_Molecule_Activity,Regulates_Process,Regulates_Tissue_Development,Transcribes_Or_Translates_To,Is_Linked_To,Is_Functionally_Equivalent_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To,Has_Sequence_Identical_To</types>
-			</type-scorings>
-		</evaluation>
-		<evaluation
-			name="Cluster: Comparison (commutative)">
-			<matching-similarity>
-				<same-type-and-arguments
-					commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
-					<Has_Sequence_Identical_To new-type="Is_Functionally_Equivalent_To" />
-				</same-type-and-arguments>
-			</matching-similarity>
-			<scoring name="Standard">
-				<post-filter>
-					<types>Is_Functionally_Equivalent_To,Has_Sequence_Identical_To</types>
-				</post-filter>
-				<f1-measures/>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-				<measure>false-positives</measure>
-			</scoring>
-		</evaluation>
-		<evaluation
-			name="Cluster: Where and When">
-			<matching-similarity>
-				<same-type-and-arguments
-					commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
-					<Exists_In_Genotype new-type="Where_When">
-						<Molecule>Agent</Molecule>
-						<Element>Agent</Element>
-						<Genotype>Target</Genotype>
-					</Exists_In_Genotype>
-					<Occurs_In_Genotype new-type="Where_When">
-						<Process>Agent</Process>
-						<Genotype>Target</Genotype>
-					</Occurs_In_Genotype>
-					<Exists_At_Stage new-type="Where_When">
-						<Functional_Molecule>Agent</Functional_Molecule>
-						<Development>Target</Development>
-					</Exists_At_Stage>
-					<Occurs_During new-type="Where_When">
-						<Process>Agent</Process>
-						<Development>Target</Development>
-					</Occurs_During>
-					<Is_Localized_In new-type="Where_When">
-						<Functional_Molecule>Agent</Functional_Molecule>
-						<Process>Agent</Process>
-						<Target_Tissue>Target</Target_Tissue>
-					</Is_Localized_In>
-				</same-type-and-arguments>
-			</matching-similarity>
-			<scoring name="Standard">
-				<post-filter>
-					<types>Exists_In_Genotype,Occurs_In_Genotype,Exists_At_Stage,Occurs_During,Is_Localized_In</types>
-				</post-filter>
-				<f1-measures/>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-				<measure>false-positives</measure>
-			</scoring>
-		</evaluation>
-		<evaluation
-			name="Cluster: Function (commutative)">
-			<matching-similarity>
-				<same-type-and-arguments
-					commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To,Function">
-					<Is_Involved_In_Process new-type="Function">
-						<Participant>Agent</Participant>
-						<Process>Target</Process>
-					</Is_Involved_In_Process>
-					<Transcribes_Or_Translates_To new-type="Function">
-						<Source>Agent</Source>
-						<Product>Target</Product>
-					</Transcribes_Or_Translates_To>
-					<Is_Functionally_Equivalent_To new-type="Function">
-						<Element1>Agent</Element1>
-						<Element2>Target</Element2>
-					</Is_Functionally_Equivalent_To>
-				</same-type-and-arguments>
-			</matching-similarity>
-			<scoring name="Standard">
-				<post-filter>
-					<types>Is_Involved_In_Process,Transcribes_Or_Translates_To,Is_Functionally_Equivalent_To</types>
-				</post-filter>
-				<f1-measures/>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-				<measure>false-positives</measure>
-			</scoring>
-		</evaluation>
-		<evaluation
-			name="Cluster: Regulation">
-			<matching-similarity>
-				<same-type-and-arguments
-					commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
-					<Regulates_Accumulation new-type="Regulation">
-						<Functional_Molecule>Target</Functional_Molecule>
-					</Regulates_Accumulation>
-					<Regulates_Development_Phase new-type="Regulation">
-						<Development>Target</Development>
-					</Regulates_Development_Phase>
-					<Regulates_Expression new-type="Regulation">
-						<DNA>Target</DNA>
-					</Regulates_Expression>
-					<Regulates_Molecule_Activity new-type="Regulation">
-						<Molecule>Target</Molecule>
-					</Regulates_Molecule_Activity>
-					<Regulates_Process new-type="Regulation">
-						<Process>Target</Process>
-					</Regulates_Process>
-					<Regulates_Tissue_Development new-type="Regulation">
-						<Target_Tissue>Target</Target_Tissue>
-					</Regulates_Tissue_Development>
-				</same-type-and-arguments>
-			</matching-similarity>
-			<scoring name="Standard">
-				<post-filter>
-					<types>Regulates_Accumulation,Regulates_Development_Phase,Regulates_Expression,Regulates_Molecule_Activity,Regulates_Process,Regulates_Tissue_Development</types>
-				</post-filter>
-				<f1-measures/>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-				<measure>false-positives</measure>
-			</scoring>
-		</evaluation>
-		<evaluation
-			name="Cluster: Composition_MemberShip (commutative)">
-			<matching-similarity>
-				<same-type-and-arguments
-					commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To,Composition_MemberShip">
-					<Composes_Primary_Structure new-type="Composition_MemberShip">
-						<DNA_Part>Agent</DNA_Part>
-						<DNA>Target</DNA>
-					</Composes_Primary_Structure>
-					<Composes_Protein_Complex new-type="Composition_MemberShip">
-						<Amino_Acid_Sequence>Agent</Amino_Acid_Sequence>
-						<Protein_Complex>Target</Protein_Complex>
-					</Composes_Protein_Complex>
-					<Is_Protein_Domain_Of new-type="Composition_MemberShip">
-						<Domain>Agent</Domain>
-						<Product>Target</Product>
-					</Is_Protein_Domain_Of>
-					<Is_Member_Of_Family new-type="Composition_MemberShip">
-						<Element>Agent</Element>
-						<Family>Target</Family>
-					</Is_Member_Of_Family>
-					<Has_Sequence_Identical_To new-type="Composition_MemberShip">
-						<Element1>Agent</Element1>
-						<Element2>Target</Element2>
-					</Has_Sequence_Identical_To>
-				</same-type-and-arguments>
-			</matching-similarity>
-			<scoring name="Standard">
-				<post-filter>
-					<types>Composes_Primary_Structure,Composes_Protein_Complex,Is_Protein_Domain_Of,Is_Member_Of_Family,Has_Sequence_Identical_To</types>
-				</post-filter>
-				<f1-measures/>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-				<measure>false-positives</measure>
-			</scoring>
-		</evaluation>
-		<evaluation
-			name="Cluster: Interaction">
-			<matching-similarity>
-				<same-type-and-arguments
-					commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
-					<Interacts_With new-type="Interaction"/>
-					<Binds_To new-type="Interaction">
-						<Functional_Molecule>Agent</Functional_Molecule>
-						<Molecule>Target</Molecule>
-					</Binds_To>
-				</same-type-and-arguments>
-			</matching-similarity>
-			<scoring name="Standard">
-				<post-filter>
-					<types>Interacts_With,Binds_To</types>
-				</post-filter>
-				<f1-measures/>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-				<measure>false-positives</measure>
-			</scoring>
-		</evaluation>
-		<evaluation name="Type confusion (commutative)">
-			<matching-similarity>
-				<same-type-and-arguments commutative-types="Is_Linked_To">
-					<Binds_To new-type="Is_Linked_To">
-						<Functional_Molecule>Agent</Functional_Molecule>
-						<Molecule>Target</Molecule>
-					</Binds_To>
-					<Composes_Primary_Structure new-type="Is_Linked_To">
-						<DNA_Part>Agent</DNA_Part>
-						<DNA>Target</DNA>
-					</Composes_Primary_Structure>
-					<Composes_Protein_Complex new-type="Is_Linked_To">
-						<Amino_Acid_Sequence>Agent</Amino_Acid_Sequence>
-						<Protein_Complex>Target</Protein_Complex>
-					</Composes_Protein_Complex>
-					<Exists_At_Stage new-type="Is_Linked_To">
-						<Functional_Molecule>Agent</Functional_Molecule>
-						<Development>Target</Development>
-					</Exists_At_Stage>
-					<Exists_In_Genotype new-type="Is_Linked_To">
-						<Molecule>Agent</Molecule>
-						<Element>Agent</Element>
-						<Genotype>Target</Genotype>
-					</Exists_In_Genotype>
-					<Has_Sequence_Identical_To new-type="Is_Linked_To">
-						<Element1>Agent</Element1>
-						<Element2>Target</Element2>
-					</Has_Sequence_Identical_To>
-					<Interacts_With new-type="Is_Linked_To">
-					</Interacts_With>
-					<Is_Functionally_Equivalent_To
-						new-type="Is_Linked_To">
-						<Element1>Agent</Element1>
-						<Element2>Target</Element2>
-					</Is_Functionally_Equivalent_To>
-					<Is_Involved_In_Process new-type="Is_Linked_To">
-						<Participant>Agent</Participant>
-						<Process>Target</Process>
-					</Is_Involved_In_Process>
-					<Is_Localized_In new-type="Is_Linked_To">
-						<Functional_Molecule>Agent</Functional_Molecule>
-						<Process>Agent</Process>
-						<Target_Tissue>Target</Target_Tissue>
-					</Is_Localized_In>
-					<Is_Member_Of_Family new-type="Is_Linked_To">
-						<Element>Agent</Element>
-						<Family>Target</Family>
-					</Is_Member_Of_Family>
-					<Is_Protein_Domain_Of new-type="Is_Linked_To">
-						<Domain>Agent</Domain>
-						<Product>Target</Product>
-					</Is_Protein_Domain_Of>
-					<Occurs_During new-type="Is_Linked_To">
-						<Process>Agent</Process>
-						<Development>Target</Development>
-					</Occurs_During>
-					<Occurs_In_Genotype new-type="Is_Linked_To">
-						<Process>Agent</Process>
-						<Genotype>Target</Genotype>
-					</Occurs_In_Genotype>
-					<Regulates_Accumulation new-type="Is_Linked_To">
-						<Functional_Molecule>Target</Functional_Molecule>
-					</Regulates_Accumulation>
-					<Regulates_Development_Phase new-type="Is_Linked_To">
-						<Development>Target</Development>
-					</Regulates_Development_Phase>
-					<Regulates_Expression new-type="Is_Linked_To">
-						<DNA>Target</DNA>
-					</Regulates_Expression>
-					<Regulates_Molecule_Activity new-type="Is_Linked_To">
-						<Molecule>Target</Molecule>
-					</Regulates_Molecule_Activity>
-					<Regulates_Process new-type="Is_Linked_To">
-						<Process>Target</Process>
-					</Regulates_Process>
-					<Regulates_Tissue_Development
-						new-type="Is_Linked_To">
-						<Target_Tissue>Target</Target_Tissue>
-					</Regulates_Tissue_Development>
-					<Transcribes_Or_Translates_To
-						new-type="Is_Linked_To">
-						<Product>Target</Product>
-					</Transcribes_Or_Translates_To>
-				</same-type-and-arguments>
-			</matching-similarity>
-			<scoring name="Standard">
-				<f1-measures/>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-				<measure>false-positives</measure>
-			</scoring>
-		</evaluation>
-		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_train.zip" />
-		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_dev.zip" />
-		<!--
-		<test
-			zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_test_WITH_ANSWERS.zip"
-			with-reference="true" />
-			-->
-	</task>
+  <task name="SeeDev-binary">
+    <description>Binary event extraction of genetic and molecular
+    mechanisms involved in plant seed development.</description>
+    <schema>
+      <text-bound type="Gene" />
+      <text-bound type="Gene_Family" />
+      <text-bound type="Box" />
+      <text-bound type="Promoter" />
+      <text-bound type="RNA" />
+      <text-bound type="Protein" />
+      <text-bound type="Protein_Family" />
+      <text-bound type="Protein_Complex" />
+      <text-bound type="Protein_Domain" />
+      <text-bound type="Hormone" />
+      <text-bound type="Regulatory_Network" />
+      <text-bound type="Pathway" />
+      <text-bound type="Genotype" />
+      <text-bound type="Tissue" />
+      <text-bound type="Development_Phase" />
+      <text-bound type="Environmental_Factor" />
+      <relation type="Binds_To">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Functional_Molecule,Molecule</roles>
+	<mandatory-arguments>Functional_Molecule,Molecule</mandatory-arguments>
+	<argument-types role="Functional_Molecule">&functional-molecule;
+	</argument-types>
+	<argument-types role="Molecule">&molecule;
+	</argument-types>
+      </relation>
+      <relation type="Composes_Primary_Structure">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>DNA_Part,DNA</roles>
+	<mandatory-arguments>DNA_Part,DNA</mandatory-arguments>
+	<argument-types role="DNA_Part">Box,Promoter</argument-types>
+	<argument-types role="DNA">&dna;
+	</argument-types>
+      </relation>
+      <relation type="Composes_Protein_Complex">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Amino_Acid_Sequence,Protein_Complex</roles>
+	<mandatory-arguments>Amino_Acid_Sequence,Protein_Complex</mandatory-arguments>
+	<argument-types role="Amino_Acid_Sequence">Protein,Protein_Family,Protein_Complex,Protein_Domain</argument-types>
+	<argument-types role="Protein_Complex">Protein_Complex</argument-types>
+      </relation>
+      <relation type="Exists_At_Stage">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Functional_Molecule,Development</roles>
+	<mandatory-arguments>Functional_Molecule,Development</mandatory-arguments>
+	<argument-types role="Functional_Molecule">&functional-molecule;
+	</argument-types>
+	<argument-types role="Development">Development_Phase</argument-types>
+      </relation>
+      <relation type="Exists_In_Genotype">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Molecule,Element,Genotype</roles>
+	<mandatory-arguments>Genotype</mandatory-arguments>
+	<mandatory-alternatives exclusive="true">Molecule,Element</mandatory-alternatives>
+	<argument-types role="Molecule">&molecule;
+	</argument-types>
+	<argument-types role="Element">&internal-factor;
+	</argument-types>
+	<argument-types role="Genotype">Genotype</argument-types>
+      </relation>
+      <relation type="Has_Sequence_Identical_To">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Element1,Element2</roles>
+	<mandatory-arguments>Element1,Element2</mandatory-arguments>
+      </relation>
+      <relation type="Interacts_With">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Target</roles>
+	<mandatory-arguments>Agent,Target</mandatory-arguments>
+	<argument-types role="Agent">&molecule;,&process;,Environmental_Factor
+	</argument-types>
+	<argument-types role="Agent">&molecule;,&process;,&factor;
+	</argument-types>
+      </relation>
+      <relation type="Is_Functionally_Equivalent_To">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Element1,Element2</roles>
+	<mandatory-arguments>Element1,Element2</mandatory-arguments>
+      </relation>
+      <relation type="Is_Involved_In_Process">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Participant,Process</roles>
+	<mandatory-arguments>Participant,Process</mandatory-arguments>
+	<argument-types role="Participant">&molecule;
+	</argument-types>
+	<argument-types role="Process">&process;
+	</argument-types>
+      </relation>
+      <relation type="Is_Localized_In">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Functional_Molecule,Process,Target_Tissue</roles>
+	<mandatory-arguments>Target_Tissue</mandatory-arguments>
+	<mandatory-alternatives exclusive="true">Functional_Molecule,Process</mandatory-alternatives>
+	<argument-types role="Functional_Molecule">&functional-molecule;
+	</argument-types>
+	<argument-types role="Process">&process;
+	</argument-types>
+	<argument-types role="Target_Tissue">Tissue</argument-types>
+      </relation>
+      <relation type="Is_Member_Of_Family">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Element,Family</roles>
+	<mandatory-arguments>Element,Family</mandatory-arguments>
+	<argument-types role="Element">Gene,Gene_Family,Protein,Protein_Domain,Protein_Family,RNA</argument-types>
+	<argument-types role="Family">Gene_Family,Protein_Family,RNA</argument-types>
+      </relation>
+      <relation type="Is_Protein_Domain_Of">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Domain,Product</roles>
+	<mandatory-arguments>Domain,Product</mandatory-arguments>
+	<argument-types role="Domain">Protein_Domain</argument-types>
+	<argument-types role="Product">&dna-product;
+	</argument-types>
+      </relation>
+      <relation type="Occurs_During">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Process,Development</roles>
+	<mandatory-arguments>Process,Development</mandatory-arguments>
+	<argument-types role="Process">&process;
+	</argument-types>
+	<argument-types role="Development">Development_Phase</argument-types>
+      </relation>
+      <relation type="Occurs_In_Genotype">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Process,Genotype</roles>
+	<mandatory-arguments>Process,Genotype</mandatory-arguments>
+	<argument-types role="Process">&process;
+	</argument-types>
+	<argument-types role="Genotype">Genotype</argument-types>
+      </relation>
+      <relation type="Regulates_Accumulation">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Functional_Molecule</roles>
+	<mandatory-arguments>Agent,Functional_Molecule</mandatory-arguments>
+	<argument-types role="Functional_Molecule">&functional-molecule;
+	</argument-types>
+      </relation>
+      <relation type="Regulates_Development_Phase">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Development</roles>
+	<mandatory-arguments>Agent,Development</mandatory-arguments>
+	<argument-types role="Development">Development_Phase</argument-types>
+      </relation>
+      <relation type="Regulates_Expression">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,DNA</roles>
+	<mandatory-arguments>Agent,DNA</mandatory-arguments>
+	<argument-types role="DNA">&dna;
+	</argument-types>
+      </relation>
+      <relation type="Regulates_Molecule_Activity">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Molecule</roles>
+	<mandatory-arguments>Agent,Molecule</mandatory-arguments>
+	<argument-types role="Molecule">&molecule;
+	</argument-types>
+      </relation>
+      <relation type="Regulates_Process">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Process</roles>
+	<mandatory-arguments>Agent,Process</mandatory-arguments>
+	<argument-types role="Process">&process;
+	</argument-types>
+      </relation>
+      <relation type="Regulates_Tissue_Development">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Agent,Target_Tissue</roles>
+	<mandatory-arguments>Agent,Target_Tissue</mandatory-arguments>
+	<argument-types role="Target_Tissue">Tissue</argument-types>
+      </relation>
+      <relation type="Transcribes_Or_Translates_To">
+	<backreference-cardinality at-most="1">Negation</backreference-cardinality>
+	<roles>Source,Product</roles>
+	<mandatory-arguments>Source,Product</mandatory-arguments>
+	<argument-types role="Source">&dna;,RNA
+	</argument-types>
+	<argument-types role="Product">&dna-product;
+	</argument-types>
+      </relation>
+      <relation type="Is_Linked_To">
+	<roles>Agent1,Agent2</roles>
+	<mandatory-arguments>Agent1,Agent2</mandatory-arguments>
+      </relation>
+    </schema>
+    <evaluation name="Standard pairing">
+      <matching-similarity>
+	<same-type-and-arguments
+	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
+	  <Has_Sequence_Identical_To new-type="Is_Functionally_Equivalent_To" />
+	</same-type-and-arguments>
+      </matching-similarity>
+      <scoring name="All Relations">
+	<f1-measures/>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+	<measure>false-positives</measure>
+      </scoring>
+      <type-scorings>
+	<types>Binds_To,Composes_Primary_Structure,Composes_Protein_Complex,Exists_At_Stage,Exists_In_Genotype,Interacts_With,Is_Involved_In_Process,Is_Localized_In,Is_Member_Of_Family,Is_Protein_Domain_Of,Occurs_In_Genotype,Occurs_During,Regulates_Accumulation,Regulates_Development_Phase,Regulates_Expression,Regulates_Molecule_Activity,Regulates_Process,Regulates_Tissue_Development,Transcribes_Or_Translates_To,Is_Linked_To,Is_Functionally_Equivalent_To,Has_Sequence_Identical_To</types>
+      </type-scorings>
+    </evaluation>
+    <evaluation name="Inside sentences">
+      <matching-similarity>
+	<same-type-and-arguments
+	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
+	  <Has_Sequence_Identical_To new-type="Is_Functionally_Equivalent_To" />
+	</same-type-and-arguments>
+      </matching-similarity>
+      <pre-filter>
+	<same-sentence jar="org/bionlpst/data/SeeDev-sentences.txt" />
+      </pre-filter>
+      <scoring name="All Relations">
+	<f1-measures/>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+	<measure>false-positives</measure>
+      </scoring>
+      <type-scorings>
+	<types>Binds_To,Composes_Primary_Structure,Composes_Protein_Complex,Exists_At_Stage,Exists_In_Genotype,Interacts_With,Is_Involved_In_Process,Is_Localized_In,Is_Member_Of_Family,Is_Protein_Domain_Of,Occurs_In_Genotype,Occurs_During,Regulates_Accumulation,Regulates_Development_Phase,Regulates_Expression,Regulates_Molecule_Activity,Regulates_Process,Regulates_Tissue_Development,Transcribes_Or_Translates_To,Is_Linked_To,Is_Functionally_Equivalent_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To,Has_Sequence_Identical_To</types>
+      </type-scorings>
+    </evaluation>
+    <evaluation
+	name="Cluster: Comparison (commutative)">
+      <matching-similarity>
+	<same-type-and-arguments
+	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
+	  <Has_Sequence_Identical_To new-type="Is_Functionally_Equivalent_To" />
+	</same-type-and-arguments>
+      </matching-similarity>
+      <scoring name="Standard">
+	<post-filter>
+	  <types>Is_Functionally_Equivalent_To,Has_Sequence_Identical_To</types>
+	</post-filter>
+	<f1-measures/>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+	<measure>false-positives</measure>
+      </scoring>
+    </evaluation>
+    <evaluation
+	name="Cluster: Where and When">
+      <matching-similarity>
+	<same-type-and-arguments
+	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
+	  <Exists_In_Genotype new-type="Where_When">
+	    <Molecule>Agent</Molecule>
+	    <Element>Agent</Element>
+	    <Genotype>Target</Genotype>
+	  </Exists_In_Genotype>
+	  <Occurs_In_Genotype new-type="Where_When">
+	    <Process>Agent</Process>
+	    <Genotype>Target</Genotype>
+	  </Occurs_In_Genotype>
+	  <Exists_At_Stage new-type="Where_When">
+	    <Functional_Molecule>Agent</Functional_Molecule>
+	    <Development>Target</Development>
+	  </Exists_At_Stage>
+	  <Occurs_During new-type="Where_When">
+	    <Process>Agent</Process>
+	    <Development>Target</Development>
+	  </Occurs_During>
+	  <Is_Localized_In new-type="Where_When">
+	    <Functional_Molecule>Agent</Functional_Molecule>
+	    <Process>Agent</Process>
+	    <Target_Tissue>Target</Target_Tissue>
+	  </Is_Localized_In>
+	</same-type-and-arguments>
+      </matching-similarity>
+      <scoring name="Standard">
+	<post-filter>
+	  <types>Exists_In_Genotype,Occurs_In_Genotype,Exists_At_Stage,Occurs_During,Is_Localized_In</types>
+	</post-filter>
+	<f1-measures/>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+	<measure>false-positives</measure>
+      </scoring>
+    </evaluation>
+    <evaluation
+	name="Cluster: Function (commutative)">
+      <matching-similarity>
+	<same-type-and-arguments
+	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To,Function">
+	  <Is_Involved_In_Process new-type="Function">
+	    <Participant>Agent</Participant>
+	    <Process>Target</Process>
+	  </Is_Involved_In_Process>
+	  <Transcribes_Or_Translates_To new-type="Function">
+	    <Source>Agent</Source>
+	    <Product>Target</Product>
+	  </Transcribes_Or_Translates_To>
+	  <Is_Functionally_Equivalent_To new-type="Function">
+	    <Element1>Agent</Element1>
+	    <Element2>Target</Element2>
+	  </Is_Functionally_Equivalent_To>
+	</same-type-and-arguments>
+      </matching-similarity>
+      <scoring name="Standard">
+	<post-filter>
+	  <types>Is_Involved_In_Process,Transcribes_Or_Translates_To,Is_Functionally_Equivalent_To</types>
+	</post-filter>
+	<f1-measures/>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+	<measure>false-positives</measure>
+      </scoring>
+    </evaluation>
+    <evaluation
+	name="Cluster: Regulation">
+      <matching-similarity>
+	<same-type-and-arguments
+	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
+	  <Regulates_Accumulation new-type="Regulation">
+	    <Functional_Molecule>Target</Functional_Molecule>
+	  </Regulates_Accumulation>
+	  <Regulates_Development_Phase new-type="Regulation">
+	    <Development>Target</Development>
+	  </Regulates_Development_Phase>
+	  <Regulates_Expression new-type="Regulation">
+	    <DNA>Target</DNA>
+	  </Regulates_Expression>
+	  <Regulates_Molecule_Activity new-type="Regulation">
+	    <Molecule>Target</Molecule>
+	  </Regulates_Molecule_Activity>
+	  <Regulates_Process new-type="Regulation">
+	    <Process>Target</Process>
+	  </Regulates_Process>
+	  <Regulates_Tissue_Development new-type="Regulation">
+	    <Target_Tissue>Target</Target_Tissue>
+	  </Regulates_Tissue_Development>
+	</same-type-and-arguments>
+      </matching-similarity>
+      <scoring name="Standard">
+	<post-filter>
+	  <types>Regulates_Accumulation,Regulates_Development_Phase,Regulates_Expression,Regulates_Molecule_Activity,Regulates_Process,Regulates_Tissue_Development</types>
+	</post-filter>
+	<f1-measures/>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+	<measure>false-positives</measure>
+      </scoring>
+    </evaluation>
+    <evaluation
+	name="Cluster: Composition_MemberShip (commutative)">
+      <matching-similarity>
+	<same-type-and-arguments
+	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To,Composition_MemberShip">
+	  <Composes_Primary_Structure new-type="Composition_MemberShip">
+	    <DNA_Part>Agent</DNA_Part>
+	    <DNA>Target</DNA>
+	  </Composes_Primary_Structure>
+	  <Composes_Protein_Complex new-type="Composition_MemberShip">
+	    <Amino_Acid_Sequence>Agent</Amino_Acid_Sequence>
+	    <Protein_Complex>Target</Protein_Complex>
+	  </Composes_Protein_Complex>
+	  <Is_Protein_Domain_Of new-type="Composition_MemberShip">
+	    <Domain>Agent</Domain>
+	    <Product>Target</Product>
+	  </Is_Protein_Domain_Of>
+	  <Is_Member_Of_Family new-type="Composition_MemberShip">
+	    <Element>Agent</Element>
+	    <Family>Target</Family>
+	  </Is_Member_Of_Family>
+	  <Has_Sequence_Identical_To new-type="Composition_MemberShip">
+	    <Element1>Agent</Element1>
+	    <Element2>Target</Element2>
+	  </Has_Sequence_Identical_To>
+	</same-type-and-arguments>
+      </matching-similarity>
+      <scoring name="Standard">
+	<post-filter>
+	  <types>Composes_Primary_Structure,Composes_Protein_Complex,Is_Protein_Domain_Of,Is_Member_Of_Family,Has_Sequence_Identical_To</types>
+	</post-filter>
+	<f1-measures/>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+	<measure>false-positives</measure>
+      </scoring>
+    </evaluation>
+    <evaluation
+	name="Cluster: Interaction">
+      <matching-similarity>
+	<same-type-and-arguments
+	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
+	  <Interacts_With new-type="Interaction"/>
+	  <Binds_To new-type="Interaction">
+	    <Functional_Molecule>Agent</Functional_Molecule>
+	    <Molecule>Target</Molecule>
+	  </Binds_To>
+	</same-type-and-arguments>
+      </matching-similarity>
+      <scoring name="Standard">
+	<post-filter>
+	  <types>Interacts_With,Binds_To</types>
+	</post-filter>
+	<f1-measures/>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+	<measure>false-positives</measure>
+      </scoring>
+    </evaluation>
+    <evaluation name="Type confusion (commutative)">
+      <matching-similarity>
+	<same-type-and-arguments commutative-types="Is_Linked_To">
+	  <Binds_To new-type="Is_Linked_To">
+	    <Functional_Molecule>Agent</Functional_Molecule>
+	    <Molecule>Target</Molecule>
+	  </Binds_To>
+	  <Composes_Primary_Structure new-type="Is_Linked_To">
+	    <DNA_Part>Agent</DNA_Part>
+	    <DNA>Target</DNA>
+	  </Composes_Primary_Structure>
+	  <Composes_Protein_Complex new-type="Is_Linked_To">
+	    <Amino_Acid_Sequence>Agent</Amino_Acid_Sequence>
+	    <Protein_Complex>Target</Protein_Complex>
+	  </Composes_Protein_Complex>
+	  <Exists_At_Stage new-type="Is_Linked_To">
+	    <Functional_Molecule>Agent</Functional_Molecule>
+	    <Development>Target</Development>
+	  </Exists_At_Stage>
+	  <Exists_In_Genotype new-type="Is_Linked_To">
+	    <Molecule>Agent</Molecule>
+	    <Element>Agent</Element>
+	    <Genotype>Target</Genotype>
+	  </Exists_In_Genotype>
+	  <Has_Sequence_Identical_To new-type="Is_Linked_To">
+	    <Element1>Agent</Element1>
+	    <Element2>Target</Element2>
+	  </Has_Sequence_Identical_To>
+	  <Interacts_With new-type="Is_Linked_To">
+	  </Interacts_With>
+	  <Is_Functionally_Equivalent_To
+	      new-type="Is_Linked_To">
+	    <Element1>Agent</Element1>
+	    <Element2>Target</Element2>
+	  </Is_Functionally_Equivalent_To>
+	  <Is_Involved_In_Process new-type="Is_Linked_To">
+	    <Participant>Agent</Participant>
+	    <Process>Target</Process>
+	  </Is_Involved_In_Process>
+	  <Is_Localized_In new-type="Is_Linked_To">
+	    <Functional_Molecule>Agent</Functional_Molecule>
+	    <Process>Agent</Process>
+	    <Target_Tissue>Target</Target_Tissue>
+	  </Is_Localized_In>
+	  <Is_Member_Of_Family new-type="Is_Linked_To">
+	    <Element>Agent</Element>
+	    <Family>Target</Family>
+	  </Is_Member_Of_Family>
+	  <Is_Protein_Domain_Of new-type="Is_Linked_To">
+	    <Domain>Agent</Domain>
+	    <Product>Target</Product>
+	  </Is_Protein_Domain_Of>
+	  <Occurs_During new-type="Is_Linked_To">
+	    <Process>Agent</Process>
+	    <Development>Target</Development>
+	  </Occurs_During>
+	  <Occurs_In_Genotype new-type="Is_Linked_To">
+	    <Process>Agent</Process>
+	    <Genotype>Target</Genotype>
+	  </Occurs_In_Genotype>
+	  <Regulates_Accumulation new-type="Is_Linked_To">
+	    <Functional_Molecule>Target</Functional_Molecule>
+	  </Regulates_Accumulation>
+	  <Regulates_Development_Phase new-type="Is_Linked_To">
+	    <Development>Target</Development>
+	  </Regulates_Development_Phase>
+	  <Regulates_Expression new-type="Is_Linked_To">
+	    <DNA>Target</DNA>
+	  </Regulates_Expression>
+	  <Regulates_Molecule_Activity new-type="Is_Linked_To">
+	    <Molecule>Target</Molecule>
+	  </Regulates_Molecule_Activity>
+	  <Regulates_Process new-type="Is_Linked_To">
+	    <Process>Target</Process>
+	  </Regulates_Process>
+	  <Regulates_Tissue_Development
+	      new-type="Is_Linked_To">
+	    <Target_Tissue>Target</Target_Tissue>
+	  </Regulates_Tissue_Development>
+	  <Transcribes_Or_Translates_To
+	      new-type="Is_Linked_To">
+	    <Product>Target</Product>
+	  </Transcribes_Or_Translates_To>
+	</same-type-and-arguments>
+      </matching-similarity>
+      <scoring name="Standard">
+	<f1-measures/>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+	<measure>false-positives</measure>
+      </scoring>
+    </evaluation>
+    <train zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_train.zip" />
+    <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_dev.zip" />
+    <!--
+	<test
+	zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_test_WITH_ANSWERS.zip"
+	with-reference="true" />
+    -->
+  </task>
 
-	<task name="BB-cat">
-		<description>Bacteria Biotope entity categorization.</description>
-		<description>
-			<em>Bacteria</em>
-			entities are categorized in the NCBI Taxonomy,
-			<em>Habitat</em>
-			entities are categorized in the OntoBiotope ontology.
-		</description>
-		<schema>
-			<text-bound type="Title" />
-			<text-bound type="Paragraph" />
-			<text-bound type="Bacteria">
-				<backreference-cardinality at-least="1"
-					at-most="2">NCBI_Taxonomy</backreference-cardinality>
-			</text-bound>
-			<text-bound type="Habitat">
-				<backreference-cardinality at-least="1">OntoBiotope</backreference-cardinality>
-			</text-bound>
-			<normalization type="OntoBiotope">
-				<annotation-types>Habitat</annotation-types>
-				<reference-vocabulary
-					jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016.txt" />
-			</normalization>
-			<normalization type="NCBI_Taxonomy">
-				<annotation-types>Bacteria</annotation-types>
-				<reference-vocabulary jar="org/bionlpst/data/NCBI_Taxonomy.txt" />
-			</normalization>
-		</schema>
-		<evaluation name="Reference pairing" input-iteration="true">
-			<matching-similarity>
-				<type-dispatch>
-					<wang type="Habitat" weight="0.65" normalization-type="OntoBiotope"
-						jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-					<normalization type="Bacteria" normalization-type="NCBI_Taxonomy" />
-				</type-dispatch>
-			</matching-similarity>
-			<pre-filter>
-				<types>Habitat,Bacteria</types>
-			</pre-filter>
-			<scoring name="Main scoring">
-				<measure>precision</measure>
-			</scoring>
-			<scoring name="Habitats only">
-				<post-filter>
-					<types>Habitat</types>
-				</post-filter>
-				<similarity>
-					<wang type="Habitat" weight="0.65" normalization-type="OntoBiotope"
-						jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-				</similarity>
-				<measure>precision</measure>
-			</scoring>
-			<scoring name="Habitats only (cap to human)">
-				<post-filter>
-					<types>Habitat</types>
-				</post-filter>
-				<similarity>
-					<wang type="Habitat" weight="0.65" normalization-type="OntoBiotope"
-						jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-				</similarity>
-				<measure>precision</measure>
-			</scoring>
-			<scoring name="Bacteria only">
-				<post-filter>
-					<types>Bacteria</types>
-				</post-filter>
-				<similarity>
-					<normalization type="Bacteria" normalization-type="NCBI_Taxonomy" />
-				</similarity>
-				<measure>precision</measure>
-			</scoring>
-			<scoring name="Bacteria only (cap to species)">
-				<post-filter>
-					<types>Bacteria</types>
-				</post-filter>
-				<similarity>
-					<normalization type="Bacteria" normalization-type="NCBI_Taxonomy">
-						<referent-map jar="org/bionlpst/data/Bacteria_species.txt"/>
-					</normalization>
-				</similarity>
-				<measure>precision</measure>
-			</scoring>
-			<scoring name="Multiple normalizations">
-				<post-filter>
-					<or>
-						<backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
-						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
-					</or>
-				</post-filter>
-				<similarity>
-					<type-dispatch>
-						<wang type="Habitat" weight="0.65" normalization-type="OntoBiotope"
-							jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-						<normalization type="Bacteria" normalization-type="NCBI_Taxonomy" />
-					</type-dispatch>
-				</similarity>
-				<measure>precision</measure>
-				<measure>references</measure>
-			</scoring>
-			<scoring name="Multiple normalizations (Bacteria)">
-				<post-filter>
-					<and>
-						<types>Bacteria</types>
-						<backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
-					</and>
-				</post-filter>
-				<similarity>
-					<normalization type="Bacteria" normalization-type="NCBI_Taxonomy"/>
-				</similarity>
-				<measure>precision</measure>
-				<measure>references</measure>
-			</scoring>
-			<scoring name="Multiple normalizations (Habitats)">
-				<post-filter>
-					<and>
-						<types>Habitat</types>
-						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
-					</and>
-				</post-filter>
-				<similarity>
-					<wang type="Habitat" weight="0.65" normalization-type="OntoBiotope"
-						jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-				</similarity>
-				<measure>precision</measure>
-				<measure>references</measure>
-			</scoring>
-		</evaluation>
-		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_train.zip" />
-		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_dev.zip" />
-		<!--
-		<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_test_WITH_ANSWERS.zip"
-		with-reference="true" />
-		-->
-	</task>
+  <task name="BB-cat">
+    <description>Bacteria Biotope entity categorization.</description>
+    <description>
+      <em>Bacteria</em>
+      entities are categorized in the NCBI Taxonomy,
+      <em>Habitat</em>
+      entities are categorized in the OntoBiotope ontology.
+    </description>
+    <schema alias-name="BB-cat-schema">
+      <text-bound type="Title" />
+      <text-bound type="Paragraph" />
+      <text-bound type="Bacteria">
+	<backreference-cardinality at-least="1"
+				   at-most="2">NCBI_Taxonomy</backreference-cardinality>
+      </text-bound>
+      <text-bound type="Habitat">
+	<backreference-cardinality at-least="1">OntoBiotope</backreference-cardinality>
+      </text-bound>
+      <normalization type="OntoBiotope">
+	<annotation-types>Habitat</annotation-types>
+	<reference-vocabulary
+	    jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016.txt" />
+      </normalization>
+      <normalization type="NCBI_Taxonomy">
+	<annotation-types>Bacteria</annotation-types>
+	<reference-vocabulary jar="org/bionlpst/data/NCBI_Taxonomy.txt" />
+      </normalization>
+    </schema>
+    <evaluation name="Reference pairing" input-iteration="true">
+      <matching-similarity>
+	<type-dispatch alias-name="BB-cat-sim">
+	  <wang
+	      type="Habitat"
+	      weight="0.65"
+	      normalization-type="OntoBiotope"
+	      jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt"
+	      alias-name="wang-sim" />
+	  <normalization
+	      type="Bacteria"
+	      normalization-type="NCBI_Taxonomy"
+	      alias-name="bact-sim" />
+	</type-dispatch>
+      </matching-similarity>
+      <pre-filter>
+	<types>Habitat,Bacteria</types>
+      </pre-filter>
+      <scoring name="Main scoring">
+	<measure>precision</measure>
+      </scoring>
+      <scoring name="Habitats only">
+	<post-filter>
+	  <types>Habitat</types>
+	</post-filter>
+	<similarity append-alias="wang-sim" />
+	<measure>precision</measure>
+      </scoring>
+      <scoring name="Habitats only (cap to human)">
+	<post-filter>
+	  <types>Habitat</types>
+	</post-filter>
+	<similarity append-alias="wang-sim" />
+	<measure>precision</measure>
+      </scoring>
+      <scoring name="Bacteria only">
+	<post-filter>
+	  <types>Bacteria</types>
+	</post-filter>
+	<similarity append-alias="bact-sim" />
+	<measure>precision</measure>
+      </scoring>
+      <scoring name="Bacteria only (cap to species)">
+	<post-filter>
+	  <types>Bacteria</types>
+	</post-filter>
+	<similarity>
+	  <normalization
+	      type="Bacteria"
+	      normalization-type="NCBI_Taxonomy"
+	      alias-name="bact-species-sim" >
+	    <referent-map jar="org/bionlpst/data/Bacteria_species.txt"/>
+          </normalization>
+	</similarity>
+	<measure>precision</measure>
+      </scoring>
+      <scoring name="Multiple normalizations">
+	<post-filter>
+	  <or>
+	    <backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
+	    <backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+	  </or>
+	</post-filter>
+	<similarity>
+	  <type-dispatch replace-alias="BB-cat-sim" />
+	</similarity>
+	<measure>precision</measure>
+	<measure>references</measure>
+      </scoring>
+      <scoring name="Multiple normalizations (Bacteria)">
+	<post-filter>
+	  <and>
+	    <types>Bacteria</types>
+	    <backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
+	  </and>
+	</post-filter>
+	<similarity append-alias="bact-sim" />
+	<measure>precision</measure>
+	<measure>references</measure>
+      </scoring>
+      <scoring name="Multiple normalizations (Habitats)">
+	<post-filter>
+	  <and>
+	    <types>Habitat</types>
+	    <backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+	  </and>
+	</post-filter>
+	<similarity append-alias="wang-sim" />
+	<measure>precision</measure>
+	<measure>references</measure>
+      </scoring>
+    </evaluation>
+    <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_train.zip" />
+    <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_dev.zip" />
+    <!--
+	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_test_WITH_ANSWERS.zip"
+	with-reference="true" />
+    -->
+  </task>
 
-	<task name="BB-event">
-		<description>Bacteria Biotope binary event extraction.</description>
-		<schema>
-			<text-bound type="Title" />
-			<text-bound type="Paragraph" />
-			<text-bound type="Bacteria" />
-			<text-bound type="Habitat" />
-			<text-bound type="Geographical" />
-			<relation type="Lives_In">
-				<roles>Bacteria,Location</roles>
-				<mandatory-arguments>Bacteria,Location</mandatory-arguments>
-				<argument-types role="Bacteria">Bacteria</argument-types>
-				<argument-types role="Location">Habitat,Geographical</argument-types>
-			</relation>
-		</schema>
-		<evaluation name="Standard pairing">
-			<pairing-algorithm>
-				<custom>org.bionlpst.evaluation.BBEventPairing</custom>
-			</pairing-algorithm>
-			<matching-similarity>
-				<product>
-					<argument role="Bacteria">
-						<equivalence>
-							<same />
-						</equivalence>
-					</argument>
-					<argument role="Location">
-						<equivalence>
-							<same />
-						</equivalence>
-					</argument>
-				</product>
-			</matching-similarity>
-			<scoring name="Lives_In">
-				<f1-measures/>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Lives_In (Habitat)">
-				<post-filter>
-					<argument role="Location">
-						<types>Habitat</types>
-					</argument>
-				</post-filter>
-				<f1-measures/>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Lives_In (Geographical)">
-				<post-filter>
-					<argument role="Location">
-						<types>Geographical</types>
-					</argument>
-				</post-filter>
-				<f1-measures/>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Lives_In (inside sentences)">
-				<post-filter>
-					<same-sentence jar="org/bionlpst/data/BB-sentences.txt" />
-				</post-filter>
-				<f1-measures/>
-				<measure>predictions</measure>
-			</scoring>
-		</evaluation>
-		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_train.zip" />
-		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_dev.zip" />
-		<!--
-		<test
-			zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_test_WITH_ANSWERS.zip"
-			with-reference="true" />
-			-->
-	</task>
+  <task name="BB-event">
+    <description>Bacteria Biotope binary event extraction.</description>
+    <schema alias-name="BB-event-schema">
+      <text-bound type="Title" />
+      <text-bound type="Paragraph" />
+      <text-bound type="Bacteria" />
+      <text-bound type="Habitat" />
+      <text-bound type="Geographical" />
+      <relation type="Lives_In" alias-name="Lives_In">
+	<roles>Bacteria,Location</roles>
+	<mandatory-arguments>Bacteria,Location</mandatory-arguments>
+	<argument-types role="Bacteria">Bacteria</argument-types>
+	<argument-types role="Location">Habitat,Geographical</argument-types>
+      </relation>
+    </schema>
+    <evaluation name="Standard pairing">
+      <pairing-algorithm>
+	<custom>org.bionlpst.evaluation.BBEventPairing</custom>
+      </pairing-algorithm>
+      <matching-similarity>
+	<product>
+	  <argument role="Bacteria">
+	    <equivalence>
+	      <same />
+	    </equivalence>
+	  </argument>
+	  <argument role="Location">
+	    <equivalence>
+	      <same />
+	    </equivalence>
+	  </argument>
+	</product>
+      </matching-similarity>
+      <scoring name="Lives_In">
+	<f1-measures/>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Lives_In (Habitat)">
+	<post-filter>
+	  <argument role="Location">
+	    <types>Habitat</types>
+	  </argument>
+	</post-filter>
+	<f1-measures/>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Lives_In (Geographical)">
+	<post-filter>
+	  <argument role="Location">
+	    <types>Geographical</types>
+	  </argument>
+	</post-filter>
+	<f1-measures/>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Lives_In (inside sentences)">
+	<post-filter>
+	  <same-sentence jar="org/bionlpst/data/BB-sentences.txt" />
+	</post-filter>
+	<f1-measures/>
+	<measure>predictions</measure>
+      </scoring>
+    </evaluation>
+    <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_train.zip" />
+    <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_dev.zip" />
+    <!--
+	<test
+	zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_test_WITH_ANSWERS.zip"
+	with-reference="true" />
+    -->
+  </task>
 
-	<task name="BB-kb">
-		<description>Bacteria Biotope entity categorization and binary event
-			extraction.</description>
-		<description>
-			<em>Bacteria</em>
-			entities are categorized in the NCBI Taxonomy,
-			<em>Habitat</em>
-			entities are categorized in the OntoBiotope ontology.
-		</description>
-		<description>Submissions are evaluated from the knowledge base
-			population point of view.</description>
-		<schema>
-			<text-bound type="Title" />
-			<text-bound type="Paragraph" />
-			<text-bound type="Bacteria">
-				<backreference-cardinality at-least="1">NCBI_Taxonomy</backreference-cardinality>
-			</text-bound>
-			<text-bound type="Habitat">
-				<backreference-cardinality at-least="1">OntoBiotope</backreference-cardinality>
-			</text-bound>
-			<relation type="Lives_In">
-				<roles>Bacteria,Location</roles>
-				<mandatory-arguments>Bacteria,Location</mandatory-arguments>
-				<argument-types role="Bacteria">Bacteria</argument-types>
-				<argument-types role="Location">Habitat</argument-types>
-			</relation>
-			<normalization type="OntoBiotope">
-				<annotation-types>Habitat</annotation-types>
-				<reference-vocabulary
-					jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016.txt" />
-			</normalization>
-			<normalization type="NCBI_Taxonomy">
-				<annotation-types>Bacteria</annotation-types>
-				<reference-vocabulary jar="org/bionlpst/data/NCBI_Taxonomy.txt" />
-			</normalization>
-		</schema>
-		<post-processing>org.bionlpst.app.BBKBPostprocessing</post-processing>
-		<evaluation name="Standard pairing">
-			<pre-filter>
-				<types>KB_Lives_In</types>
-			</pre-filter>
-			<pairing-algorithm>
-				<references false-negatives="true" />
-			</pairing-algorithm>
-			<matching-similarity>
-				<product>
-					<wang weight="0.65" normalization-type="OntoBiotope"
-						jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-					<normalization normalization-type="NCBI_Taxonomy" />
-				</product>
-			</matching-similarity>
-			<scoring name="Standard scoring">
-				<measure>mean-references</measure>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-			</scoring>
-		</evaluation>
-		<evaluation name="Cap to species">
-			<pre-filter>
-				<types>KB_Lives_In_Cap_To_Species</types>
-			</pre-filter>
-			<pairing-algorithm>
-				<references false-negatives="true" />
-			</pairing-algorithm>
-			<matching-similarity>
-				<product>
-					<wang weight="0.65" normalization-type="OntoBiotope"
-						jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-					<normalization normalization-type="NCBI_Taxonomy" />
-				</product>
-			</matching-similarity>
-			<scoring name="Standard scoring">
-				<measure>mean-references</measure>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-			</scoring>
-		</evaluation>
-		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_train.zip" />
-		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_dev.zip" />
-		<!--
-		<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_test_WITH_ANSWERS.zip"
-		with-reference="true" />
-		-->
-	</task>
+  <task name="BB-kb">
+    <description>Bacteria Biotope entity categorization and binary event
+    extraction.</description>
+    <description>
+      <em>Bacteria</em>
+      entities are categorized in the NCBI Taxonomy,
+      <em>Habitat</em>
+      entities are categorized in the OntoBiotope ontology.
+    </description>
+    <description>Submissions are evaluated from the knowledge base
+    population point of view.</description>
+    <schema append-alias-children="BB-cat-schema Lives_In" />
+    <post-processing>org.bionlpst.app.BBKBPostprocessing</post-processing>
+    <evaluation name="Standard pairing" alias-name="BB-event-eval-standard">
+      <pre-filter>
+	<types>KB_Lives_In</types>
+      </pre-filter>
+      <pairing-algorithm>
+	<references false-negatives="true" />
+      </pairing-algorithm>
+      <matching-similarity>
+	<product alias-name="BB-kb-sim" append-alias="wang-sim bact-sim" />
+      </matching-similarity>
+      <scoring name="Standard scoring">
+	<measure>mean-references</measure>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+      </scoring>
+    </evaluation>
+    <evaluation name="Cap to species" alias-name="BB-event-eval-species">
+      <pre-filter>
+	<types>KB_Lives_In_Cap_To_Species</types>
+      </pre-filter>
+      <pairing-algorithm>
+	<references false-negatives="true" />
+      </pairing-algorithm>
+      <matching-similarity append-alias="BB-kb-sim" />
+      <scoring name="Standard scoring">
+	<measure>mean-references</measure>
+	<measure>predictions</measure>
+	<measure>false-negatives</measure>
+      </scoring>
+    </evaluation>
+    <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_train.zip" />
+    <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_dev.zip" />
+    <!--
+	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_test_WITH_ANSWERS.zip"
+	with-reference="true" />
+    -->
+  </task>
 
-	<task name="BB-cat+ner">
-		<description>Bacteria Biotope named entity recognition and
-			categorization.</description>
-		<description>
-			<em>Bacteria</em>
-			entities are categorized in the NCBI Taxonomy,
-			<em>Habitat</em>
-			entities are categorized in the OntoBiotope ontology.
-		</description>
-		<schema>
-			<text-bound type="Title" />
-			<text-bound type="Paragraph" />
-			<text-bound type="Bacteria">
-				<backreference-cardinality at-least="1">NCBI_Taxonomy</backreference-cardinality>
-			</text-bound>
-			<text-bound type="Habitat">
-				<backreference-cardinality at-least="1">OntoBiotope</backreference-cardinality>
-			</text-bound>
-			<normalization type="OntoBiotope">
-				<annotation-types>Habitat</annotation-types>
-				<reference-vocabulary
-					jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016.txt" />
-			</normalization>
-			<normalization type="NCBI_Taxonomy">
-				<annotation-types>Bacteria</annotation-types>
-				<reference-vocabulary jar="org/bionlpst/data/NCBI_Taxonomy.txt" />
-			</normalization>
-		</schema>
-		<evaluation name="Standard pairing">
-			<matching-similarity>
-				<product>
-					<jaccard />
-					<type-dispatch>
-						<wang type="Habitat" weight="0.65" normalization-type="OntoBiotope"
-							jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-						<normalization type="Bacteria" normalization-type="NCBI_Taxonomy" />
-					</type-dispatch>
-				</product>
-			</matching-similarity>
-			<pre-filter>
-				<types>Bacteria,Habitat</types>
-			</pre-filter>
-			<scoring name="Standard scoring">
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Habitats only">
-				<post-filter>
-					<types>Habitat</types>
-				</post-filter>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Bacteria only">
-				<post-filter>
-					<types>Bacteria</types>
-				</post-filter>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Ignore boundaries">
-				<similarity>
-					<type-dispatch>
-						<wang type="Habitat" weight="0.65" normalization-type="OntoBiotope"
-							jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-						<normalization type="Bacteria" normalization-type="NCBI_Taxonomy" />
-					</type-dispatch>
-				</similarity>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Ignore boundaries (Habitats)">
-				<post-filter>
-					<types>Habitat</types>
-				</post-filter>
-				<similarity>
-					<wang type="Habitat" weight="0.65" normalization-type="OntoBiotope"
-						jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-				</similarity>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Ignore boundaries (Bacteria)">
-				<post-filter>
-					<types>Bacteria</types>
-				</post-filter>
-				<similarity>
-					<normalization type="Bacteria" normalization-type="NCBI_Taxonomy" />
-				</similarity>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Multiple normalizations">
-				<similarity>
-					<type-dispatch>
-						<wang type="Habitat" weight="0.65" normalization-type="OntoBiotope"
-							jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-						<normalization type="Bacteria" normalization-type="NCBI_Taxonomy" />
-					</type-dispatch>
-				</similarity>
-				<post-filter>
-					<or>
-						<backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
-						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
-					</or>
-				</post-filter>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Multiple normalizations (Habitats)">
-				<post-filter>
-					<and>
-						<types>Habitat</types>
-						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
-					</and>
-				</post-filter>
-				<similarity>
-					<wang type="Habitat" weight="0.65" normalization-type="OntoBiotope"
-						jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-				</similarity>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Multiple normalizations (Bacteria)">
-				<post-filter>
-					<and>
-						<types>Bacteria</types>
-						<backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
-					</and>
-				</post-filter>
-				<similarity>
-					<normalization type="Bacteria" normalization-type="NCBI_Taxonomy" />
-				</similarity>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-		</evaluation>
-		<evaluation name="Cap to species">
-			<matching-similarity>
-				<product>
-					<jaccard />
-					<normalization normalization-type="NCBI_Taxonomy">
-						<referent-map jar="org/bionlpst/data/Bacteria_species.txt"/>
-					</normalization>
-				</product>
-			</matching-similarity>
-			<pre-filter>
-				<types>Bacteria</types>
-			</pre-filter>
-			<scoring name="Bacteria only">
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Ignore boundaries (Bacteria)">
-				<similarity>
-					<normalization type="Bacteria" normalization-type="NCBI_Taxonomy">
-						<referent-map jar="org/bionlpst/data/Bacteria_species.txt"/>
-					</normalization>
-				</similarity>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-		</evaluation>
-		<evaluation name="Boundaries pairing">
-			<matching-similarity>
-				<jaccard />
-			</matching-similarity>
-			<pre-filter>
-				<types>Bacteria,Habitat</types>
-			</pre-filter>
-			<scoring name="Boundaries scoring">
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Habitats boundaries only">
-				<post-filter>
-					<types>Habitat</types>
-				</post-filter>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Bacteria boundaries only">
-				<post-filter>
-					<types>Bacteria</types>
-				</post-filter>
-				<ser-measures/>
-				<measure>recall</measure>
-				<measure>precision</measure>
-				<measure>predictions</measure>
-			</scoring>
-		</evaluation>
-		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_train.zip" />
-		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_dev.zip" />
-		<!--
-		<test
-			zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_test_WITH_ANSWERS.zip"
-			with-reference="true" />
-			-->
-	</task>
+  <task name="BB-cat+ner">
+    <description>Bacteria Biotope named entity recognition and
+    categorization.</description>
+    <description>
+      <em>Bacteria</em>
+      entities are categorized in the NCBI Taxonomy,
+      <em>Habitat</em>
+      entities are categorized in the OntoBiotope ontology.
+    </description>
+    <schema replace-alias="BB-cat-schema"/>
+    <evaluation name="Standard pairing">
+      <matching-similarity>
+	<product>
+	  <jaccard />
+	  <type-dispatch replace-alias="BB-cat-sim"/>
+	</product>
+      </matching-similarity>
+      <pre-filter>
+	<types>Bacteria,Habitat</types>
+      </pre-filter>
+      <scoring name="Standard scoring">
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Habitats only">
+	<post-filter>
+	  <types>Habitat</types>
+	</post-filter>
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Bacteria only">
+	<post-filter>
+	  <types>Bacteria</types>
+	</post-filter>
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Ignore boundaries">
+	<similarity>
+	  <type-dispatch replace-alias="BB-cat-sim" />
+	</similarity>
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Ignore boundaries (Habitats)">
+	<post-filter>
+	  <types>Habitat</types>
+	</post-filter>
+	<similarity append-alias="wang-sim" />
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Ignore boundaries (Bacteria)">
+	<post-filter>
+	  <types>Bacteria</types>
+	</post-filter>
+	<similarity append-alias="bact-sim" />
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Multiple normalizations">
+	<similarity>
+	  <type-dispatch replace-alias="BB-cat-sim" />
+	</similarity>
+	<post-filter>
+	  <or>
+	    <backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
+	    <backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+	  </or>
+	</post-filter>
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Multiple normalizations (Habitats)">
+	<post-filter>
+	  <and>
+	    <types>Habitat</types>
+	    <backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+	  </and>
+	</post-filter>
+	<similarity append-alias="wang-sim" />
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Multiple normalizations (Bacteria)">
+	<post-filter>
+	  <and>
+	    <types>Bacteria</types>
+	    <backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
+	  </and>
+	</post-filter>
+	<similarity append-alias="bact-sim" />
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+    </evaluation>
+    <evaluation name="Cap to species">
+      <matching-similarity>
+	<product>
+	  <jaccard />
+	  <normalization replace-alias="bact-species-sim" />
+	</product>
+      </matching-similarity>
+      <pre-filter>
+	<types>Bacteria</types>
+      </pre-filter>
+      <scoring name="Bacteria only">
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Ignore boundaries (Bacteria)">
+	<similarity append-alias="bact-species-sim" />
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+    </evaluation>
+    <evaluation name="Boundaries pairing">
+      <matching-similarity>
+	<jaccard />
+      </matching-similarity>
+      <pre-filter>
+	<types>Bacteria,Habitat</types>
+      </pre-filter>
+      <scoring name="Boundaries scoring">
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Habitats boundaries only">
+	<post-filter>
+	  <types>Habitat</types>
+	</post-filter>
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Bacteria boundaries only">
+	<post-filter>
+	  <types>Bacteria</types>
+	</post-filter>
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+    </evaluation>
+    <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_train.zip" />
+    <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_dev.zip" />
+    <!--
+	<test
+	zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_test_WITH_ANSWERS.zip"
+	with-reference="true" />
+    -->
+  </task>
 
-	<task name="BB-event+ner">
-		<description>Bacteria Biotope named entity recognition and binary
-			event extraction.</description>
-		<schema>
-			<text-bound type="Title" />
-			<text-bound type="Paragraph" />
-			<text-bound type="Bacteria" />
-			<text-bound type="Habitat" />
-			<text-bound type="Geographical" />
-			<relation type="Lives_In">
-				<roles>Bacteria,Location</roles>
-				<mandatory-arguments>Bacteria,Location</mandatory-arguments>
-				<argument-types role="Bacteria">Bacteria</argument-types>
-				<argument-types role="Location">Habitat,Geographical</argument-types>
-			</relation>
-		</schema>
-		<evaluation name="Standard pairing">
-			<pre-filter>
-				<types>Lives_In</types>
-			</pre-filter>
-			<pairing-algorithm>
-				<custom>org.bionlpst.evaluation.BBEventPairing</custom>
-			</pairing-algorithm>
-			<matching-similarity>
-				<product>
-					<argument role="Bacteria">
-						<equivalence>
-							<product>
-								<type />
-								<jaccard />
-							</product>
-						</equivalence>
-					</argument>
-					<argument role="Location">
-						<equivalence>
-							<product>
-								<type />
-								<jaccard />
-							</product>
-						</equivalence>
-					</argument>
-				</product>
-			</matching-similarity>
-			<scoring name="Lives_In">
-				<f1-measures/>
-				<ser-measures/>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Lives_In (Habitat)">
-				<post-filter>
-					<argument role="Location">
-						<types>Habitat</types>
-					</argument>
-				</post-filter>
-				<f1-measures/>
-				<ser-measures/>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Lives_In (Geographical)">
-				<post-filter>
-					<argument role="Location">
-						<types>Geographical</types>
-					</argument>
-				</post-filter>
-				<f1-measures/>
-				<ser-measures/>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Lives_In (inside sentences)">
-				<post-filter>
-					<same-sentence jar="org/bionlpst/data/BB-sentences.txt" />
-				</post-filter>
-				<f1-measures/>
-				<ser-measures/>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Lives_In (ignore boundaries)">
-				<similarity>
-					<constant>1</constant>
-				</similarity>
-				<f1-measures/>
-				<ser-measures/>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Lives_In (Habitat, ignore boundaries)">
-				<similarity>
-					<constant>1</constant>
-				</similarity>
-				<post-filter>
-					<argument role="Location">
-						<types>Habitat</types>
-					</argument>
-				</post-filter>
-				<f1-measures/>
-				<ser-measures/>
-				<measure>predictions</measure>
-			</scoring>
-			<scoring name="Lives_In (Geographical, ignore boundaries)">
-				<similarity>
-					<constant>1</constant>
-				</similarity>
-				<post-filter>
-					<argument role="Location">
-						<types>Geographical</types>
-					</argument>
-				</post-filter>
-				<f1-measures/>
-				<ser-measures/>
-				<measure>predictions</measure>
-			</scoring>
-		</evaluation>
-		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_train.zip" />
-		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_dev.zip" />
-		<!-- <test
-			zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_test_WITH_ANSWERS.zip"
-			with-reference="true" />-->
-	</task>
+  <task name="BB-event+ner">
+    <description>Bacteria Biotope named entity recognition and binary event extraction.</description>
+    <schema replace-alias="BB-event-schema" />
+    <evaluation name="Standard pairing">
+      <pre-filter>
+	<types>Lives_In</types>
+      </pre-filter>
+      <pairing-algorithm>
+	<custom>org.bionlpst.evaluation.BBEventPairing</custom>
+      </pairing-algorithm>
+      <matching-similarity>
+	<product>
+	  <argument role="Bacteria">
+	    <equivalence>
+	      <product>
+		<type />
+		<jaccard />
+	      </product>
+	    </equivalence>
+	  </argument>
+	  <argument role="Location">
+	    <equivalence>
+	      <product>
+		<type />
+		<jaccard />
+	      </product>
+	    </equivalence>
+	  </argument>
+	</product>
+      </matching-similarity>
+      <scoring name="Lives_In">
+	<f1-measures/>
+	<ser-measures/>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Lives_In (Habitat)">
+	<post-filter>
+	  <argument role="Location">
+	    <types>Habitat</types>
+	  </argument>
+	</post-filter>
+	<f1-measures/>
+	<ser-measures/>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Lives_In (Geographical)">
+	<post-filter>
+	  <argument role="Location">
+	    <types>Geographical</types>
+	  </argument>
+	</post-filter>
+	<f1-measures/>
+	<ser-measures/>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Lives_In (inside sentences)">
+	<post-filter>
+	  <same-sentence jar="org/bionlpst/data/BB-sentences.txt" />
+	</post-filter>
+	<f1-measures/>
+	<ser-measures/>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Lives_In (ignore boundaries)">
+	<similarity>
+	  <constant>1</constant>
+	</similarity>
+	<f1-measures/>
+	<ser-measures/>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Lives_In (Habitat, ignore boundaries)">
+	<similarity>
+	  <constant>1</constant>
+	</similarity>
+	<post-filter>
+	  <argument role="Location">
+	    <types>Habitat</types>
+	  </argument>
+	</post-filter>
+	<f1-measures/>
+	<ser-measures/>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Lives_In (Geographical, ignore boundaries)">
+	<similarity>
+	  <constant>1</constant>
+	</similarity>
+	<post-filter>
+	  <argument role="Location">
+	    <types>Geographical</types>
+	  </argument>
+	</post-filter>
+	<f1-measures/>
+	<ser-measures/>
+	<measure>predictions</measure>
+      </scoring>
+    </evaluation>
+    <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_train.zip" />
+    <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_dev.zip" />
+    <!-- <test
+	 zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_test_WITH_ANSWERS.zip"
+	 with-reference="true" />-->
+  </task>
 
-	<task name="BB-kb+ner">
-		<description>Bacteria Biotope entity recognition and categorization,
-			and binary event extraction.</description>
-		<description>
-			<em>Bacteria</em>
-			entities are categorized in the NCBI Taxonomy,
-			<em>Habitat</em>
-			entities are categorized in the OntoBiotope ontology.
-		</description>
-		<description>Submissions are evaluated from the knowledge base
-			population point of view.</description>
-		<schema>
-			<text-bound type="Title" />
-			<text-bound type="Paragraph" />
-			<text-bound type="Bacteria">
-				<backreference-cardinality at-least="1">NCBI_Taxonomy</backreference-cardinality>
-			</text-bound>
-			<text-bound type="Habitat">
-				<backreference-cardinality at-least="1">OntoBiotope</backreference-cardinality>
-			</text-bound>
-			<relation type="Lives_In">
-				<roles>Bacteria,Location</roles>
-				<mandatory-arguments>Bacteria,Location</mandatory-arguments>
-				<argument-types role="Bacteria">Bacteria</argument-types>
-				<argument-types role="Location">Habitat</argument-types>
-			</relation>
-			<normalization type="OntoBiotope">
-				<annotation-types>Habitat</annotation-types>
-				<reference-vocabulary
-					jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016.txt" />
-			</normalization>
-			<normalization type="NCBI_Taxonomy">
-				<annotation-types>Bacteria</annotation-types>
-				<reference-vocabulary jar="org/bionlpst/data/NCBI_Taxonomy.txt" />
-			</normalization>
-		</schema>
-		<post-processing>org.bionlpst.app.BBKBPostprocessing</post-processing>
-		<evaluation name="Standard pairing">
-			<pre-filter>
-				<types>KB_Lives_In</types>
-			</pre-filter>
-			<pairing-algorithm>
-				<references false-negatives="true" />
-			</pairing-algorithm>
-			<matching-similarity>
-				<product>
-					<wang weight="0.65" normalization-type="OntoBiotope"
-						jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-					<normalization normalization-type="NCBI_Taxonomy" />
-				</product>
-			</matching-similarity>
-			<scoring name="Standard scoring">
-				<measure>mean-references</measure>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-			</scoring>
-		</evaluation>
-		<evaluation name="Cap to species">
-			<pre-filter>
-				<types>KB_Lives_In_Cap_To_Species</types>
-			</pre-filter>
-			<pairing-algorithm>
-				<references false-negatives="true" />
-			</pairing-algorithm>
-			<matching-similarity>
-				<product>
-					<wang weight="0.65" normalization-type="OntoBiotope"
-						jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
-					<normalization normalization-type="NCBI_Taxonomy" />
-				</product>
-			</matching-similarity>
-			<scoring name="Standard scoring">
-				<measure>mean-references</measure>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-			</scoring>
-		</evaluation>
-		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_train.zip" />
-		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_dev.zip" />
-		<!--
-		<test
-			zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_test_WITH_ANSWERS.zip"
-			with-reference="true" />
-			-->
-	</task>
+  <task name="BB-kb+ner">
+    <description>Bacteria Biotope entity recognition and categorization,
+    and binary event extraction.</description>
+    <description>
+      <em>Bacteria</em>
+      entities are categorized in the NCBI Taxonomy,
+      <em>Habitat</em>
+      entities are categorized in the OntoBiotope ontology.
+    </description>
+    <description>Submissions are evaluated from the knowledge base
+    population point of view.</description>
+    <schema append-alias-children="BB-cat-schema Lives_In" />
+    <post-processing>org.bionlpst.app.BBKBPostprocessing</post-processing>
+    <evaluation replace-alias="BB-event-eval-standard" />
+    <evaluation replace-alias="BB-event-eval-species" />		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_train.zip" />
+    <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_dev.zip" />
+    <!--
+	<test
+	zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_test_WITH_ANSWERS.zip"
+	with-reference="true" />
+    -->
+  </task>
 </task-definition>
