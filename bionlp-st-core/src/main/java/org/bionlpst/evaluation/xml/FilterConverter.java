@@ -49,7 +49,7 @@ public class FilterConverter implements DOMElementConverter<Filter<Annotation>> 
 				return AnnotationKind.NORMALIZATION;
 			}
 			case "not": {
-				List<Element> children = DOMUtil.getChildrenElements(element);
+				List<Element> children = DOMUtil.getChildrenElements(element, false);
 				if (children.isEmpty()) {
 					throw new BioNLPSTException("<not> requires a filter");
 				}
@@ -62,7 +62,7 @@ public class FilterConverter implements DOMElementConverter<Filter<Annotation>> 
 			}
 			case "and": {
 				Filter.Conjunction<Annotation> result = new Filter.Conjunction<Annotation>();
-				for (Element child : DOMUtil.getChildrenElements(element)) {
+				for (Element child : DOMUtil.getChildrenElements(element, false)) {
 					Filter<Annotation> filter = convert(child);
 					result.addFilter(filter);
 				}
@@ -70,7 +70,7 @@ public class FilterConverter implements DOMElementConverter<Filter<Annotation>> 
 			}
 			case "or": {
 				Filter.Disjunction<Annotation> result = new Filter.Disjunction<Annotation>();
-				for (Element child : DOMUtil.getChildrenElements(element)) {
+				for (Element child : DOMUtil.getChildrenElements(element, false)) {
 					Filter<Annotation> filter = convert(child);
 					result.addFilter(filter);
 				}

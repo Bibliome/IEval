@@ -88,7 +88,7 @@ public class SimilarityConverter implements DOMElementConverter<Similarity<Annot
 			}
 			case "type-table": {
 				AnnotationTypeSimilarity.TypeTable typeTable = new AnnotationTypeSimilarity.TypeTable();
-				for (Element child : DOMUtil.getChildrenElements(element)) {
+				for (Element child : DOMUtil.getChildrenElements(element, false)) {
 					String ref = DOMUtil.getMandatoryAttribute(child, "ref");
 					String pred = DOMUtil.getMandatoryAttribute(child, "pred");
 					double value = DOMUtil.getDoubleContents(child);
@@ -102,7 +102,7 @@ public class SimilarityConverter implements DOMElementConverter<Similarity<Annot
 				Similarity<Annotation> defaultSimilarity = new ConstantSimilarity<Annotation>(defaultValue);
 				Similarity<Annotation> differentSimilarity = new ConstantSimilarity<Annotation>(differentValue);
 				AnnotationTypeDispatchSimilarity<Annotation> result = new AnnotationTypeDispatchSimilarity<Annotation>(defaultSimilarity, differentSimilarity);
-				for (Element child : DOMUtil.getChildrenElements(element)) {
+				for (Element child : DOMUtil.getChildrenElements(element, false)) {
 					String name = DOMUtil.getMandatoryAttribute(child, "type");
 					Similarity<Annotation> sim = convert(child);
 					result.addSimilarity(name, sim);
@@ -131,7 +131,7 @@ public class SimilarityConverter implements DOMElementConverter<Similarity<Annot
 				}
 				boolean resolveEquivalences = DOMUtil.getBooleanAttribute(element, "resolve-equivalences", true);
 				Map<String,SameTypeAndArgumentsSimilarity.TypeConversion> typeConversions = new HashMap<String,SameTypeAndArgumentsSimilarity.TypeConversion>();
-				for (Element te : DOMUtil.getChildrenElements(element)) {
+				for (Element te : DOMUtil.getChildrenElements(element, false)) {
 					String type = te.getTagName();
 					SameTypeAndArgumentsSimilarity.TypeConversion conversion = convertTypeConversion(te, type);
 					typeConversions.put(type, conversion);
@@ -169,7 +169,7 @@ public class SimilarityConverter implements DOMElementConverter<Similarity<Annot
 	}
 	
 	private void fillCompositeSimilarity(CompositeSimilarity<Annotation> result, Element element) throws Exception {
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			Similarity<Annotation> sim = convert(child);
 			result.addSimilarity(sim);
 		}
@@ -178,7 +178,7 @@ public class SimilarityConverter implements DOMElementConverter<Similarity<Annot
 	private static SameTypeAndArgumentsSimilarity.TypeConversion convertTypeConversion(Element element, String type) {
 		String newType = DOMUtil.getAttribute(element, "new-type", type);
 		Map<String,String> roleConversion = new HashMap<String,String>();
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			String role = child.getTagName();
 			String newRole = child.getTextContent();
 			roleConversion.put(role, newRole);
@@ -188,7 +188,7 @@ public class SimilarityConverter implements DOMElementConverter<Similarity<Annot
 	
 	private Map<String,String> getReferentMap(Element element) throws Exception {
 		Map<String,String> result = new HashMap<String,String>();
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			if (child.getTagName().equals("referent-map")) {
 				SourceStreamConverter converter = new SourceStreamConverter(classLoader);
 				SourceStream source = converter.convert(child);

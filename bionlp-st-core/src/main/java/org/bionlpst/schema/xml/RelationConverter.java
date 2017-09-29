@@ -20,7 +20,7 @@ public enum RelationConverter implements DOMElementConverter<Schema<Relation>> {
 	public Schema<Relation> convert(Element element) throws Exception {
 		CompositeSchema<Relation> result = new CompositeSchema<Relation>();
 		
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			String tag = child.getTagName();
 			switch (tag) {
 				case "custom": {

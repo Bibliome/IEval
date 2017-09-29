@@ -69,7 +69,7 @@ public class ScoringConverter implements DOMElementConverter<Scoring<Annotation>
 		Filter<Annotation> postFilter = null;
 		Similarity<Annotation> similarity = null;
 		Collection<Measure> measures = new ArrayList<Measure>();
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			String tag = child.getTagName();
 			switch (tag) {
 				case "post-filter": {

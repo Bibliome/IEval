@@ -21,7 +21,7 @@ import org.w3c.dom.Text;
 public enum DOMUtil {
 	;
 	
-	public static List<Element> getChildrenElements(Element elt) {
+	public static List<Element> getChildrenElements(Element elt, boolean allowJunkText) {
 		List<Element> result = new ArrayList<Element>();
 		NodeList children = elt.getChildNodes();
 		for (int i = 0; i < children.getLength(); ++i) {
@@ -32,6 +32,9 @@ public enum DOMUtil {
 					break;
 				}
 				case Node.TEXT_NODE: {
+					if (allowJunkText) {
+						break;
+					}
 					Text txt = (Text) child;
 					String s = txt.getWholeText();
 					if (!s.trim().isEmpty()) {
@@ -145,7 +148,10 @@ public enum DOMUtil {
 	}
 	
 	public static <T> T convert(DOMElementConverter<T> converter, Document doc) throws Exception {
+		DOMAliases aliases = new DOMAliases("alias-name", "replace-alias", "append-alias", "replace-alias-children", "append-alias-children");
 		Element element = doc.getDocumentElement();
+		aliases.addRecursiveAliases(element);
+		aliases.replace(element);
 		return converter.convert(element);
 	}
 	

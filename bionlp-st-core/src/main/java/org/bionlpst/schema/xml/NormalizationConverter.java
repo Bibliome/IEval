@@ -33,7 +33,7 @@ public class NormalizationConverter implements DOMElementConverter<Schema<Normal
 	public Schema<Normalization> convert(Element element) throws Exception {
 		CompositeSchema<Normalization> result = new CompositeSchema<Normalization>();
 		
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			String tag = child.getTagName();
 			switch (tag) {
 				case "custom": {

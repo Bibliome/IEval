@@ -40,7 +40,7 @@ public class CorpusSchemaConverter implements DOMElementConverter<Schema<Corpus>
 		docSchema.addCompound(new BasicDocumentSchema(annSchema));
 		result.addCompound(new BasicCorpusSchema(docSchema));
 		
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			String tag = child.getTagName();
 			switch (tag) {
 				case "custom-corpus": {

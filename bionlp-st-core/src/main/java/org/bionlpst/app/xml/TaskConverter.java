@@ -36,7 +36,7 @@ public class TaskConverter implements DOMElementConverter<Task> {
 	public Task convert(Element element) throws Exception {
 		String name = DOMUtil.getMandatoryAttribute(element, "name");
 		Task result = new Task(name);
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			String tag = child.getTagName();
 			switch (tag) {
 				case "description": {

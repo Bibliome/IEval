@@ -17,7 +17,7 @@ public enum ModifierConverter implements DOMElementConverter<Schema<Modifier>> {
 	public Schema<Modifier> convert(Element element) throws Exception {
 		CompositeSchema<Modifier> result = new CompositeSchema<Modifier>();
 		
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			String tag = child.getTagName();
 			switch (tag) {
 				case "custom": {

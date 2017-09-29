@@ -14,7 +14,7 @@ public enum MeasureMapConverter implements DOMElementConverter<Map<String,Measur
 	@Override
 	public Map<String,Measure> convert(Element element) throws Exception {
 		Map<String,Measure> result = new LinkedHashMap<String,Measure>();
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			String name = child.getTagName();
 			String sMeasure = child.getTextContent();
 			Measure measure = MeasureConverter.getMeasure(sMeasure);

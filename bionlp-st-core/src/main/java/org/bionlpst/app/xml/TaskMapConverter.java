@@ -29,7 +29,7 @@ public class TaskMapConverter implements DOMElementConverter<Map<String,Task>> {
 
 	@Override
 	public Map<String,Task> convert(Element element) throws Exception {
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			Task task = taskConverter.convert(child);
 			String name = task.getName();
 			if (result.containsKey(name)) {

@@ -17,7 +17,7 @@ public enum TextBoundConverter implements DOMElementConverter<Schema<TextBound>>
 	public Schema<TextBound> convert(Element element) throws Exception {
 		CompositeSchema<TextBound> result = new CompositeSchema<TextBound>();
 		
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			String tag = child.getTagName();
 			switch (tag) {
 				case "custom": {

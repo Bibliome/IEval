@@ -35,7 +35,7 @@ public class EvaluationConverter implements DOMElementConverter<AnnotationEvalua
 		Similarity<Annotation> matchingSimilarity = null;
 		List<Scoring<Annotation>> scorings = new ArrayList<Scoring<Annotation>>();
 		Filter<Annotation> preFilter = null;
-		for (Element child : DOMUtil.getChildrenElements(element)) {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			String tag = child.getTagName();
 			switch (tag) {
 				case "pairing-algorithm": {
