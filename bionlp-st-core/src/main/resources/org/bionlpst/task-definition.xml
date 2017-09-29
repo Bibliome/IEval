@@ -276,9 +276,11 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_dev.zip" />
+		<!--
 		<test
 			zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_test_WITH_ANSWERS.zip"
 			with-reference="true" />
+			-->
 	</task>
 
 	<task name="SeeDev-binary">
@@ -779,9 +781,11 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_dev.zip" />
+		<!--
 		<test
 			zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_test_WITH_ANSWERS.zip"
 			with-reference="true" />
+			-->
 	</task>
 
 	<task name="BB-cat">
@@ -913,8 +917,10 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_dev.zip" />
+		<!--
 		<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_test_WITH_ANSWERS.zip"
-			with-reference="true" />
+		with-reference="true" />
+		-->
 	</task>
 
 	<task name="BB-event">
@@ -982,9 +988,11 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_dev.zip" />
+		<!--
 		<test
 			zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_test_WITH_ANSWERS.zip"
 			with-reference="true" />
+			-->
 	</task>
 
 	<task name="BB-kb">
@@ -1066,8 +1074,10 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_dev.zip" />
+		<!--
 		<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_test_WITH_ANSWERS.zip"
-			with-reference="true" />
+		with-reference="true" />
+		-->
 	</task>
 
 	<task name="BB-cat+ner">
@@ -1289,9 +1299,11 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_dev.zip" />
+		<!--
 		<test
 			zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_test_WITH_ANSWERS.zip"
 			with-reference="true" />
+			-->
 	</task>
 
 	<task name="BB-event+ner">
@@ -1410,9 +1422,6 @@
 		<!-- <test
 			zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_test_WITH_ANSWERS.zip"
 			with-reference="true" />-->
-		<test
-			zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_all_WITH_ANSWERS.zip"
-			with-reference="true" />
 	</task>
 
 	<task name="BB-kb+ner">
@@ -1494,8 +1503,10 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_dev.zip" />
+		<!--
 		<test
 			zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_test_WITH_ANSWERS.zip"
 			with-reference="true" />
+			-->
 	</task>
 </task-definition>
