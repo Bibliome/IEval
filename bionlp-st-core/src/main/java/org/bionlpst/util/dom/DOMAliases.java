@@ -4,28 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class DOMAliases {
-	private final Map<String,Element> aliases = new HashMap<String,Element>();
-	private final String aliasNameAttribute;
-	private final String replaceAliasAttribute;
-	private final String appendAliasAttribute;
-	private final String replaceAliasChildrenAttribute;
-	private final String appendAliasChildrenAttribute;
+	private final Map<String,DocumentFragment> aliases = new HashMap<String,DocumentFragment>();
 
-	public DOMAliases(String aliasNameAttribute, String replaceAliasAttribute, String appendAliasAttribute, String replaceAliasChildrenAttribute, String appendAliasChildrenAttribute) {
+	public DOMAliases() {
 		super();
-		this.aliasNameAttribute = aliasNameAttribute;
-		this.replaceAliasAttribute = replaceAliasAttribute;
-		this.appendAliasAttribute = appendAliasAttribute;
-		this.replaceAliasChildrenAttribute = replaceAliasChildrenAttribute;
-		this.appendAliasChildrenAttribute = appendAliasChildrenAttribute;
 	}
 
-	public void addAlias(String name, Element value) {
+	public void addAlias(String name, DocumentFragment value) {
 		if (hasAlias(name)) {
 			throw new IllegalArgumentException("duplicate alias name: " + name);
 		}
@@ -36,7 +27,7 @@ public class DOMAliases {
 		return aliases.containsKey(name);
 	}
 	
-	public Element getAlias(String name) {
+	public DocumentFragment getAlias(String name) {
 		if (hasAlias(name)) {
 			return aliases.get(name);
 		}
@@ -44,81 +35,45 @@ public class DOMAliases {
 	}
 	
 	public Node getAliasClone(String name, Document owner) {
-		Element value = getAlias(name);
+		DocumentFragment value = getAlias(name);
 		Node result = value.cloneNode(true);
 		owner.adoptNode(result);
 		return result;
 	}
 	
-	public void addRecursiveAliases(Element elt) {
-		if (elt.hasAttribute(aliasNameAttribute)) {
-			String name = elt.getAttribute(aliasNameAttribute);
-			addAlias(name, elt);
+	public boolean replace(Node elt) {
+		boolean result = replaceChildren(elt);
+		String tagName = elt.getNodeName();
+		if (!hasAlias(tagName)) {
+			return result;
 		}
-		addRecursiveChildrenAliases(elt);
+		NodeList children = elt.getChildNodes();
+		if (children.getLength() > 0) {
+			return result;
+		}
+		Document owner = elt.getOwnerDocument();
+		Node value = getAliasClone(tagName, owner);
+		Node parent = elt.getParentNode();
+		parent.replaceChild(value, elt);
+		return true;
 	}
 
-	private void addRecursiveChildrenAliases(Element elt) {
+	private boolean replaceChildren(Node elt) {
+		boolean result = false;
 		for (Element child : DOMUtil.getChildrenElements(elt, true)) {
-			addRecursiveAliases(child);
+			result = replace(child) || result;
 		}
-	}
-
-	public void addRecursiveAliases(Document doc) {
-		addRecursiveAliases(doc.getDocumentElement());
-	}
-	
-	public void replace(Element elt) {
-		replaceChildren(elt);
-		if (elt.hasAttribute(replaceAliasAttribute)) {
-			String name = elt.getAttribute(replaceAliasAttribute);
-			Document doc = elt.getOwnerDocument();
-			Node repl = getAliasClone(name, doc);
-			Node parent = elt.getParentNode();
-			parent.replaceChild(repl, elt);
-		}
-		if (elt.hasAttribute(appendAliasAttribute)) {
-			Document doc = elt.getOwnerDocument();
-			String names = elt.getAttribute(appendAliasAttribute);
-			for (String name : names.split("\\s+")) {
-				Node repl = getAliasClone(name, doc);
-				elt.appendChild(repl);
-			}
-		}
-		if (elt.hasAttribute(replaceAliasChildrenAttribute)) {
-			Document doc = elt.getOwnerDocument();
-			Node parent = elt.getParentNode();
-			String name = elt.getAttribute(replaceAliasChildrenAttribute);
-			Node repl = getAliasClone(name, doc);
-			NodeList children = repl.getChildNodes();
-			for (int i = 0; i < children.getLength(); ++i) {
-				Node child = children.item(i);
-				parent.insertBefore(child, elt);
-			}
-			parent.removeChild(elt);
-		}
-		if (elt.hasAttribute(appendAliasChildrenAttribute)) {
-			Document doc = elt.getOwnerDocument();
-			String names = elt.getAttribute(appendAliasChildrenAttribute);
-			for (String name : names.split("\\s+")) {
-				Node repl = getAliasClone(name, doc);
-				NodeList children = repl.getChildNodes();
-				for (int i = 0; i < children.getLength(); ++i) {
-					Node child = children.item(i);
-					elt.appendChild(child);
-				}
-			}
-		}
-	}
-
-	private void replaceChildren(Element elt) {
-		for (Element child : DOMUtil.getChildrenElements(elt, true)) {
-			replace(child);
-		}
+		return result;
 	}
 	
 	public void replace(Document doc) {
 		Element root = doc.getDocumentElement();
 		replace(root);
+	}
+	
+	public void replaceValues() {
+		for (DocumentFragment df : aliases.values()) {
+			while (replace(df));
+		}
 	}
 }
