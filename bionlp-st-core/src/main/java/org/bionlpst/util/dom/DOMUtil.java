@@ -8,11 +8,19 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.util.SourceStream;
 import org.bionlpst.util.Util;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -21,7 +29,7 @@ import org.w3c.dom.Text;
 public enum DOMUtil {
 	;
 	
-	public static List<Element> getChildrenElements(Element elt, boolean allowJunkText) {
+	public static List<Element> getChildrenElements(Node elt, boolean allowJunkText) {
 		List<Element> result = new ArrayList<Element>();
 		NodeList children = elt.getChildNodes();
 		for (int i = 0; i < children.getLength(); ++i) {
@@ -38,7 +46,7 @@ public enum DOMUtil {
 					Text txt = (Text) child;
 					String s = txt.getWholeText();
 					if (!s.trim().isEmpty()) {
-						throw new BioNLPSTException("junk text in tag " + elt.getTagName() + ": " + s);
+						throw new BioNLPSTException("junk text in tag " + elt.getNodeName() + ": " + s);
 					}
 					break;
 				}
@@ -71,7 +79,19 @@ public enum DOMUtil {
 		if (element.hasAttribute(attribute)) {
 			return element.getAttribute(attribute);
 		}
-		throw new BioNLPSTException("expected attribute: " + attribute);
+		throw new BioNLPSTException("expected attribute: " + attribute + " in " + getElementPath(element));
+	}
+	
+	private static String getElementPath(Element element) {
+		StringBuilder result = new StringBuilder();
+		for (Node e = element; e != null; e = e.getParentNode()) {
+			if (e != element) {
+				result.append(" < ");
+			}
+			String name = e.getNodeName();
+			result.append(name);
+		}
+		return result.toString();
 	}
 	
 	private static boolean getBoolean(String s) {
@@ -148,11 +168,42 @@ public enum DOMUtil {
 	}
 	
 	public static <T> T convert(DOMElementConverter<T> converter, Document doc) throws Exception {
-		DOMAliases aliases = new DOMAliases("alias-name", "replace-alias", "append-alias", "replace-alias-children", "append-alias-children");
+		DOMAliases aliases = createAliases(doc);
 		Element element = doc.getDocumentElement();
-		aliases.addRecursiveAliases(element);
 		aliases.replace(element);
 		return converter.convert(element);
+	}
+	
+	public static void writeDOMToFile(Document doc, File f) throws TransformerException {
+		TransformerFactory tf = TransformerFactory.newInstance();
+		Transformer t = tf.newTransformer();
+		Source source = new DOMSource(doc);
+		Result result = new StreamResult(f);
+		t.transform(source, result);		
+	}
+	
+	private static DOMAliases createAliases(Document doc) {
+		DOMAliases result = new DOMAliases();
+		Element element = doc.getDocumentElement();
+		for (Element child : getChildrenElements(element, true)) {
+			String tagName = child.getTagName();
+			if (tagName.equals("aliases")) {
+				for (Element alias : getChildrenElements(child, false)) {
+					String name = alias.getTagName();
+					DocumentFragment value = doc.createDocumentFragment();
+					NodeList valueContent = alias.getChildNodes();
+					for (int i = 0; i < valueContent.getLength(); ++i) {
+						Node n = valueContent.item(i);
+						Node n2 = n.cloneNode(true);
+						value.appendChild(n2);
+					}
+					result.addAlias(name, value);
+				}
+				element.removeChild(child);
+			}
+		}
+		result.replaceValues();
+		return result;
 	}
 	
 	private static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
