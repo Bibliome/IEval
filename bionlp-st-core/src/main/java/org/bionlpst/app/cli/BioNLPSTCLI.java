@@ -31,7 +31,7 @@ import org.bionlpst.util.message.CheckMessage;
 import org.bionlpst.util.message.CheckMessageLevel;
 
 public class BioNLPSTCLI {
-	private static final Location COMMAND_LINE_LOCATION = new Location("command-line", -1);
+	private static final Location COMMAND_LINE_LOCATION = new Location("", -1);
 	private final CheckLogger logger = new CheckLogger();
 	private String taskName = null;
 	private String set = null;
