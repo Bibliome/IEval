@@ -8,21 +8,24 @@ import java.util.Map;
 import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.AnnotationSetSelector;
 import org.bionlpst.corpus.Normalization;
+import org.bionlpst.util.Filter;
 
 public class NormalizationSimilarity implements Similarity<Annotation> {
 	private final String normalizationType;
+	private final Filter<String> acceptedReferents;
 	private final Similarity<Collection<String>> similarity;
 	private final Map<String,String> referentMap;
 	
-	public NormalizationSimilarity(String normalizationType, Similarity<Collection<String>> similarity, Map<String,String> referentMap) {
+	public NormalizationSimilarity(String normalizationType, Filter<String> acceptedReferents, Similarity<Collection<String>> similarity, Map<String,String> referentMap) {
 		super();
 		this.normalizationType = normalizationType;
+		this.acceptedReferents = acceptedReferents;
 		this.similarity = similarity;
 		this.referentMap = referentMap;
 	}
 	
-	public NormalizationSimilarity(String normalizationType, Similarity<Collection<String>> similarity) {
-		this(normalizationType, similarity, new HashMap<String,String>());
+	public NormalizationSimilarity(String normalizationType, Filter<String> acceptedReferents, Similarity<Collection<String>> similarity) {
+		this(normalizationType, acceptedReferents, similarity, new HashMap<String,String>());
 	}
 	
 	private Collection<String> getNormalizations(Annotation a, AnnotationSetSelector selector) {
@@ -34,7 +37,9 @@ public class NormalizationSimilarity implements Similarity<Annotation> {
 				if (referentMap.containsKey(referent)) {
 					referent = referentMap.get(referent);
 				}
-				result.add(referent);
+				if (acceptedReferents.accept(referent)) {
+					result.add(referent);
+				}
 			}
 		}
 		return result;

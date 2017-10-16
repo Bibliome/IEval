@@ -8,6 +8,7 @@ import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.AnnotationKind;
 import org.bionlpst.corpus.AnnotationTypeFilter;
 import org.bionlpst.corpus.BackReferenceCardinalityFilter;
+import org.bionlpst.corpus.NormalizationFilter;
 import org.bionlpst.corpus.SameSentenceFilter;
 import org.bionlpst.util.Filter;
 import org.bionlpst.util.SourceStream;
@@ -98,6 +99,14 @@ public class FilterConverter implements DOMElementConverter<Filter<Annotation>> 
 				int atLeast = DOMUtil.getIntAttribute(element, "at-least", 0);
 				int atMost = DOMUtil.getIntAttribute(element, "at-most", Integer.MAX_VALUE);
 				return new BackReferenceCardinalityFilter<Annotation>(type, atLeast, atMost);
+			}
+			case "referent-filter": {
+				String type = element.getTextContent().trim();
+				SourceStreamConverter converter = new SourceStreamConverter(classLoader);
+				SourceStream source = converter.convert(element);
+				try (BufferedReader r = source.openBufferedReader()) {
+					return new NormalizationFilter<Annotation>(type, r);
+				}
 			}
 			case "custom": {
 				@SuppressWarnings("unchecked")

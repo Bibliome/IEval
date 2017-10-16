@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.corpus.Annotation;
+import org.bionlpst.corpus.CollectionFilter;
 import org.bionlpst.evaluation.similarity.AnnotationKindSimilarity;
 import org.bionlpst.evaluation.similarity.AnnotationTypeDispatchSimilarity;
 import org.bionlpst.evaluation.similarity.AnnotationTypeSimilarity;
@@ -29,6 +30,7 @@ import org.bionlpst.evaluation.similarity.SimilarityCutoff;
 import org.bionlpst.evaluation.similarity.SingleReferenceSimilarity;
 import org.bionlpst.evaluation.similarity.TextBoundJaccard;
 import org.bionlpst.evaluation.similarity.WangSimilarity;
+import org.bionlpst.util.Filter;
 import org.bionlpst.util.SourceStream;
 import org.bionlpst.util.Util;
 import org.bionlpst.util.dom.DOMElementConverter;
@@ -146,16 +148,19 @@ public class SimilarityConverter implements DOMElementConverter<Similarity<Annot
 			case "normalization": {
 				String normalizationType = DOMUtil.getMandatoryAttribute(element, "normalization-type");
 				Map<String,String> referentMap = getReferentMap(element);
-				return new NormalizationSimilarity(normalizationType, NormalizationJaccard.INSTANCE, referentMap);
+				Filter<String> acceptedReferents = getAcceptedReferents(element);
+				return new NormalizationSimilarity(normalizationType, acceptedReferents, NormalizationJaccard.INSTANCE, referentMap);
 			}
 			case "wang": {
 				double weight = DOMUtil.getDoubleAttribute(element, "weight");
 				String normalizationType = DOMUtil.getMandatoryAttribute(element, "normalization-type");
+				Map<String,String> referentMap = getReferentMap(element);
+				Filter<String> acceptedReferents = getAcceptedReferents(element);
 				SourceStreamConverter converter = new SourceStreamConverter(classLoader);
 				SourceStream source = converter.convert(element);
 				try (BufferedReader r = source.openBufferedReader()) {
 					Similarity<Collection<String>> wang = WangSimilarity.createFromParentsFile(r, weight);
-					return new NormalizationSimilarity(normalizationType, wang);
+					return new NormalizationSimilarity(normalizationType, acceptedReferents, wang, referentMap);
 				}
 			}
 			case "equivalence": {
@@ -167,7 +172,7 @@ public class SimilarityConverter implements DOMElementConverter<Similarity<Annot
 			}
 		}
 	}
-	
+
 	private void fillCompositeSimilarity(CompositeSimilarity<Annotation> result, Element element) throws Exception {
 		for (Element child : DOMUtil.getChildrenElements(element, false)) {
 			Similarity<Annotation> sim = convert(child);
@@ -207,5 +212,18 @@ public class SimilarityConverter implements DOMElementConverter<Similarity<Annot
 			}
 		}
 		return result;
+	}
+
+	private Filter<String> getAcceptedReferents(Element element) throws Exception {
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
+			if (child.getTagName().equals("referent-filter")) {
+				SourceStreamConverter converter = new SourceStreamConverter(classLoader);
+				SourceStream source = converter.convert(child);
+				try (BufferedReader r = source.openBufferedReader()) {
+					return new CollectionFilter(r);
+				}
+			}
+		}
+		return new Filter.AcceptAll<String>();
 	}
 }
