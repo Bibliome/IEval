@@ -631,7 +631,19 @@
 	  <types>Habitat</types>
 	</post-filter>
 	<similarity>
-	  <wang-sim/>
+	  <wang-sim-human/>
+	</similarity>
+	<measure>precision</measure>
+      </scoring>
+      <scoring name="Habitats only (food only)">
+	<post-filter>
+	  <and>
+	    <types>Habitat</types>
+	    <referent-filter jar="org/bionlpst/data/Habitats_food.txt">OntoBiotope</referent-filter>
+	  </and>
+	</post-filter>
+	<similarity>
+	  <wang-sim-food/>
 	</similarity>
 	<measure>precision</measure>
       </scoring>
@@ -825,6 +837,33 @@
 	<post-filter>
 	  <types>Habitat</types>
 	</post-filter>
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Habitats only (cap to human)">
+	<post-filter>
+	  <types>Habitat</types>
+	</post-filter>
+	<similarity>
+	  <wang-sim-human/>
+	</similarity>
+	<ser-measures/>
+	<measure>recall</measure>
+	<measure>precision</measure>
+	<measure>predictions</measure>
+      </scoring>
+      <scoring name="Habitats only (food only)">
+	<post-filter>
+	  <and>
+	    <types>Habitat</types>
+	    <referent-filter jar="org/bionlpst/data/Habitats_food.txt">OntoBiotope</referent-filter>
+	  </and>
+	</post-filter>
+	<similarity>
+	  <wang-sim-food/>
+	</similarity>
 	<ser-measures/>
 	<measure>recall</measure>
 	<measure>precision</measure>
@@ -1364,6 +1403,25 @@
 	  normalization-type="OntoBiotope"
 	  jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
     </wang-sim>
+
+    <wang-sim-human>
+      <wang
+	  type="Habitat"
+	  weight="0.65"
+	  normalization-type="OntoBiotope"
+	  jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt">
+	  <referent-map jar="org/bionlpst/data/Habitats_human.txt"/>
+	  </wang>
+    </wang-sim-human>
+
+    <wang-sim-food>
+      <wang
+	  type="Habitat"
+	  weight="0.65"
+	  normalization-type="OntoBiotope"
+	  jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" />
+	  <referent-filter jar="org/bionlpst/data/Habitats_food.txt">OntoBiotope</referent-filter>
+    </wang-sim-food>
 
     <bact-sim>
       <normalization
