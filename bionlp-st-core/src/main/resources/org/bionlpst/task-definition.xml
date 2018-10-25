@@ -194,11 +194,7 @@
     </evaluation>
     <train zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_train.zip" />
     <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_dev.zip" />
-    <!--
-	<test
-	zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_test_WITH_ANSWERS.zip"
-	with-reference="true" />
-    -->
+	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_test_WITH_ANSWERS.zip" with-reference="true" />
   </task>
 
   <task name="SeeDev-binary">
@@ -589,11 +585,7 @@
     </evaluation>
     <train zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_train.zip" />
     <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_dev.zip" />
-    <!--
-	<test
-	zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_test_WITH_ANSWERS.zip"
-	with-reference="true" />
-    -->
+	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_test_WITH_ANSWERS.zip" with-reference="true" />
   </task>
 
   <task name="BB-cat">
@@ -623,6 +615,15 @@
 	</post-filter>
 	<similarity>
 	  <wang-sim/>
+	</similarity>
+	<measure>precision</measure>
+      </scoring>
+      <scoring name="Habitats exact">
+	<post-filter>
+	  <types>Habitat</types>
+	</post-filter>
+	<similarity>
+	  <habitat-exact-sim/>
 	</similarity>
 	<measure>precision</measure>
       </scoring>
@@ -707,10 +708,7 @@
     </evaluation>
     <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_train.zip" />
     <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_dev.zip" />
-    <!--
-	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_test_WITH_ANSWERS.zip"
-	with-reference="true" />
-    -->
+	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat_test_WITH_ANSWERS.zip" with-reference="true" />
   </task>
 
   <task name="BB-event">
@@ -768,11 +766,7 @@
     </evaluation>
     <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_train.zip" />
     <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_dev.zip" />
-    <!--
-	<test
-	zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_test_WITH_ANSWERS.zip"
-	with-reference="true" />
-    -->
+	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event_test_WITH_ANSWERS.zip" with-reference="true" />
   </task>
 
   <task name="BB-kb">
@@ -799,10 +793,7 @@
     </evaluation>
     <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_train.zip" />
     <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_dev.zip" />
-    <!--
-	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_test_WITH_ANSWERS.zip"
-	with-reference="true" />
-    -->
+	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb_test_WITH_ANSWERS.zip" with-reference="true" />
   </task>
 
   <task name="BB-cat+ner">
@@ -1017,11 +1008,7 @@
     </evaluation>
     <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_train.zip" />
     <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_dev.zip" />
-    <!--
-	<test
-	zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_test_WITH_ANSWERS.zip"
-	with-reference="true" />
-    -->
+	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-cat+ner_test_WITH_ANSWERS.zip" with-reference="true" />
   </task>
 
   <task name="BB-event+ner">
@@ -1126,9 +1113,7 @@
     </evaluation>
     <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_train.zip" />
     <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_dev.zip" />
-    <!-- <test
-	 zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_test_WITH_ANSWERS.zip"
-	 with-reference="true" />-->
+    <test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-event+ner_test_WITH_ANSWERS.zip" with-reference="true" />
   </task>
 
   <task name="BB-kb+ner">
@@ -1155,11 +1140,7 @@
     </evaluation>
     <train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_train.zip" />
     <dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_dev.zip" />
-    <!--
-	<test
-	zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_test_WITH_ANSWERS.zip"
-	with-reference="true" />
-    -->
+	<test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_test_WITH_ANSWERS.zip" with-reference="true" />
   </task>
   <aliases>
     <SeeDev-entity-schema>
@@ -1423,6 +1404,10 @@
 	  <referent-filter jar="org/bionlpst/data/Habitats_food.txt">OntoBiotope</referent-filter>
     </wang-sim-food>
 
+	<habitat-exact-sim>
+	<normalization type="Habitat" normalization-type="OntoBiotope" />
+	</habitat-exact-sim>
+	
     <bact-sim>
       <normalization
 	  type="Bacteria"
