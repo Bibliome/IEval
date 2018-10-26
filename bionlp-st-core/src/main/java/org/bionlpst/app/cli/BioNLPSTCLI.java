@@ -19,9 +19,12 @@ import org.bionlpst.app.source.ZipFileCorpusSource;
 import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
+import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.EvaluationResult;
+import org.bionlpst.evaluation.Measure;
 import org.bionlpst.evaluation.MeasureResult;
 import org.bionlpst.evaluation.Pair;
+import org.bionlpst.evaluation.Scoring;
 import org.bionlpst.evaluation.ScoringResult;
 import org.bionlpst.evaluation.similarity.Similarity;
 import org.bionlpst.util.Location;
@@ -73,7 +76,15 @@ public class BioNLPSTCLI {
 				break;
 			}
 			case LIST_TASKS: {
-				doListTasks();
+				if (taskName == null) {
+					doListTasks();
+				}
+				else {
+					Task task = getSelectedTask();
+					if (task != null) {
+						displayTask(task);
+					}
+				}
 				exit(0);
 				break;
 			}
@@ -215,8 +226,23 @@ public class BioNLPSTCLI {
 	@SuppressWarnings("static-method")
 	private void doListTasks() throws Exception {
 		Map<String,Task> taskMap = Task.loadTasks();
-		for (String taskName : taskMap.keySet()) {
-			System.out.println(taskName);
+		for (Task task : taskMap.values()) {
+			displayTask(task);
+		}
+	}
+	
+	private static void displayTask(Task task) {
+		System.out.println(task.getName());
+		for (AnnotationEvaluation eval : task.getEvaluations()) {
+			System.out.println("  " + eval.getName());
+			for (Scoring<Annotation> scoring : eval.getScorings()) {
+				System.out.print("    " + scoring.getName() + ":");
+				for (Measure measure : scoring.getMeasures()) {
+					System.out.print(' ');
+					System.out.print(measure.getName());
+				}
+				System.out.println();
+			}
 		}
 	}
 	

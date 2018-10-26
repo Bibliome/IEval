@@ -34,5 +34,5 @@ Options:
 		do not evaluate, only check
 
 	-list-tasks
-		print a list of supported tasks and exit
+		print a list of supported tasks with their evaluations and exit, if -task is provided diplay evaluations of the specified task
 
