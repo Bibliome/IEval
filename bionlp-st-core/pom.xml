@@ -34,6 +34,7 @@
       <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-jar-plugin</artifactId>
+	<version>3.0.0</version>
 	<configuration>
 	  <archive>
 	    <manifest>
@@ -47,6 +48,9 @@
     <resources>
       <resource>
 	<directory>src/main/resources</directory>
+        <excludes>
+          <exclude>**/*_WITH_ANSWERS.zip</exclude>
+        </excludes>
       </resource>
     </resources>
   </build>
