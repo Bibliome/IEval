@@ -459,13 +459,22 @@
       <scoring name="Standard">
 	<post-filter>
 		<and>
-	  		<types>Genic_Regulation</types>
-	  		<argument role="Agent">
+	  		<types>Regulates_Accumulation,Regulates_Expression,Regulates_Molecule_Activity,Binds_To,Interacts_With</types>
+	  		<if-argument role="Agent">
 	  			<types>Gene,Protein</types>
-	  		</argument>
-	  		<argument role="Target">
+	  		</if-argument>
+	  		<if-argument role="Target">
 	  			<types>Gene,Protein</types>
-	  		</argument>
+	  		</if-argument>
+	  		<if-argument role="Functional_Molecule">
+	  			<types>Gene,Protein</types>
+	  		</if-argument>
+	  		<if-argument role="Molecule">
+	  			<types>Gene,Protein</types>
+	  		</if-argument>
+	  		<if-argument role="DNA">
+	  			<types>Gene,Protein</types>
+	  		</if-argument>
 	  	</and>
 	</post-filter>
 	<SeeDev-binary-scoring/>
