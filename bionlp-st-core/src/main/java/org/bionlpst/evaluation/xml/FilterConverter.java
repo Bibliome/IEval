@@ -85,7 +85,13 @@ public class FilterConverter implements DOMElementConverter<Filter<Annotation>> 
 				String role = DOMUtil.getMandatoryAttribute(element, "role");
 				Element child = DOMUtil.getFirstChildElement(element);
 				Filter<Annotation> filter = convert(child);
-				return new RelationArgumentFilter(role, filter);
+				return new RelationArgumentFilter(role, filter, false, false);
+			}
+			case "if-argument": {
+				String role = DOMUtil.getMandatoryAttribute(element, "role");
+				Element child = DOMUtil.getFirstChildElement(element);
+				Filter<Annotation> filter = convert(child);
+				return new RelationArgumentFilter(role, filter, true, true);
 			}
 			case "same-sentence": {
 				SourceStreamConverter converter = new SourceStreamConverter(classLoader);
