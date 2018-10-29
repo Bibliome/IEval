@@ -1344,8 +1344,11 @@
       </argument-types>
     </Regulation_Of_Expression-types>
 
-    <Regulation_Of_Molecule_Activity-roles></Regulation_Of_Molecule_Activity-roles>
+    <Regulation_Of_Molecule_Activity-roles>Agent,Molecule</Regulation_Of_Molecule_Activity-roles>
     <Regulation_Of_Molecule_Activity-types>
+      <argument-types role="Molecule">
+      	Protein,Protein_Family,Protein_Complex,Hormone
+      </argument-types>
     </Regulation_Of_Molecule_Activity-types>
 
     <Regulation_Of_Process-roles>Agent,Process</Regulation_Of_Process-roles>
