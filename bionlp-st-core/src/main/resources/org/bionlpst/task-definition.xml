@@ -335,8 +335,7 @@
 	<types>Binds_To,Composes_Primary_Structure,Composes_Protein_Complex,Exists_At_Stage,Exists_In_Genotype,Interacts_With,Is_Involved_In_Process,Is_Localized_In,Is_Member_Of_Family,Is_Protein_Domain_Of,Occurs_In_Genotype,Occurs_During,Regulates_Accumulation,Regulates_Development_Phase,Regulates_Expression,Regulates_Molecule_Activity,Regulates_Process,Regulates_Tissue_Development,Transcribes_Or_Translates_To,Is_Linked_To,Is_Functionally_Equivalent_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To,Has_Sequence_Identical_To</types>
       </type-scorings>
     </evaluation>
-    <evaluation
-	name="Cluster: Comparison (commutative)">
+    <evaluation name="Cluster: Comparison (commutative)">
       <matching-similarity>
 	<SeeDev-binary-matching-sim/>
       </matching-similarity>
@@ -347,8 +346,7 @@
 	<SeeDev-binary-scoring/>
       </scoring>
     </evaluation>
-    <evaluation
-	name="Cluster: Where and When">
+    <evaluation name="Cluster: Where and When">
       <matching-similarity>
 	<same-type-and-arguments
 	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
@@ -383,8 +381,7 @@
 	<SeeDev-binary-scoring/>
       </scoring>
     </evaluation>
-    <evaluation
-	name="Cluster: Function (commutative)">
+    <evaluation name="Cluster: Function (commutative)">
       <matching-similarity>
 	<same-type-and-arguments
 	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To,Function">
@@ -409,8 +406,7 @@
 	<SeeDev-binary-scoring/>
       </scoring>
     </evaluation>
-    <evaluation
-	name="Cluster: Regulation">
+    <evaluation name="Cluster: Regulation">
       <matching-similarity>
 	<same-type-and-arguments
 	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
@@ -441,8 +437,7 @@
 	<SeeDev-binary-scoring/>
       </scoring>
     </evaluation>
-    <evaluation
-	name="Cluster: Composition_Membership (commutative)">
+    <evaluation name="Cluster: Composition_Membership (commutative)">
       <matching-similarity>
 	<same-type-and-arguments
 	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To,Composition_Membership">
@@ -475,8 +470,7 @@
 	<SeeDev-binary-scoring/>
       </scoring>
     </evaluation>
-    <evaluation
-	name="Cluster: Interaction">
+    <evaluation name="Cluster: Interaction">
       <matching-similarity>
 	<same-type-and-arguments
 	    commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
