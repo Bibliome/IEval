@@ -437,6 +437,40 @@
 	<SeeDev-binary-scoring/>
       </scoring>
     </evaluation>
+    <evaluation name="Cluster: Genic Regulation">
+      <matching-similarity>
+	<same-type-and-arguments commutative-types="Is_Linked_To,Has_Sequence_Identical_To,Is_Functionally_Equivalent_To">
+	  <Regulates_Accumulation new-type="Genic_Regulation">
+	    <Functional_Molecule>Target</Functional_Molecule>
+	  </Regulates_Accumulation>
+	  <Regulates_Expression new-type="Genic_Regulation">
+	    <DNA>Target</DNA>
+	  </Regulates_Expression>
+	  <Regulates_Molecule_Activity new-type="Genic_Regulation">
+	    <Molecule>Target</Molecule>
+	  </Regulates_Molecule_Activity>
+	  <Binds_To new-type="Genic_Regulation">
+	 	<Functional_Molecule>Agent</Functional_Molecule>
+	 	<Molecule>Target</Molecule>
+	  </Binds_To>
+	  <Interacts_With new-type="Genic_Regulation" />
+	</same-type-and-arguments>
+      </matching-similarity>
+      <scoring name="Standard">
+	<post-filter>
+		<and>
+	  		<types>Genic_Regulation</types>
+	  		<argument role="Agent">
+	  			<types>Gene,Protein</types>
+	  		</argument>
+	  		<argument role="Target">
+	  			<types>Gene,Protein</types>
+	  		</argument>
+	  	</and>
+	</post-filter>
+	<SeeDev-binary-scoring/>
+      </scoring>
+    </evaluation>
     <evaluation name="Cluster: Composition_Membership (commutative)">
       <matching-similarity>
 	<same-type-and-arguments
