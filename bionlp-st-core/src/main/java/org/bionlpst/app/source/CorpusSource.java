@@ -12,6 +12,7 @@ import org.bionlpst.BioNLPSTException;
 import org.bionlpst.corpus.AnnotationSetSelector;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
+import org.bionlpst.corpus.parser.bionlpst.BioNLPSTParser;
 import org.bionlpst.util.Util;
 import org.bionlpst.util.message.CheckLogger;
 
@@ -106,7 +107,7 @@ public abstract class CorpusSource {
 		}
 		
 		private void createDocument(Corpus corpus) {
-			String docId = Corpus.getDocumentIdFromPath(name);
+			String docId = BioNLPSTParser.getDocumentIdFromPath(name);
 			new Document(corpus, docId, contents);
 		}
 		
@@ -116,7 +117,7 @@ public abstract class CorpusSource {
 		
 		private void createInputAnnotations(CheckLogger logger, Corpus corpus) throws IOException {
 			Reader reader = new StringReader(contents);
-			corpus.parseAnnotations(logger, AnnotationSetSelector.INPUT, name, reader);
+			BioNLPSTParser.parseAnnotations(logger, corpus, AnnotationSetSelector.INPUT, name, reader);
 		}
 		
 		private boolean isOutputAnnotationSet() {
@@ -125,7 +126,7 @@ public abstract class CorpusSource {
 		
 		private void createOutputAnnotations(CheckLogger logger, Corpus corpus, AnnotationSetSelector loadOutput) throws IOException {
 			Reader reader = new StringReader(contents);
-			corpus.parseAnnotations(logger, loadOutput, name, reader);
+			BioNLPSTParser.parseAnnotations(logger, corpus, loadOutput, name, reader);
 		}
 	}
 	
