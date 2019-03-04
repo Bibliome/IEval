@@ -1,4 +1,4 @@
-package org.bionlpst.corpus.parser.bionlpst;
+package org.bionlpst.corpus.parser;
 
 import java.io.IOException;
 

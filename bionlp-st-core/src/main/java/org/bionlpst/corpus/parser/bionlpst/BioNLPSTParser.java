@@ -28,6 +28,8 @@ import org.bionlpst.corpus.Modifier;
 import org.bionlpst.corpus.Normalization;
 import org.bionlpst.corpus.Relation;
 import org.bionlpst.corpus.TextBound;
+import org.bionlpst.corpus.parser.CorpusAndReferenceParser;
+import org.bionlpst.corpus.parser.PredictionParser;
 import org.bionlpst.util.Location;
 import org.bionlpst.util.Util;
 import org.bionlpst.util.fragment.ImmutableFragment;

@@ -1,4 +1,4 @@
-package org.bionlpst.corpus;
+package org.bionlpst.corpus.parser;
 
 import org.bionlpst.BioNLPSTException;
 
