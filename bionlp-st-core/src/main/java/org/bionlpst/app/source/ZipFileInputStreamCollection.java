@@ -5,15 +5,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ZipFileCorpusSource extends ZipCorpusSource {
+public class ZipFileInputStreamCollection extends AbstractZipInputStreamCollection {
 	private final File zipFile;
 
-	public ZipFileCorpusSource(File zipFile) {
+	public ZipFileInputStreamCollection(File zipFile) {
 		super();
 		this.zipFile = zipFile;
 	}
 	
-	public ZipFileCorpusSource(String zipFile) {
+	public ZipFileInputStreamCollection(String zipFile) {
 		this(new File(zipFile));
 	}
 

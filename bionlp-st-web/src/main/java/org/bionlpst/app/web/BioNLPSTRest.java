@@ -35,7 +35,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.Task;
-import org.bionlpst.app.source.CorpusSource;
+import org.bionlpst.app.source.InputStreamCollection;
 import org.bionlpst.app.web.json.CheckMessageJsonConverter;
 import org.bionlpst.app.web.json.EvaluationResultJsonConverter;
 import org.bionlpst.app.web.json.JsonConverter;
@@ -209,7 +209,7 @@ public class BioNLPSTRest {
 		if (task == null || corpus == null) {
 			return;
 		}
-		CorpusSource predictionSource = new ZipFileUploadCorpusSource(zipStream, zipInfo.getFileName());
+		InputStreamCollection predictionSource = new ZipFileUploadInputStreamCollection(zipStream, zipInfo.getFileName());
 		PredictionParser predictionParser = new BioNLPSTParser(predictionSource);
 		predictionParser.getPredictions(logger, corpus);
 		corpus.resolveReferences(logger);

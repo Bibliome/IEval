@@ -16,8 +16,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bionlpst.BioNLPSTException;
-import org.bionlpst.app.source.CorpusSource;
-import org.bionlpst.app.source.EntryIterator;
+import org.bionlpst.app.source.InputStreamCollection;
+import org.bionlpst.app.source.InputStreamIterator;
 import org.bionlpst.corpus.AnnotationSet;
 import org.bionlpst.corpus.AnnotationSetSelector;
 import org.bionlpst.corpus.Corpus;
@@ -41,9 +41,9 @@ public class BioNLPSTParser implements CorpusAndReferenceParser, PredictionParse
 	private static final String[] EXTS_ALL = { EXT_CONTENTS, EXT_INPUT, EXT_OUTPUT };
 	private static final String[] EXTS_OUTPUT_ONLY = { EXT_CONTENTS, EXT_INPUT, EXT_OUTPUT };
 
-	private final CorpusSource corpusSource;
+	private final InputStreamCollection corpusSource;
 	
-	public BioNLPSTParser(CorpusSource corpusSource) {
+	public BioNLPSTParser(InputStreamCollection corpusSource) {
 		super();
 		this.corpusSource = corpusSource;
 	}
@@ -107,7 +107,7 @@ public class BioNLPSTParser implements CorpusAndReferenceParser, PredictionParse
 
 	private Collection<EntryRecord> collectEntries(String... exts) throws IOException {
 		Collection<EntryRecord> result = new ArrayList<EntryRecord>();
-		EntryIterator it = corpusSource.getEntries();
+		InputStreamIterator it = corpusSource.getIterator();
 		while (it.next()) {
 			String name = it.getName();
 			if (matchExt(name, exts)) {

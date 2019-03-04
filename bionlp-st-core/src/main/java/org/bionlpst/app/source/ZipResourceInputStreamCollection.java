@@ -3,11 +3,11 @@ package org.bionlpst.app.source;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ZipResourceCorpusSource extends ZipCorpusSource {
+public class ZipResourceInputStreamCollection extends AbstractZipInputStreamCollection {
 	private final ClassLoader classLoader;
 	private final String resourceName;
 
-	public ZipResourceCorpusSource(ClassLoader classLoader, String resourceName) {
+	public ZipResourceInputStreamCollection(ClassLoader classLoader, String resourceName) {
 		super();
 		this.classLoader = classLoader;
 		this.resourceName = resourceName;

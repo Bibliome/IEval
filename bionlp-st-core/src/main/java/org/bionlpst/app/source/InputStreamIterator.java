@@ -3,7 +3,7 @@ package org.bionlpst.app.source;
 import java.io.IOException;
 import java.io.InputStream;
 
-public interface EntryIterator extends AutoCloseable {
+public interface InputStreamIterator extends AutoCloseable {
 	boolean next() throws IOException;
 	void closeEntry() throws IOException;
 	String getName();

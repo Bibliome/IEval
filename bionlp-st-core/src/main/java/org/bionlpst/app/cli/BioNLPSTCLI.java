@@ -13,9 +13,9 @@ import java.util.Map;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.Task;
-import org.bionlpst.app.source.CorpusSource;
-import org.bionlpst.app.source.DirectoryCorpusSource;
-import org.bionlpst.app.source.ZipFileCorpusSource;
+import org.bionlpst.app.source.InputStreamCollection;
+import org.bionlpst.app.source.DirectoryInputStreamCollection;
+import org.bionlpst.app.source.ZipFileInputStreamCollection;
 import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
@@ -404,12 +404,12 @@ public class BioNLPSTCLI {
 		return defaultValue;
 	}
 	
-	private static CorpusSource getSource(String arg) {
+	private static InputStreamCollection getSource(String arg) {
 		File f = new File(arg);
 		if (f.isDirectory()) {
-			return new DirectoryCorpusSource(f);
+			return new DirectoryInputStreamCollection(f);
 		}
-		return new ZipFileCorpusSource(f);
+		return new ZipFileInputStreamCollection(f);
 	}
 
 	private boolean finishArgs() {

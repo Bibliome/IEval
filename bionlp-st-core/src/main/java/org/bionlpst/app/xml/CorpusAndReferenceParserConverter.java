@@ -1,6 +1,6 @@
 package org.bionlpst.app.xml;
 
-import org.bionlpst.app.source.CorpusSource;
+import org.bionlpst.app.source.InputStreamCollection;
 import org.bionlpst.corpus.parser.bionlpst.BioNLPSTParser;
 import org.bionlpst.corpus.parser.bionlpst.CorpusAndReferenceParser;
 import org.bionlpst.util.dom.DOMElementConverter;
@@ -16,7 +16,7 @@ public class CorpusAndReferenceParserConverter implements DOMElementConverter<Co
 
 	@Override
 	public CorpusAndReferenceParser convert(Element element) throws Exception {
-		CorpusSource corpusSource = corpusSourceConverter.convert(element);
+		InputStreamCollection corpusSource = corpusSourceConverter.convert(element);
 		return new BioNLPSTParser(corpusSource);
 	}
 }

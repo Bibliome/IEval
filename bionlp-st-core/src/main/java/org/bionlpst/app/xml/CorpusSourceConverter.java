@@ -1,13 +1,13 @@
 package org.bionlpst.app.xml;
 
-import org.bionlpst.app.source.CorpusSource;
-import org.bionlpst.app.source.DirectoryCorpusSource;
-import org.bionlpst.app.source.ZipFileCorpusSource;
-import org.bionlpst.app.source.ZipResourceCorpusSource;
+import org.bionlpst.app.source.InputStreamCollection;
+import org.bionlpst.app.source.DirectoryInputStreamCollection;
+import org.bionlpst.app.source.ZipFileInputStreamCollection;
+import org.bionlpst.app.source.ZipResourceInputStreamCollection;
 import org.bionlpst.util.dom.DOMElementConverter;
 import org.w3c.dom.Element;
 
-public class CorpusSourceConverter implements DOMElementConverter<CorpusSource> {
+public class CorpusSourceConverter implements DOMElementConverter<InputStreamCollection> {
 	private final ClassLoader classLoader;
 	
 	public CorpusSourceConverter(ClassLoader classLoader) {
@@ -16,16 +16,16 @@ public class CorpusSourceConverter implements DOMElementConverter<CorpusSource> 
 	}
 
 	@Override
-	public CorpusSource convert(Element element) throws Exception {
+	public InputStreamCollection convert(Element element) throws Exception {
 		if (element.hasAttribute("zipfile")) {
-			return new ZipFileCorpusSource(element.getAttribute("zipfile"));
+			return new ZipFileInputStreamCollection(element.getAttribute("zipfile"));
 		}
 		if (element.hasAttribute("dir")) {
-			return new DirectoryCorpusSource(element.getAttribute("dir"));
+			return new DirectoryInputStreamCollection(element.getAttribute("dir"));
 		}
 		if (element.hasAttribute("zipresource")) {
-			return new ZipResourceCorpusSource(classLoader, element.getAttribute("zipresource"));
+			return new ZipResourceInputStreamCollection(classLoader, element.getAttribute("zipresource"));
 		}
-		return new ZipResourceCorpusSource(classLoader, element.getTextContent());
+		return new ZipResourceInputStreamCollection(classLoader, element.getTextContent());
 	}
 }
