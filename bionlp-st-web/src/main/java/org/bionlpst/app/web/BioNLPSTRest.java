@@ -35,7 +35,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.Task;
-import org.bionlpst.app.source.InputStreamCollection;
 import org.bionlpst.app.web.json.CheckMessageJsonConverter;
 import org.bionlpst.app.web.json.EvaluationResultJsonConverter;
 import org.bionlpst.app.web.json.JsonConverter;
@@ -47,6 +46,7 @@ import org.bionlpst.corpus.Document;
 import org.bionlpst.corpus.DocumentCollection;
 import org.bionlpst.corpus.parser.PredictionParser;
 import org.bionlpst.corpus.parser.bionlpst.BioNLPSTParser;
+import org.bionlpst.corpus.parser.bionlpst.InputStreamCollection;
 import org.bionlpst.evaluation.BootstrapConfig;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;

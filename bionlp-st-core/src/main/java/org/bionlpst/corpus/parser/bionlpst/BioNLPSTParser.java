@@ -16,8 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bionlpst.BioNLPSTException;
-import org.bionlpst.app.source.InputStreamCollection;
-import org.bionlpst.app.source.InputStreamIterator;
 import org.bionlpst.corpus.AnnotationSet;
 import org.bionlpst.corpus.AnnotationSetSelector;
 import org.bionlpst.corpus.Corpus;

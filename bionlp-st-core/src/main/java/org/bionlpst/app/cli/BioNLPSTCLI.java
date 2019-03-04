@@ -13,15 +13,15 @@ import java.util.Map;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.Task;
-import org.bionlpst.app.source.InputStreamCollection;
-import org.bionlpst.app.source.DirectoryInputStreamCollection;
-import org.bionlpst.app.source.ZipFileInputStreamCollection;
 import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
 import org.bionlpst.corpus.parser.CorpusAndReferenceParser;
 import org.bionlpst.corpus.parser.PredictionParser;
 import org.bionlpst.corpus.parser.bionlpst.BioNLPSTParser;
+import org.bionlpst.corpus.parser.bionlpst.DirectoryInputStreamCollection;
+import org.bionlpst.corpus.parser.bionlpst.InputStreamCollection;
+import org.bionlpst.corpus.parser.bionlpst.ZipFileInputStreamCollection;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
