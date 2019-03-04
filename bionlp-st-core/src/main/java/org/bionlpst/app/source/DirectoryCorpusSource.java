@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class DirectoryCorpusSource extends CorpusSource {
+public class DirectoryCorpusSource implements CorpusSource {
 	private final File directory;
 	
 	public DirectoryCorpusSource(File directory) {
@@ -19,7 +19,7 @@ public class DirectoryCorpusSource extends CorpusSource {
 	}
 
 	@Override
-	protected EntryIterator getEntries() {
+	public EntryIterator getEntries() {
 		String[] files = directory.list();
 		return new DirectoryEntryIterator(files);
 	}

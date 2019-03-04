@@ -19,6 +19,7 @@ import org.bionlpst.app.source.ZipFileCorpusSource;
 import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
+import org.bionlpst.corpus.parser.bionlpst.BioNLPSTParser;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
@@ -118,7 +119,7 @@ public class BioNLPSTCLI {
 		flushLogger();
 
 		logger.information(COMMAND_LINE_LOCATION, "loading prediction data");
-		predictionSource.getPredictions(logger, corpus);
+		BioNLPSTParser.getPredictions(logger, predictionSource, corpus);
 		flushLogger();
 		
 		logger.information(COMMAND_LINE_LOCATION, "resolving references");
@@ -248,7 +249,7 @@ public class BioNLPSTCLI {
 	
 	private Corpus loadReference(Task task, boolean loadOutput) throws BioNLPSTException, IOException {
 		if (referenceSource != null) {
-			return referenceSource.getCorpusAndReference(logger, loadOutput);
+			return BioNLPSTParser.getCorpusAndReference(logger, referenceSource, loadOutput);
 		}
 		switch (set) {
 			case "train": return task.getTrainCorpus(logger);

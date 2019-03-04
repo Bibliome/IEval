@@ -6,9 +6,9 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public abstract class ZipCorpusSource extends CorpusSource {
+public abstract class ZipCorpusSource implements CorpusSource {
 	@Override
-	protected EntryIterator getEntries() throws IOException {
+	public EntryIterator getEntries() throws IOException {
 		InputStream is = getInputStream();
 		ZipInputStream zis = new ZipInputStream(is);
 		return new ZipEntryIterator(zis);

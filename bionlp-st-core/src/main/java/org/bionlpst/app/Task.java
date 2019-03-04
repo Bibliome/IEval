@@ -19,6 +19,7 @@ import org.bionlpst.corpus.AnnotationSet;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
 import org.bionlpst.corpus.DocumentCollection;
+import org.bionlpst.corpus.parser.bionlpst.BioNLPSTParser;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.BootstrapConfig;
 import org.bionlpst.evaluation.EvaluationResult;
@@ -120,16 +121,16 @@ public class Task {
 	}
 	
 	public Corpus getTrainCorpus(CheckLogger logger) throws BioNLPSTException, IOException {
-		return trainSource.getCorpusAndReference(logger, true);
+		return BioNLPSTParser.getCorpusAndReference(logger, trainSource, true);
 	}
 	
 	public Corpus getDevCorpus(CheckLogger logger) throws BioNLPSTException, IOException {
-		return devSource.getCorpusAndReference(logger, true);
+		return BioNLPSTParser.getCorpusAndReference(logger, devSource, true);
 	}
 	
 	public Corpus getTrainAndDevCorpus(CheckLogger logger) throws BioNLPSTException, IOException {
 		Corpus result = getTrainCorpus(logger);
-		devSource.getCorpusAndReference(logger, result, true);
+		BioNLPSTParser.getCorpusAndReference(logger, devSource, result, true);
 		return result;
 	}
 	
@@ -137,7 +138,7 @@ public class Task {
 		if (testSource == null) {
 			throw new BioNLPSTException("test set is not available for " + name);
 		}
-		return testSource.getCorpusAndReference(logger, true/*testHasReferenceAnnotations*/);
+		return BioNLPSTParser.getCorpusAndReference(logger, testSource, true);
 	}
 	
 	public void checkSchema(CheckLogger logger, Corpus corpus) {
@@ -172,7 +173,7 @@ public class Task {
 	}
 
 	public void loadPredictions(CheckLogger logger, Corpus corpus, CorpusSource predictionSource) throws BioNLPSTException, IOException {
-		predictionSource.getPredictions(logger, corpus);
+		BioNLPSTParser.getPredictions(logger, predictionSource, corpus);
 		schema.check(logger, corpus);
 	}
 	
