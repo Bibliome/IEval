@@ -2,7 +2,8 @@ package org.bionlpst.app.source;
 
 import java.io.IOException;
 
-public interface InputStreamCollection {
+import org.bionlpst.util.Named;
+
+public interface InputStreamCollection extends Named {
 	InputStreamIterator getIterator() throws IOException;
-	String getName();
 }
