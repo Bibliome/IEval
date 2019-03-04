@@ -15,7 +15,7 @@ public class DummyAnnotation extends Annotation {
 	 */
 	public static final String DUMMY_TYPE = "DUMMY";
 	
-	DummyAnnotation(CheckLogger logger, AnnotationSet annotationCollection, Location location, String id, String type) {
+	public DummyAnnotation(CheckLogger logger, AnnotationSet annotationCollection, Location location, String id, String type) {
 		super(logger, annotationCollection, location, id, type);
 	}
 
