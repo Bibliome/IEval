@@ -20,6 +20,8 @@ import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
 import org.bionlpst.corpus.parser.bionlpst.BioNLPSTParser;
+import org.bionlpst.corpus.parser.bionlpst.CorpusAndReferenceParser;
+import org.bionlpst.corpus.parser.bionlpst.PredictionParser;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
@@ -39,8 +41,8 @@ public class BioNLPSTCLI {
 	private final CheckLogger logger = new CheckLogger();
 	private String taskName = null;
 	private String set = null;
-	private CorpusSource referenceSource = null;
-	private CorpusSource predictionSource = null;
+	private CorpusAndReferenceParser referenceSource = null;
+	private PredictionParser predictionSource = null;
 	private boolean detailedEvaluation = false;
 	private boolean alternateScores = false;
 	private boolean forceEvaluation = false;
@@ -119,7 +121,7 @@ public class BioNLPSTCLI {
 		flushLogger();
 
 		logger.information(COMMAND_LINE_LOCATION, "loading prediction data");
-		BioNLPSTParser.getPredictions(logger, predictionSource, corpus);
+		predictionSource.getPredictions(logger, corpus);
 		flushLogger();
 		
 		logger.information(COMMAND_LINE_LOCATION, "resolving references");
@@ -249,7 +251,7 @@ public class BioNLPSTCLI {
 	
 	private Corpus loadReference(Task task, boolean loadOutput) throws BioNLPSTException, IOException {
 		if (referenceSource != null) {
-			return BioNLPSTParser.getCorpusAndReference(logger, referenceSource, loadOutput);
+			return referenceSource.getCorpusAndReference(logger, loadOutput);
 		}
 		switch (set) {
 			case "train": return task.getTrainCorpus(logger);
@@ -338,7 +340,7 @@ public class BioNLPSTCLI {
 					}
 					String arg = requireArgument(argsIt, opt, null);
 					if (arg != null) {
-						referenceSource = getSource(arg);
+						referenceSource = new BioNLPSTParser(getSource(arg));
 					}
 					break;
 				}
@@ -348,7 +350,7 @@ public class BioNLPSTCLI {
 					}
 					String arg = requireArgument(argsIt, opt, null);
 					if (arg != null) {
-						predictionSource = getSource(arg);
+						predictionSource = new BioNLPSTParser(getSource(arg));
 					}
 					break;
 				}

@@ -12,14 +12,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.bionlpst.BioNLPSTException;
-import org.bionlpst.app.source.CorpusSource;
 import org.bionlpst.app.xml.TaskMapConverter;
 import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.AnnotationSet;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
 import org.bionlpst.corpus.DocumentCollection;
-import org.bionlpst.corpus.parser.bionlpst.BioNLPSTParser;
+import org.bionlpst.corpus.parser.bionlpst.CorpusAndReferenceParser;
+import org.bionlpst.corpus.parser.bionlpst.PredictionParser;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.BootstrapConfig;
 import org.bionlpst.evaluation.EvaluationResult;
@@ -34,9 +34,9 @@ public class Task {
 	private final StringBuilder description = new StringBuilder();
 	private Schema<Corpus> schema;
 	private final List<AnnotationEvaluation> evaluations = new ArrayList<AnnotationEvaluation>();
-	private CorpusSource trainSource;
-	private CorpusSource devSource;
-	private CorpusSource testSource;
+	private CorpusAndReferenceParser trainSource;
+	private CorpusAndReferenceParser devSource;
+	private CorpusAndReferenceParser testSource;
 	private boolean testHasReferenceAnnotations;
 	private CorpusPostprocessing corpusPostprocessing = NullPostprocessing.INSTANCE;
 
@@ -61,15 +61,15 @@ public class Task {
 		return Collections.unmodifiableList(evaluations);
 	}
 
-	public CorpusSource getTrainSource() {
+	public CorpusAndReferenceParser getTrainSource() {
 		return trainSource;
 	}
 
-	public CorpusSource getDevSource() {
+	public CorpusAndReferenceParser getDevSource() {
 		return devSource;
 	}
 
-	public CorpusSource getTestSource() {
+	public CorpusAndReferenceParser getTestSource() {
 		return testSource;
 	}
 
@@ -104,15 +104,15 @@ public class Task {
 		this.schema = schema;
 	}
 
-	public void setTrainSource(CorpusSource trainSource) {
+	public void setTrainSource(CorpusAndReferenceParser trainSource) {
 		this.trainSource = trainSource;
 	}
 
-	public void setDevSource(CorpusSource devSource) {
+	public void setDevSource(CorpusAndReferenceParser devSource) {
 		this.devSource = devSource;
 	}
 
-	public void setTestSource(CorpusSource testSource) {
+	public void setTestSource(CorpusAndReferenceParser testSource) {
 		this.testSource = testSource;
 	}
 
@@ -121,16 +121,16 @@ public class Task {
 	}
 	
 	public Corpus getTrainCorpus(CheckLogger logger) throws BioNLPSTException, IOException {
-		return BioNLPSTParser.getCorpusAndReference(logger, trainSource, true);
+		return trainSource.getCorpusAndReference(logger, true);
 	}
 	
 	public Corpus getDevCorpus(CheckLogger logger) throws BioNLPSTException, IOException {
-		return BioNLPSTParser.getCorpusAndReference(logger, devSource, true);
+		return devSource.getCorpusAndReference(logger, true);
 	}
 	
 	public Corpus getTrainAndDevCorpus(CheckLogger logger) throws BioNLPSTException, IOException {
 		Corpus result = getTrainCorpus(logger);
-		BioNLPSTParser.getCorpusAndReference(logger, devSource, result, true);
+		devSource.getCorpusAndReference(logger, result, true);
 		return result;
 	}
 	
@@ -138,7 +138,7 @@ public class Task {
 		if (testSource == null) {
 			throw new BioNLPSTException("test set is not available for " + name);
 		}
-		return BioNLPSTParser.getCorpusAndReference(logger, testSource, true);
+		return testSource.getCorpusAndReference(logger, true);
 	}
 	
 	public void checkSchema(CheckLogger logger, Corpus corpus) {
@@ -172,64 +172,64 @@ public class Task {
 		return mainEvaluation.getMainResult(documentCollection, keepPairs, bootstrap);
 	}
 
-	public void loadPredictions(CheckLogger logger, Corpus corpus, CorpusSource predictionSource) throws BioNLPSTException, IOException {
-		BioNLPSTParser.getPredictions(logger, predictionSource, corpus);
+	public void loadPredictions(CheckLogger logger, Corpus corpus, PredictionParser predictionParser) throws BioNLPSTException, IOException {
+		predictionParser.getPredictions(logger, corpus);
 		schema.check(logger, corpus);
 	}
 	
-	public Map<String,EvaluationResult<Annotation>> evaluateTrain(CheckLogger logger, CorpusSource predictionSource, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
+	public Map<String,EvaluationResult<Annotation>> evaluateTrain(CheckLogger logger, PredictionParser predictionParser, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
 		Corpus corpus = getTrainCorpus(logger);
-		loadPredictions(logger, corpus, predictionSource);
+		loadPredictions(logger, corpus, predictionParser);
 		return evaluate(logger, corpus, keepPairs, bootstrap);
 	}
 
-	public Map<String,EvaluationResult<Annotation>> evaluateDev(CheckLogger logger, CorpusSource predictionSource, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
+	public Map<String,EvaluationResult<Annotation>> evaluateDev(CheckLogger logger, PredictionParser predictionParser, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
 		Corpus corpus = getDevCorpus(logger);
-		loadPredictions(logger, corpus, predictionSource);
+		loadPredictions(logger, corpus, predictionParser);
 		return evaluate(logger, corpus, keepPairs, bootstrap);
 	}	
 
-	public Map<String,EvaluationResult<Annotation>> evaluateTrainAndDev(CheckLogger logger, CorpusSource predictionSource, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
+	public Map<String,EvaluationResult<Annotation>> evaluateTrainAndDev(CheckLogger logger, PredictionParser predictionParser, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
 		Corpus corpus = getTrainAndDevCorpus(logger);
-		loadPredictions(logger, corpus, predictionSource);
+		loadPredictions(logger, corpus, predictionParser);
 		return evaluate(logger, corpus, keepPairs, bootstrap);
 	}	
 
-	public Map<String,EvaluationResult<Annotation>> evaluateTest(CheckLogger logger, CorpusSource predictionSource, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
+	public Map<String,EvaluationResult<Annotation>> evaluateTest(CheckLogger logger, PredictionParser predictionParser, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
 		if (!testHasReferenceAnnotations) {
-			logger.serious(new Location(predictionSource.getName(), 0), "evaluation for the test set is not available for " + name);
+			logger.serious(new Location(predictionParser.getName(), 0), "evaluation for the test set is not available for " + name);
 			return Collections.emptyMap();
 		}
 		Corpus corpus = getTestCorpus(logger);
-		loadPredictions(logger, corpus, predictionSource);
+		loadPredictions(logger, corpus, predictionParser);
 		return evaluate(logger, corpus, false, bootstrap);
 	}
 	
-	public EvaluationResult<Annotation> evaluateMainTrain(CheckLogger logger, CorpusSource predictionSource, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
+	public EvaluationResult<Annotation> evaluateMainTrain(CheckLogger logger, PredictionParser predictionParser, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
 		Corpus corpus = getTrainCorpus(logger);
-		loadPredictions(logger, corpus, predictionSource);
+		loadPredictions(logger, corpus, predictionParser);
 		return evaluateMain(logger, corpus, keepPairs, bootstrap);
 	}	
 
-	public EvaluationResult<Annotation> evaluateMainDev(CheckLogger logger, CorpusSource predictionSource, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
+	public EvaluationResult<Annotation> evaluateMainDev(CheckLogger logger, PredictionParser predictionParser, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
 		Corpus corpus = getDevCorpus(logger);
-		loadPredictions(logger, corpus, predictionSource);
+		loadPredictions(logger, corpus, predictionParser);
 		return evaluateMain(logger, corpus, keepPairs, bootstrap);
 	}	
 
-	public EvaluationResult<Annotation> evaluateMainTrainAndDev(CheckLogger logger, CorpusSource predictionSource, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
+	public EvaluationResult<Annotation> evaluateMainTrainAndDev(CheckLogger logger, PredictionParser predictionParser, boolean keepPairs, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
 		Corpus corpus = getTrainAndDevCorpus(logger);
-		loadPredictions(logger, corpus, predictionSource);
+		loadPredictions(logger, corpus, predictionParser);
 		return evaluateMain(logger, corpus, keepPairs, bootstrap);
 	}
 
-	public EvaluationResult<Annotation> evaluateMainTest(CheckLogger logger, CorpusSource predictionSource, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
+	public EvaluationResult<Annotation> evaluateMainTest(CheckLogger logger, PredictionParser predictionParser, BootstrapConfig bootstrap) throws BioNLPSTException, IOException {
 		if (!testHasReferenceAnnotations) {
-			logger.serious(new Location(predictionSource.getName(), 0), "evaluation for the test set is not available for " + name);
+			logger.serious(new Location(predictionParser.getName(), 0), "evaluation for the test set is not available for " + name);
 			return new EvaluationResult<Annotation>(evaluations.get(0));
 		}
 		Corpus corpus = getTestCorpus(logger);
-		loadPredictions(logger, corpus, predictionSource);
+		loadPredictions(logger, corpus, predictionParser);
 		return evaluateMain(logger, corpus, false, bootstrap);
 	}
 	

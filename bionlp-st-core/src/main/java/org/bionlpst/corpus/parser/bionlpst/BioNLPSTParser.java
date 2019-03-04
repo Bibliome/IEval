@@ -33,13 +33,20 @@ import org.bionlpst.util.Util;
 import org.bionlpst.util.fragment.ImmutableFragment;
 import org.bionlpst.util.message.CheckLogger;
 
-public class BioNLPSTParser {
+public class BioNLPSTParser implements CorpusAndReferenceParser, PredictionParser {
 	public static final String EXT_CONTENTS = ".txt";
 	public static final String EXT_INPUT = ".a1";
 	public static final String EXT_OUTPUT = ".a2";
 	
 	private static final String[] EXTS_ALL = { EXT_CONTENTS, EXT_INPUT, EXT_OUTPUT };
 	private static final String[] EXTS_OUTPUT_ONLY = { EXT_CONTENTS, EXT_INPUT, EXT_OUTPUT };
+
+	private final CorpusSource corpusSource;
+	
+	public BioNLPSTParser(CorpusSource corpusSource) {
+		super();
+		this.corpusSource = corpusSource;
+	}
 
 	private static String getDocumentIdFromPath(String path) {
 		int dot = path.lastIndexOf('.');
@@ -70,8 +77,9 @@ public class BioNLPSTParser {
 		parseAnnotations(logger, aset, source, reader);
 	}
 
-	public static void getCorpusAndReference(CheckLogger logger, CorpusSource corpusSource, Corpus corpus, boolean loadOutput) throws BioNLPSTException, IOException {
-		Collection<EntryRecord> records = collectEntries(corpusSource, EXTS_ALL);
+	@Override
+	public void getCorpusAndReference(CheckLogger logger, Corpus corpus, boolean loadOutput) throws BioNLPSTException, IOException {
+		Collection<EntryRecord> records = collectEntries(EXTS_ALL);
 		loadDocuments(corpus, records);
 		loadInputAnnotations(logger, corpus, records);
 		if (loadOutput) {
@@ -79,18 +87,25 @@ public class BioNLPSTParser {
 		}
 	}
 
-	public static Corpus getCorpusAndReference(CheckLogger logger, CorpusSource corpusSource, boolean loadOutput) throws BioNLPSTException, IOException {
+	@Override
+	public Corpus getCorpusAndReference(CheckLogger logger, boolean loadOutput) throws BioNLPSTException, IOException {
 		Corpus result = new Corpus();
-		getCorpusAndReference(logger, corpusSource, result, loadOutput);
+		getCorpusAndReference(logger, result, loadOutput);
 		return result;
 	}
 	
-	public static void getPredictions(CheckLogger logger, CorpusSource corpusSource, Corpus corpus) throws BioNLPSTException, IOException {
-		Collection<EntryRecord> records = collectEntries(corpusSource, EXTS_OUTPUT_ONLY);
+	@Override
+	public void getPredictions(CheckLogger logger, Corpus corpus) throws BioNLPSTException, IOException {
+		Collection<EntryRecord> records = collectEntries(EXTS_OUTPUT_ONLY);
 		loadOutputAnnotations(logger, corpus, records, AnnotationSetSelector.PREDICTION);
 	}
 
-	private static Collection<EntryRecord> collectEntries(CorpusSource corpusSource, String... exts) throws IOException {
+	@Override
+	public String getName() {
+		return corpusSource.getName();
+	}
+
+	private Collection<EntryRecord> collectEntries(String... exts) throws IOException {
 		Collection<EntryRecord> result = new ArrayList<EntryRecord>();
 		EntryIterator it = corpusSource.getEntries();
 		while (it.next()) {
