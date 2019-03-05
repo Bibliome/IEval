@@ -3,7 +3,7 @@ package org.bionlpst.app.web;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.bionlpst.corpus.parser.bionlpst.AbstractZipInputStreamCollection;
+import org.bionlpst.corpus.source.bionlpst.AbstractZipInputStreamCollection;
 
 class ZipFileUploadInputStreamCollection extends AbstractZipInputStreamCollection {
 	private final InputStream inputStream;

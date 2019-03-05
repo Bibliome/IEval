@@ -4,7 +4,7 @@ import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.CorpusPostprocessing;
 import org.bionlpst.app.Task;
 import org.bionlpst.corpus.Corpus;
-import org.bionlpst.corpus.parser.ContentAndReferenceSource;
+import org.bionlpst.corpus.source.ContentAndReferenceSource;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.xml.EvaluationConverter;
 import org.bionlpst.schema.Schema;

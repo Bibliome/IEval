@@ -1,4 +1,4 @@
-package org.bionlpst.corpus.parser.bionlpst;
+package org.bionlpst.corpus.source.bionlpst;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,8 +26,8 @@ import org.bionlpst.corpus.Modifier;
 import org.bionlpst.corpus.Normalization;
 import org.bionlpst.corpus.Relation;
 import org.bionlpst.corpus.TextBound;
-import org.bionlpst.corpus.parser.ContentAndReferenceSource;
-import org.bionlpst.corpus.parser.PredictionSource;
+import org.bionlpst.corpus.source.ContentAndReferenceSource;
+import org.bionlpst.corpus.source.PredictionSource;
 import org.bionlpst.util.Location;
 import org.bionlpst.util.Util;
 import org.bionlpst.util.fragment.ImmutableFragment;

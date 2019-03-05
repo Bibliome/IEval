@@ -1,8 +1,8 @@
 package org.bionlpst.app.xml;
 
-import org.bionlpst.corpus.parser.ContentAndReferenceSource;
-import org.bionlpst.corpus.parser.bionlpst.BioNLPSTSource;
-import org.bionlpst.corpus.parser.bionlpst.InputStreamCollection;
+import org.bionlpst.corpus.source.ContentAndReferenceSource;
+import org.bionlpst.corpus.source.bionlpst.BioNLPSTSource;
+import org.bionlpst.corpus.source.bionlpst.InputStreamCollection;
 import org.bionlpst.util.dom.DOMElementConverter;
 import org.w3c.dom.Element;
 
