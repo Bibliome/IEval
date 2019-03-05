@@ -33,7 +33,7 @@ import org.bionlpst.util.Util;
 import org.bionlpst.util.fragment.ImmutableFragment;
 import org.bionlpst.util.message.CheckLogger;
 
-public class BioNLPSTParser implements ContentAndReferenceSource, PredictionSource {
+public class BioNLPSTSource implements ContentAndReferenceSource, PredictionSource {
 	public static final String EXT_CONTENTS = ".txt";
 	public static final String EXT_INPUT = ".a1";
 	public static final String EXT_OUTPUT = ".a2";
@@ -43,7 +43,7 @@ public class BioNLPSTParser implements ContentAndReferenceSource, PredictionSour
 
 	private final InputStreamCollection corpusSource;
 	
-	public BioNLPSTParser(InputStreamCollection corpusSource) {
+	public BioNLPSTSource(InputStreamCollection corpusSource) {
 		super();
 		this.corpusSource = corpusSource;
 	}
@@ -166,7 +166,7 @@ public class BioNLPSTParser implements ContentAndReferenceSource, PredictionSour
 		}
 		
 		private void createDocument(Corpus corpus) {
-			String docId = BioNLPSTParser.getDocumentIdFromPath(name);
+			String docId = BioNLPSTSource.getDocumentIdFromPath(name);
 			new Document(corpus, docId, contents);
 		}
 		
@@ -176,7 +176,7 @@ public class BioNLPSTParser implements ContentAndReferenceSource, PredictionSour
 		
 		private void createInputAnnotations(CheckLogger logger, Corpus corpus) throws IOException {
 			Reader reader = new StringReader(contents);
-			BioNLPSTParser.parseAnnotations(logger, corpus, AnnotationSetSelector.INPUT, name, reader);
+			BioNLPSTSource.parseAnnotations(logger, corpus, AnnotationSetSelector.INPUT, name, reader);
 		}
 		
 		private boolean isOutputAnnotationSet() {
@@ -185,7 +185,7 @@ public class BioNLPSTParser implements ContentAndReferenceSource, PredictionSour
 		
 		private void createOutputAnnotations(CheckLogger logger, Corpus corpus, AnnotationSetSelector loadOutput) throws IOException {
 			Reader reader = new StringReader(contents);
-			BioNLPSTParser.parseAnnotations(logger, corpus, loadOutput, name, reader);
+			BioNLPSTSource.parseAnnotations(logger, corpus, loadOutput, name, reader);
 		}
 	}
 

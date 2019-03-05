@@ -7,10 +7,10 @@ import org.bionlpst.corpus.parser.bionlpst.ZipResourceInputStreamCollection;
 import org.bionlpst.util.dom.DOMElementConverter;
 import org.w3c.dom.Element;
 
-public class CorpusSourceConverter implements DOMElementConverter<InputStreamCollection> {
+public class InputStreamCollectionConverter implements DOMElementConverter<InputStreamCollection> {
 	private final ClassLoader classLoader;
 	
-	public CorpusSourceConverter(ClassLoader classLoader) {
+	public InputStreamCollectionConverter(ClassLoader classLoader) {
 		super();
 		this.classLoader = classLoader;
 	}

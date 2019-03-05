@@ -16,19 +16,19 @@ import org.w3c.dom.Element;
 
 public class TaskConverter implements DOMElementConverter<Task> {
 	private final ClassLoader classLoader;
-	private final CorpusAndReferenceParserConverter corpusAndReferenceParserConverter;
+	private final ContentAndReferenceSourceConverter corpusAndReferenceParserConverter;
 	
 	public TaskConverter(ClassLoader classLoader) {
 		Util.notnull(classLoader);
 		this.classLoader = classLoader;
-		this.corpusAndReferenceParserConverter = new CorpusAndReferenceParserConverter(classLoader);
+		this.corpusAndReferenceParserConverter = new ContentAndReferenceSourceConverter(classLoader);
 	}
 
 	public ClassLoader getClassLoader() {
 		return classLoader;
 	}
 
-	public CorpusAndReferenceParserConverter getCorpusAndReferenceParserConverter() {
+	public ContentAndReferenceSourceConverter getCorpusAndReferenceParserConverter() {
 		return corpusAndReferenceParserConverter;
 	}
 
