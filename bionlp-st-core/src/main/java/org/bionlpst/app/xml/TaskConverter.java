@@ -4,7 +4,7 @@ import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.CorpusPostprocessing;
 import org.bionlpst.app.Task;
 import org.bionlpst.corpus.Corpus;
-import org.bionlpst.corpus.parser.CorpusAndReferenceParser;
+import org.bionlpst.corpus.parser.ContentAndReferenceSource;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.xml.EvaluationConverter;
 import org.bionlpst.schema.Schema;
@@ -65,7 +65,7 @@ public class TaskConverter implements DOMElementConverter<Task> {
 					break;
 				}
 				case "train": {
-					CorpusAndReferenceParser train = result.getTrainSource();
+					ContentAndReferenceSource train = result.getTrainSource();
 					if (train != null) {
 						throw new BioNLPSTException("duplicate train source");
 					}
@@ -74,7 +74,7 @@ public class TaskConverter implements DOMElementConverter<Task> {
 					break;
 				}
 				case "dev": {
-					CorpusAndReferenceParser dev = result.getDevSource();
+					ContentAndReferenceSource dev = result.getDevSource();
 					if (dev != null) {
 						throw new BioNLPSTException("duplicate dev source");
 					}
@@ -83,7 +83,7 @@ public class TaskConverter implements DOMElementConverter<Task> {
 					break;
 				}
 				case "test": {
-					CorpusAndReferenceParser test = result.getTestSource();
+					ContentAndReferenceSource test = result.getTestSource();
 					if (test != null) {
 						throw new BioNLPSTException("duplicate test source");
 					}

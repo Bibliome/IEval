@@ -26,14 +26,14 @@ import org.bionlpst.corpus.Modifier;
 import org.bionlpst.corpus.Normalization;
 import org.bionlpst.corpus.Relation;
 import org.bionlpst.corpus.TextBound;
-import org.bionlpst.corpus.parser.CorpusAndReferenceParser;
-import org.bionlpst.corpus.parser.PredictionParser;
+import org.bionlpst.corpus.parser.ContentAndReferenceSource;
+import org.bionlpst.corpus.parser.PredictionSource;
 import org.bionlpst.util.Location;
 import org.bionlpst.util.Util;
 import org.bionlpst.util.fragment.ImmutableFragment;
 import org.bionlpst.util.message.CheckLogger;
 
-public class BioNLPSTParser implements CorpusAndReferenceParser, PredictionParser {
+public class BioNLPSTParser implements ContentAndReferenceSource, PredictionSource {
 	public static final String EXT_CONTENTS = ".txt";
 	public static final String EXT_INPUT = ".a1";
 	public static final String EXT_OUTPUT = ".a2";
@@ -78,7 +78,7 @@ public class BioNLPSTParser implements CorpusAndReferenceParser, PredictionParse
 	}
 
 	@Override
-	public void getCorpusAndReference(CheckLogger logger, Corpus corpus, boolean loadOutput) throws BioNLPSTException, IOException {
+	public void getContentAndReference(CheckLogger logger, Corpus corpus, boolean loadOutput) throws BioNLPSTException, IOException {
 		Collection<EntryRecord> records = collectEntries(EXTS_ALL);
 		loadDocuments(corpus, records);
 		loadInputAnnotations(logger, corpus, records);
@@ -88,9 +88,9 @@ public class BioNLPSTParser implements CorpusAndReferenceParser, PredictionParse
 	}
 
 	@Override
-	public Corpus getCorpusAndReference(CheckLogger logger, boolean loadOutput) throws BioNLPSTException, IOException {
+	public Corpus getContentAndReference(CheckLogger logger, boolean loadOutput) throws BioNLPSTException, IOException {
 		Corpus result = new Corpus();
-		getCorpusAndReference(logger, result, loadOutput);
+		getContentAndReference(logger, result, loadOutput);
 		return result;
 	}
 	

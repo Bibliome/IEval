@@ -44,7 +44,7 @@ import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
 import org.bionlpst.corpus.DocumentCollection;
-import org.bionlpst.corpus.parser.PredictionParser;
+import org.bionlpst.corpus.parser.PredictionSource;
 import org.bionlpst.corpus.parser.bionlpst.BioNLPSTParser;
 import org.bionlpst.corpus.parser.bionlpst.InputStreamCollection;
 import org.bionlpst.evaluation.BootstrapConfig;
@@ -210,7 +210,7 @@ public class BioNLPSTRest {
 			return;
 		}
 		InputStreamCollection predictionSource = new ZipFileUploadInputStreamCollection(zipStream, zipInfo.getFileName());
-		PredictionParser predictionParser = new BioNLPSTParser(predictionSource);
+		PredictionSource predictionParser = new BioNLPSTParser(predictionSource);
 		predictionParser.getPredictions(logger, corpus);
 		corpus.resolveReferences(logger);
 		Task.checkParsedPredictions(logger, corpus, zipInfo.getFileName());

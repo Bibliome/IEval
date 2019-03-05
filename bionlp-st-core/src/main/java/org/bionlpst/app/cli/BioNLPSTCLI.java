@@ -16,8 +16,8 @@ import org.bionlpst.app.Task;
 import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
-import org.bionlpst.corpus.parser.CorpusAndReferenceParser;
-import org.bionlpst.corpus.parser.PredictionParser;
+import org.bionlpst.corpus.parser.ContentAndReferenceSource;
+import org.bionlpst.corpus.parser.PredictionSource;
 import org.bionlpst.corpus.parser.bionlpst.BioNLPSTParser;
 import org.bionlpst.corpus.parser.bionlpst.DirectoryInputStreamCollection;
 import org.bionlpst.corpus.parser.bionlpst.InputStreamCollection;
@@ -41,8 +41,8 @@ public class BioNLPSTCLI {
 	private final CheckLogger logger = new CheckLogger();
 	private String taskName = null;
 	private String set = null;
-	private CorpusAndReferenceParser referenceSource = null;
-	private PredictionParser predictionSource = null;
+	private ContentAndReferenceSource referenceSource = null;
+	private PredictionSource predictionSource = null;
 	private boolean detailedEvaluation = false;
 	private boolean alternateScores = false;
 	private boolean forceEvaluation = false;
@@ -251,7 +251,7 @@ public class BioNLPSTCLI {
 	
 	private Corpus loadReference(Task task, boolean loadOutput) throws BioNLPSTException, IOException {
 		if (referenceSource != null) {
-			return referenceSource.getCorpusAndReference(logger, loadOutput);
+			return referenceSource.getContentAndReference(logger, loadOutput);
 		}
 		switch (set) {
 			case "train": return task.getTrainCorpus(logger);
