@@ -41,11 +41,11 @@ public class BioNLPSTSource implements ContentAndReferenceSource, PredictionSour
 	private static final String[] EXTS_ALL = { EXT_CONTENTS, EXT_INPUT, EXT_OUTPUT };
 	private static final String[] EXTS_OUTPUT_ONLY = { EXT_CONTENTS, EXT_INPUT, EXT_OUTPUT };
 
-	private final InputStreamCollection corpusSource;
+	private final InputStreamCollection inputStreamCollection;
 	
-	public BioNLPSTSource(InputStreamCollection corpusSource) {
+	public BioNLPSTSource(InputStreamCollection inputStreamCollection) {
 		super();
-		this.corpusSource = corpusSource;
+		this.inputStreamCollection = inputStreamCollection;
 	}
 
 	private static String getDocumentIdFromPath(String path) {
@@ -79,7 +79,7 @@ public class BioNLPSTSource implements ContentAndReferenceSource, PredictionSour
 
 	@Override
 	public void getContentAndReference(CheckLogger logger, Corpus corpus, boolean loadOutput) throws BioNLPSTException, IOException {
-		Collection<EntryRecord> records = collectEntries(EXTS_ALL);
+		Collection<InputStreamEntry> records = collectEntries(EXTS_ALL);
 		loadDocuments(corpus, records);
 		loadInputAnnotations(logger, corpus, records);
 		if (loadOutput) {
@@ -96,23 +96,23 @@ public class BioNLPSTSource implements ContentAndReferenceSource, PredictionSour
 	
 	@Override
 	public void getPredictions(CheckLogger logger, Corpus corpus) throws BioNLPSTException, IOException {
-		Collection<EntryRecord> records = collectEntries(EXTS_OUTPUT_ONLY);
-		loadOutputAnnotations(logger, corpus, records, AnnotationSetSelector.PREDICTION);
+		Collection<InputStreamEntry> entries = collectEntries(EXTS_OUTPUT_ONLY);
+		loadOutputAnnotations(logger, corpus, entries, AnnotationSetSelector.PREDICTION);
 	}
 
 	@Override
 	public String getName() {
-		return corpusSource.getName();
+		return inputStreamCollection.getName();
 	}
 
-	private Collection<EntryRecord> collectEntries(String... exts) throws IOException {
-		Collection<EntryRecord> result = new ArrayList<EntryRecord>();
-		InputStreamIterator it = corpusSource.getIterator();
+	private Collection<InputStreamEntry> collectEntries(String... exts) throws IOException {
+		Collection<InputStreamEntry> result = new ArrayList<InputStreamEntry>();
+		InputStreamIterator it = inputStreamCollection.getIterator();
 		while (it.next()) {
 			String name = it.getName();
 			if (matchExt(name, exts)) {
 				InputStream contents = it.getContents();
-				EntryRecord z = new EntryRecord(name, contents);
+				InputStreamEntry z = new InputStreamEntry(name, contents);
 				result.add(z);
 			}
 		}
@@ -128,35 +128,35 @@ public class BioNLPSTSource implements ContentAndReferenceSource, PredictionSour
 		return false;
 	}
 
-	private static void loadDocuments(Corpus corpus, Collection<EntryRecord> records) {
-		for (EntryRecord u : records) {
+	private static void loadDocuments(Corpus corpus, Collection<InputStreamEntry> records) {
+		for (InputStreamEntry u : records) {
 			if (u.isDocumentContents()) {
 				u.createDocument(corpus);
 			}
 		}
 	}
 	
-	private static void loadInputAnnotations(CheckLogger logger, Corpus corpus, Collection<EntryRecord> record) throws IOException {
-		for (EntryRecord u : record) {
+	private static void loadInputAnnotations(CheckLogger logger, Corpus corpus, Collection<InputStreamEntry> record) throws IOException {
+		for (InputStreamEntry u : record) {
 			if (u.isInputAnnotationSet()) {
 				u.createInputAnnotations(logger, corpus);
 			}
 		}
 	}
 	
-	private static void loadOutputAnnotations(CheckLogger logger, Corpus corpus, Collection<EntryRecord> units, AnnotationSetSelector loadOutput) throws IOException {
-		for (EntryRecord u : units) {
+	private static void loadOutputAnnotations(CheckLogger logger, Corpus corpus, Collection<InputStreamEntry> entries, AnnotationSetSelector loadOutput) throws IOException {
+		for (InputStreamEntry u : entries) {
 			if (u.isOutputAnnotationSet()) {
 				u.createOutputAnnotations(logger, corpus, loadOutput);
 			}
 		}
 	}
 
-	private static class EntryRecord {
+	private static class InputStreamEntry {
 		private final String name;
 		private final String contents;
 
-		private EntryRecord(String name, InputStream contents) throws IOException {
+		private InputStreamEntry(String name, InputStream contents) throws IOException {
 			this.name = name;
 			this.contents = Util.readWholeStream(new InputStreamReader(contents));
 		}

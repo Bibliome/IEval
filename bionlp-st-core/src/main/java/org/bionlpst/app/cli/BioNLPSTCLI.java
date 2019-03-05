@@ -340,7 +340,7 @@ public class BioNLPSTCLI {
 					}
 					String arg = requireArgument(argsIt, opt, null);
 					if (arg != null) {
-						referenceSource = new BioNLPSTSource(getSource(arg));
+						referenceSource = new BioNLPSTSource(getInputStreamCollection(arg));
 					}
 					break;
 				}
@@ -350,7 +350,7 @@ public class BioNLPSTCLI {
 					}
 					String arg = requireArgument(argsIt, opt, null);
 					if (arg != null) {
-						predictionSource = new BioNLPSTSource(getSource(arg));
+						predictionSource = new BioNLPSTSource(getInputStreamCollection(arg));
 					}
 					break;
 				}
@@ -404,7 +404,7 @@ public class BioNLPSTCLI {
 		return defaultValue;
 	}
 	
-	private static InputStreamCollection getSource(String arg) {
+	private static InputStreamCollection getInputStreamCollection(String arg) {
 		File f = new File(arg);
 		if (f.isDirectory()) {
 			return new DirectoryInputStreamCollection(f);

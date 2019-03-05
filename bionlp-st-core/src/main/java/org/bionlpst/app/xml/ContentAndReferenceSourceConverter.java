@@ -16,7 +16,7 @@ public class ContentAndReferenceSourceConverter implements DOMElementConverter<C
 
 	@Override
 	public ContentAndReferenceSource convert(Element element) throws Exception {
-		InputStreamCollection corpusSource = corpusSourceConverter.convert(element);
-		return new BioNLPSTSource(corpusSource);
+		InputStreamCollection inputStreamCollection = corpusSourceConverter.convert(element);
+		return new BioNLPSTSource(inputStreamCollection);
 	}
 }
