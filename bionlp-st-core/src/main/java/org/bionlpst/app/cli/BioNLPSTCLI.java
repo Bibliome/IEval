@@ -42,6 +42,7 @@ public class BioNLPSTCLI {
 	private static final Location COMMAND_LINE_LOCATION = new Location("", -1);
 	private final CheckLogger logger = new CheckLogger();
 	private String taskName = null;
+	private Task task = null;
 	private String set = null;
 	private ContentAndReferenceSource referenceSource = null;
 	private PredictionSource predictionSource = null;
@@ -86,7 +87,6 @@ public class BioNLPSTCLI {
 					doListTasks();
 				}
 				else {
-					Task task = getSelectedTask();
 					if (task != null) {
 						displayTask(task);
 					}
@@ -115,12 +115,11 @@ public class BioNLPSTCLI {
 	}
 
 	private void doCheckAndEvaluate(boolean evaluate) throws Exception {
-		Task task = getSelectedTask();
 		if (task == null) {
 			exit(1);
 		}
 		logger.information(COMMAND_LINE_LOCATION, "loading corpus and reference data");
-		Corpus corpus = loadReference(task, evaluate);
+		Corpus corpus = loadReference(evaluate);
 		flushLogger();
 
 		logger.information(COMMAND_LINE_LOCATION, "loading prediction data");
@@ -148,7 +147,7 @@ public class BioNLPSTCLI {
 					exit(1);
 				}
 			}
-			doEvaluate(task, corpus);
+			doEvaluate(corpus);
 		}
 		else {
 			if (highestLevel != CheckMessageLevel.INFORMATION) {
@@ -157,18 +156,18 @@ public class BioNLPSTCLI {
 		}
 	}
 
-	private void doEvaluate(Task task, Corpus corpus) {
+	private void doEvaluate(Corpus corpus) {
 		logger.information(COMMAND_LINE_LOCATION, "evaluation");
 		flushLogger();
 		if (detailedEvaluation) {
 			for (Document doc : corpus.getDocuments()) {
-				doEvaluateDocument(task, doc);
+				doEvaluateDocument(doc);
 			}
 		}
-		doEvaluateCorpus(task, corpus);
+		doEvaluateCorpus(corpus);
 	}
 
-	private void doEvaluateCorpus(Task task, Corpus corpus) {
+	private void doEvaluateCorpus(Corpus corpus) {
 		System.out.println("Evaluation for corpus " + getCorpusName());
 		if (alternateScores) {
 			Map<String,EvaluationResult<Annotation>> evalMap = task.evaluate(logger, corpus, false, null/*boostrap*/);
@@ -189,7 +188,7 @@ public class BioNLPSTCLI {
 		return set;
 	}
 
-	private void doEvaluateDocument(Task task, Document doc) {
+	private void doEvaluateDocument(Document doc) {
 		System.out.println("Evaluation for document " + doc.getId());
 		if (alternateScores) {
 			Map<String,EvaluationResult<Annotation>> evalMap = task.evaluate(logger, doc, true, null/*boostrap*/);
@@ -251,8 +250,8 @@ public class BioNLPSTCLI {
 			}
 		}
 	}
-	
-	private Corpus loadReference(Task task, boolean loadOutput) throws BioNLPSTException, IOException {
+
+	private Corpus loadReference(boolean loadOutput) throws BioNLPSTException, IOException {
 		if (referenceSource != null) {
 			return referenceSource.fillContentAndReference(logger, loadOutput);
 		}
@@ -316,6 +315,14 @@ public class BioNLPSTCLI {
 						logger.serious(COMMAND_LINE_LOCATION, "duplicate option: -task");
 					}
 					taskName = requireArgument(argsIt, opt, taskName);
+					if (taskName != null) {
+						try {
+							task = getSelectedTask();
+						}
+						catch (Exception e) {
+							logger.serious(COMMAND_LINE_LOCATION, "something went wrong while loading task definitions: " + e.getMessage());
+						}
+					}
 					break;
 				}
 				case "-train":
@@ -438,6 +445,11 @@ public class BioNLPSTCLI {
 		if (taskName == null) {
 			logger.serious(COMMAND_LINE_LOCATION, "option -task is mandatory");
 			result = false;
+		}
+		else {
+			if (task == null) {
+				result = false;
+			}
 		}
 		if (set == null && referenceSource == null) {
 			logger.serious(COMMAND_LINE_LOCATION, "either one of these options is required: -train -dev -test -reference");
