@@ -19,8 +19,11 @@ Options:
 		directory or zip file containing reference annotations
 	
 	-prediction DIR
-		directory or zip file containing predicted annotations (mandatory)
+		directory or zip file containing predicted annotations in BioNLP-ST format, or file in PubAnnotation format (mandatory)
 
+	-pubannotation
+	    read predictions from a PubAnnotation JSON file
+	    
 	-detailed
 		output detailed error analysis, will not work with -test
 	

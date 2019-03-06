@@ -22,6 +22,8 @@ import org.bionlpst.corpus.source.bionlpst.BioNLPSTSource;
 import org.bionlpst.corpus.source.bionlpst.DirectoryInputStreamCollection;
 import org.bionlpst.corpus.source.bionlpst.InputStreamCollection;
 import org.bionlpst.corpus.source.bionlpst.ZipFileInputStreamCollection;
+import org.bionlpst.corpus.source.pubannotation.FileInputStreamFactory;
+import org.bionlpst.corpus.source.pubannotation.PubAnnotationSource;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
@@ -43,6 +45,7 @@ public class BioNLPSTCLI {
 	private String set = null;
 	private ContentAndReferenceSource referenceSource = null;
 	private PredictionSource predictionSource = null;
+	private boolean pubAnnotationPredictions = false;
 	private boolean detailedEvaluation = false;
 	private boolean alternateScores = false;
 	private boolean forceEvaluation = false;
@@ -344,13 +347,28 @@ public class BioNLPSTCLI {
 					}
 					break;
 				}
+				case "-pubannotation": {
+					if (pubAnnotationPredictions) {
+						logger.suspicious(COMMAND_LINE_LOCATION, "duplicate option: " + opt);
+					}
+					if (predictionSource != null) {
+						logger.suspicious(COMMAND_LINE_LOCATION, "option -pubannotation occurs after -prediction");
+					}
+					pubAnnotationPredictions = true;
+					break;
+				}
 				case "-prediction": {
 					if (predictionSource != null) {
 						logger.suspicious(COMMAND_LINE_LOCATION, "duplicate option: " + opt);
 					}
 					String arg = requireArgument(argsIt, opt, null);
 					if (arg != null) {
-						predictionSource = new BioNLPSTSource(getInputStreamCollection(arg));
+						if (pubAnnotationPredictions) {
+							predictionSource = new PubAnnotationSource(new FileInputStreamFactory(new File(arg)));
+						}
+						else {
+							predictionSource = new BioNLPSTSource(getInputStreamCollection(arg));
+						}
 					}
 					break;
 				}
