@@ -211,7 +211,7 @@ public class BioNLPSTRest {
 		}
 		InputStreamCollection predictionInputStreamCollection = new ZipFileUploadInputStreamCollection(zipStream, zipInfo.getFileName());
 		PredictionSource predictionParser = new BioNLPSTSource(predictionInputStreamCollection);
-		predictionParser.getPredictions(logger, corpus);
+		predictionParser.fillPredictions(logger, corpus);
 		corpus.resolveReferences(logger);
 		Task.checkParsedPredictions(logger, corpus, zipInfo.getFileName());
 		task.checkSchema(logger, corpus);

@@ -121,16 +121,16 @@ public class Task {
 	}
 	
 	public Corpus getTrainCorpus(CheckLogger logger) throws BioNLPSTException, IOException {
-		return trainSource.getContentAndReference(logger, true);
+		return trainSource.fillContentAndReference(logger, true);
 	}
 	
 	public Corpus getDevCorpus(CheckLogger logger) throws BioNLPSTException, IOException {
-		return devSource.getContentAndReference(logger, true);
+		return devSource.fillContentAndReference(logger, true);
 	}
 	
 	public Corpus getTrainAndDevCorpus(CheckLogger logger) throws BioNLPSTException, IOException {
 		Corpus result = getTrainCorpus(logger);
-		devSource.getContentAndReference(logger, result, true);
+		devSource.fillContentAndReference(logger, result, true);
 		return result;
 	}
 	
@@ -138,7 +138,7 @@ public class Task {
 		if (testSource == null) {
 			throw new BioNLPSTException("test set is not available for " + name);
 		}
-		return testSource.getContentAndReference(logger, true);
+		return testSource.fillContentAndReference(logger, true);
 	}
 	
 	public void checkSchema(CheckLogger logger, Corpus corpus) {
@@ -173,7 +173,7 @@ public class Task {
 	}
 
 	public void loadPredictions(CheckLogger logger, Corpus corpus, PredictionSource predictionParser) throws BioNLPSTException, IOException {
-		predictionParser.getPredictions(logger, corpus);
+		predictionParser.fillPredictions(logger, corpus);
 		schema.check(logger, corpus);
 	}
 	

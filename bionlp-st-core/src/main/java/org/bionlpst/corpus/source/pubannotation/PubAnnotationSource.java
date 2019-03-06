@@ -39,7 +39,7 @@ public class PubAnnotationSource implements PredictionSource {
 	}
 
 	@Override
-	public void getPredictions(CheckLogger logger, Corpus corpus) throws BioNLPSTException, IOException {
+	public void fillPredictions(CheckLogger logger, Corpus corpus) throws BioNLPSTException, IOException {
 		JSONArray jsDocs = getJSONArrayDocs(logger);
 		for (int i = 0; i < jsDocs.length(); ++i) {
 			JSONObject jsDoc = jsDocs.optJSONObject(i);

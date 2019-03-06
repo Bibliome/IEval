@@ -8,6 +8,6 @@ import org.bionlpst.util.Named;
 import org.bionlpst.util.message.CheckLogger;
 
 public interface ContentAndReferenceSource extends Named {
-	void getContentAndReference(CheckLogger logger, Corpus corpus, boolean loadOutput) throws BioNLPSTException, IOException;
-	Corpus getContentAndReference(CheckLogger logger, boolean loadOutput) throws BioNLPSTException, IOException;
+	void fillContentAndReference(CheckLogger logger, Corpus corpus, boolean loadOutput) throws BioNLPSTException, IOException;
+	Corpus fillContentAndReference(CheckLogger logger, boolean loadOutput) throws BioNLPSTException, IOException;
 }

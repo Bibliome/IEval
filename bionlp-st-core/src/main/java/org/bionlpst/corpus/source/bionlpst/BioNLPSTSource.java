@@ -78,7 +78,7 @@ public class BioNLPSTSource implements ContentAndReferenceSource, PredictionSour
 	}
 
 	@Override
-	public void getContentAndReference(CheckLogger logger, Corpus corpus, boolean loadOutput) throws BioNLPSTException, IOException {
+	public void fillContentAndReference(CheckLogger logger, Corpus corpus, boolean loadOutput) throws BioNLPSTException, IOException {
 		Collection<InputStreamEntry> records = collectEntries(EXTS_ALL);
 		loadDocuments(corpus, records);
 		loadInputAnnotations(logger, corpus, records);
@@ -88,14 +88,14 @@ public class BioNLPSTSource implements ContentAndReferenceSource, PredictionSour
 	}
 
 	@Override
-	public Corpus getContentAndReference(CheckLogger logger, boolean loadOutput) throws BioNLPSTException, IOException {
+	public Corpus fillContentAndReference(CheckLogger logger, boolean loadOutput) throws BioNLPSTException, IOException {
 		Corpus result = new Corpus();
-		getContentAndReference(logger, result, loadOutput);
+		fillContentAndReference(logger, result, loadOutput);
 		return result;
 	}
 	
 	@Override
-	public void getPredictions(CheckLogger logger, Corpus corpus) throws BioNLPSTException, IOException {
+	public void fillPredictions(CheckLogger logger, Corpus corpus) throws BioNLPSTException, IOException {
 		Collection<InputStreamEntry> entries = collectEntries(EXTS_OUTPUT_ONLY);
 		loadOutputAnnotations(logger, corpus, entries, AnnotationSetSelector.PREDICTION);
 	}

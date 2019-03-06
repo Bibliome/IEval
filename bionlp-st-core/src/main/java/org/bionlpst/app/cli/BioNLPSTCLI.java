@@ -121,7 +121,7 @@ public class BioNLPSTCLI {
 		flushLogger();
 
 		logger.information(COMMAND_LINE_LOCATION, "loading prediction data");
-		predictionSource.getPredictions(logger, corpus);
+		predictionSource.fillPredictions(logger, corpus);
 		flushLogger();
 		
 		logger.information(COMMAND_LINE_LOCATION, "resolving references");
@@ -251,7 +251,7 @@ public class BioNLPSTCLI {
 	
 	private Corpus loadReference(Task task, boolean loadOutput) throws BioNLPSTException, IOException {
 		if (referenceSource != null) {
-			return referenceSource.getContentAndReference(logger, loadOutput);
+			return referenceSource.fillContentAndReference(logger, loadOutput);
 		}
 		switch (set) {
 			case "train": return task.getTrainCorpus(logger);
