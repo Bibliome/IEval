@@ -40,6 +40,15 @@ public class Relation extends Annotation {
 			arguments.put(e.getKey(), resolveReference(logger, e.getValue()));
 		}
 	}
+	
+	public void setArgumentReference(CheckLogger logger, Location location, String role, String ref) {
+		if (argumentReferences.containsKey(role)) {
+			logger.suspicious(location, "duplicate argument " + role + ", ignoring");
+		}
+		else {
+			argumentReferences.put(role, ref);
+		}
+	}
 
 	/**
 	 * Returns the arguments of this relation with their roles.
