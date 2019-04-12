@@ -25,7 +25,11 @@ public class ResourceSourceStream extends SourceStream {
 
 	@Override
 	public InputStream open() throws IOException {
-		return classLoader.getResourceAsStream(resourceName);
+		InputStream result = classLoader.getResourceAsStream(resourceName);
+		if (result == null) {
+			throw new IOException("resource not found: " + resourceName);
+		}
+		return result;
 	}
 
 	@Override

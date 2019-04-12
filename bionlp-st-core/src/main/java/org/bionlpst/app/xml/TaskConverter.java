@@ -102,13 +102,13 @@ public class TaskConverter implements DOMElementConverter<Task> {
 			throw new BioNLPSTException("missing schema");
 		}
 		if (result.getTrainSource() == null) {
-			throw new BioNLPSTException("missing train corpus");
+			throw new BioNLPSTException("missing train corpus for " + name);
 		}
 		if (result.getDevSource() == null) {
-			throw new BioNLPSTException("missing dev corpus");
+			throw new BioNLPSTException("missing dev corpus for " + name);
 		}
 		if (result.getEvaluations().isEmpty()) {
-			throw new BioNLPSTException("missing evaluations");
+			throw new BioNLPSTException("missing evaluations for " + name);
 		}
 		return result;
 	}
