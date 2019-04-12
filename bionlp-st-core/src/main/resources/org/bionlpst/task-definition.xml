@@ -748,6 +748,203 @@
 		<!-- <test zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_test_WITH_ANSWERS.zip" with-reference="true" /> -->
 	</task>
 
+	<task name="BB19-cat">
+		<description>Bacteria Biotope entity categorization.</description>
+		<description><em>Microorganism</em> entities are categorized in the NCBI Taxonomy, <em>Habitat</em> and <em>Phenotype</em> entities are categorized in the OntoBiotope ontology.</description>
+		<schema>
+			<BB19-cat-schema />
+		</schema>
+		<evaluation name="Reference pairing" input-iteration="true">
+			<matching-similarity>
+				<BB19-cat-sim />
+			</matching-similarity>
+			<pre-filter>
+				<types>Habitat,Phenotype,Microorganism</types>
+			</pre-filter>
+			<scoring name="Main scoring">
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Habitats only">
+				<post-filter>
+					<types>Habitat</types>
+				</post-filter>
+				<similarity>
+					<wang-sim19 />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Habitats exact">
+				<post-filter>
+					<types>Habitat</types>
+				</post-filter>
+				<similarity>
+					<habitat-exact-sim />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Habitats only (cap to human)">
+				<post-filter>
+					<types>Habitat</types>
+				</post-filter>
+				<similarity>
+					<wang-sim-human19 />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Habitats only (food only)">
+				<post-filter>
+					<and>
+						<types>Habitat</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-sim-food19 />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Habitats only (new in dev)">
+				<post-filter>
+					<and>
+						<types>Habitat</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-new-in-dev19 />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Habitats only (new in test)">
+				<post-filter>
+					<and>
+						<types>Habitat</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-new-in-test19 />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Phenotypes only">
+				<post-filter>
+					<types>Phenotype</types>
+				</post-filter>
+				<similarity>
+					<pheno-wang-sim />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Phenotypes exact">
+				<post-filter>
+					<types>Phenotype</types>
+				</post-filter>
+				<similarity>
+					<pheno-exact-sim />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Phenotypes only (new in dev)">
+				<post-filter>
+					<and>
+						<types>Phenotype</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<pheno-wang-new-in-dev />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Phenotypes only (new in test)">
+				<post-filter>
+					<and>
+						<types>Phenotype</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<pheno-wang-new-in-test />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Microorganisms only">
+				<post-filter>
+					<types>Microorganism</types>
+				</post-filter>
+				<similarity>
+					<bact-sim />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Microorganisms only (cap to species)">
+				<post-filter>
+					<types>Microorganism</types>
+				</post-filter>
+				<similarity>
+					<micro-species-sim />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Multiple normalizations">
+				<post-filter>
+					<or>
+						<backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
+						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+					</or>
+				</post-filter>
+				<similarity>
+					<BB19-cat-sim />
+				</similarity>
+				<measure>precision</measure>
+				<measure>references</measure>
+			</scoring>
+			<scoring name="Multiple normalizations (Microorganism)">
+				<post-filter>
+					<and>
+						<types>Microorganism</types>
+						<backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
+					</and>
+				</post-filter>
+				<similarity>
+					<micro-sim />
+				</similarity>
+				<measure>precision</measure>
+				<measure>references</measure>
+			</scoring>
+			<scoring name="Multiple normalizations (Habitats)">
+				<post-filter>
+					<and>
+						<types>Habitat</types>
+						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-sim19 />
+				</similarity>
+				<measure>precision</measure>
+				<measure>references</measure>
+			</scoring>
+			<scoring name="Multiple normalizations (Phenotypes)">
+				<post-filter>
+					<and>
+						<types>Phenotype</types>
+						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-sim19 />
+				</similarity>
+				<measure>precision</measure>
+				<measure>references</measure>
+			</scoring>
+		</evaluation>
+		<train zipresource="BioNLP-ST-2016_BB-cat_train.zip" />
+		<dev zipresource="BioNLP-ST-2016_BB-cat_dev.zip" />
+		<!-- <test zipresource="" with-reference="true" /> -->
+	</task>
+
 	<task name="BB-cat">
 		<description>Bacteria Biotope entity categorization.</description>
 		<description><em>Bacteria</em> entities are categorized in the NCBI Taxonomy, <em>Habitat</em> entities are categorized in the OntoBiotope ontology.</description>
@@ -811,7 +1008,7 @@
 					</and>
 				</post-filter>
 				<similarity>
-					<wang-sim-new-in-dev />
+					<wang-new-in-dev />
 				</similarity>
 				<measure>precision</measure>
 			</scoring>
@@ -823,7 +1020,7 @@
 					</and>
 				</post-filter>
 				<similarity>
-					<wang-sim-new-in-test />
+					<wang-new-in-test />
 				</similarity>
 				<measure>precision</measure>
 			</scoring>
@@ -1034,7 +1231,7 @@
 					</and>
 				</post-filter>
 				<similarity>
-					<wang-sim-new-in-dev />
+					<wang-new-in-dev />
 				</similarity>
 				<ser-measures />
 				<measure>recall</measure>
@@ -1049,7 +1246,7 @@
 					</and>
 				</post-filter>
 				<similarity>
-					<wang-sim-new-in-test />
+					<wang-new-in-test />
 				</similarity>
 				<ser-measures />
 				<measure>recall</measure>
@@ -1560,8 +1757,7 @@
 				<backreference-cardinality at-least="1" at-most="2">NCBI_Taxonomy</backreference-cardinality>
 			</text-bound>
 			<text-bound type="Habitat">
-				<backreference-cardinality at-least="1">OntoBiotope
-				</backreference-cardinality>
+				<backreference-cardinality at-least="1">OntoBiotope</backreference-cardinality>
 			</text-bound>
 			<normalization type="OntoBiotope">
 				<annotation-types>Habitat</annotation-types>
@@ -1572,6 +1768,28 @@
 				<reference-vocabulary jar="org/bionlpst/data/NCBI_Taxonomy.txt" />
 			</normalization>
 		</BB-cat-schema>
+
+		<BB19-cat-schema>
+			<text-bound type="Title" />
+			<text-bound type="Paragraph" />
+			<text-bound type="Microorganism">
+				<backreference-cardinality at-least="1" at-most="2">NCBI_Taxonomy</backreference-cardinality>
+			</text-bound>
+			<text-bound type="Habitat">
+				<backreference-cardinality at-least="1">OntoBiotope</backreference-cardinality>
+			</text-bound>
+			<text-bound type="Phenotype">
+				<backreference-cardinality at-least="1">OntoBiotope</backreference-cardinality>
+			</text-bound>
+			<normalization type="OntoBiotope">
+				<annotation-types>Habitat,Phenotype</annotation-types>
+				<reference-vocabulary jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016.txt" /> <!-- XXX -->
+			</normalization>
+			<normalization type="NCBI_Taxonomy">
+				<annotation-types>Bacteria</annotation-types>
+				<reference-vocabulary jar="org/bionlpst/data/EMPTY" />
+			</normalization>
+		</BB19-cat-schema>
 
 		<wang-sim>
 			<wang type="Habitat" weight="0.65"
@@ -1612,6 +1830,65 @@
 			<normalization type="Habitat" normalization-type="OntoBiotope" />
 		</habitat-exact-sim>
 
+		<wang-sim19>
+			<wang type="Habitat" weight="0.65"
+				normalization-type="OntoBiotope"
+				jar="org/bionlpst/data/EMPTY" />
+		</wang-sim19>
+
+		<wang-sim-human19>
+			<wang type="Habitat" weight="0.65"
+				normalization-type="OntoBiotope"
+				jar="org/bionlpst/data/EMPTY">
+				<referent-map jar="org/bionlpst/data/EMPTY" />
+			</wang>
+		</wang-sim-human19>
+
+		<wang-sim-food19>
+			<wang type="Habitat" weight="0.65"
+				normalization-type="OntoBiotope"
+				jar="org/bionlpst/data/EMPTY" />
+			<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+		</wang-sim-food19>
+
+		<wang-new-in-dev19>
+			<wang type="Habitat" weight="0.65"
+				normalization-type="OntoBiotope"
+				jar="org/bionlpst/data/EMPTY" />
+			<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+		</wang-new-in-dev19>
+
+		<wang-new-in-test19>
+			<wang type="Habitat" weight="0.65"
+				normalization-type="OntoBiotope"
+				jar="org/bionlpst/data/EMPTY" />
+			<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+		</wang-new-in-test19>
+
+		<pheno-wang-sim>
+			<wang type="Phenotype" weight="0.65"
+				normalization-type="OntoBiotope"
+				jar="org/bionlpst/data/EMPTY" />
+		</pheno-wang-sim>
+
+		<pheno-wang-new-in-dev>
+			<wang type="Phenotype" weight="0.65"
+				normalization-type="OntoBiotope"
+				jar="org/bionlpst/data/EMPTY" />
+			<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+		</pheno-wang-new-in-dev>
+
+		<pheno-wang-new-in-test>
+			<wang type="Phenotype" weight="0.65"
+				normalization-type="OntoBiotope"
+				jar="org/bionlpst/data/EMPTY" />
+			<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+		</pheno-wang-new-in-test>
+
+		<pheno-exact-sim>
+			<normalization type="Phenotype" normalization-type="OntoBiotope" />
+		</pheno-exact-sim>
+
 		<bact-sim>
 			<normalization type="Bacteria" normalization-type="NCBI_Taxonomy" />
 		</bact-sim>
@@ -1622,12 +1899,30 @@
 			</normalization>
 		</bact-species-sim>
 
+		<micro-sim>
+			<normalization type="Microorganism" normalization-type="NCBI_Taxonomy" />
+		</micro-sim>
+
+		<micro-species-sim>
+			<normalization type="Microorganism" normalization-type="NCBI_Taxonomy">
+				<referent-map jar="org/bionlpst/data/EMPTY" />
+			</normalization>
+		</micro-species-sim>
+
 		<BB-cat-sim>
 			<type-dispatch>
 				<wang-sim />
 				<bact-sim />
 			</type-dispatch>
 		</BB-cat-sim>
+
+		<BB19-cat-sim>
+			<type-dispatch>
+				<wang-sim />
+				<pheno-wang-sim />
+				<micro-sim />
+			</type-dispatch>
+		</BB19-cat-sim>
 
 		<BB-event-schema>
 			<text-bound type="Title" />
@@ -1638,6 +1933,16 @@
 			<Lives_In />
 		</BB-event-schema>
 
+		<BB19-event-schema>
+			<text-bound type="Title" />
+			<text-bound type="Paragraph" />
+			<text-bound type="Microorganism" />
+			<text-bound type="Habitat" />
+			<text-bound type="Phenotype" />
+			<text-bound type="Geographical" />
+			<Lives_In />
+		</BB19-event-schema>
+
 		<Lives_In>
 			<relation type="Lives_In">
 				<roles>Bacteria,Location</roles>
@@ -1646,6 +1951,24 @@
 				<argument-types role="Location">Habitat,Geographical </argument-types>
 			</relation>
 		</Lives_In>
+
+		<Lives_In19>
+			<relation type="Lives_In">
+				<roles>Bacteria,Location</roles>
+				<mandatory-arguments>Microorganism,Location</mandatory-arguments>
+				<argument-types role="Microorganism">Microorganism</argument-types>
+				<argument-types role="Location">Habitat,Geographical </argument-types>
+			</relation>
+		</Lives_In19>
+
+		<Exhibits>
+			<relation type="Exhibits">
+				<roles>Bacteria,Property</roles>
+				<mandatory-arguments>Microorganism,Phenotype</mandatory-arguments>
+				<argument-types role="Microorganism">Microorganism</argument-types>
+				<argument-types role="Location">Habitat,Geographical </argument-types>
+			</relation>
+		</Exhibits>
 
 		<BB-kb-sim>
 			<product>
