@@ -945,6 +945,571 @@
 		<!-- <test zipresource="" with-reference="true" /> -->
 	</task>
 
+	<task name="BB19-event">
+		<description>Bacteria Biotope binary event extraction.</description>
+		<schema>
+			<BB19-event-schema />
+		</schema>
+		<evaluation name="Standard pairing">
+			<pairing-algorithm>
+				<custom>org.bionlpst.evaluation.BB19EventPairing</custom>
+			</pairing-algorithm>
+			<matching-similarity>
+				<product>
+					<argument role="Microorganism">
+						<equivalence>
+							<same />
+						</equivalence>
+					</argument>
+					<type-dispatch>
+						<argument type="Lives_In" role="Location">
+							<equivalence>
+								<same />
+							</equivalence>
+						</argument>
+						<argument type="Exhibits" role="Phenotype">
+							<equivalence>
+								<same />
+							</equivalence>
+						</argument>
+					</type-dispatch>
+				</product>
+			</matching-similarity>
+			
+			<scoring name="Lives_In and Exhibits">
+				<f1-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In">
+				<post-filter>
+					<types>Lives_In</types>
+				</post-filter>
+				<f1-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In (Habitat)">
+				<post-filter>
+					<and>
+						<types>Lives_In</types>
+						<argument role="Location">
+							<types>Habitat</types>
+						</argument>
+					</and>
+				</post-filter>
+				<f1-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In (Geographical)">
+				<post-filter>
+					<and>
+						<types>Lives_In</types>
+						<argument role="Location">
+							<types>Geographical</types>
+						</argument>
+					</and>
+				</post-filter>
+				<f1-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In (inside sentences)">
+				<post-filter>
+					<and>
+						<types>Lives_In</types>
+						<same-sentence jar="org/bionlpst/data/EMPTY" />
+					</and>
+				</post-filter>
+				<f1-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Exhibits">
+				<post-filter>
+					<types>Exhibits</types>
+				</post-filter>
+				<f1-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Exhibits (inside sentences)">
+				<post-filter>
+					<and>
+						<types>Exhibits</types>
+						<same-sentence jar="org/bionlpst/data/EMPTY" />
+					</and>
+				</post-filter>
+				<f1-measures />
+				<measure>predictions</measure>
+			</scoring>
+		</evaluation>
+		<train zipresource="org/bionlpst/data/EMPTY" />
+		<dev zipresource="org/bionlpst/data/EMPTY" />
+		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
+	</task>
+
+	<task name="BB19-cat+ner">
+		<description>Bacteria Biotope named entity recognition and categorization.</description>
+		<description><em>Microorganism</em> entities are categorized in the NCBI Taxonomy, <em>Habitat</em> and <em>Phenotype</em> entities are categorized in the OntoBiotope ontology.</description>
+		<schema>
+			<BB19-cat-schema />
+		</schema>
+		<evaluation name="Standard pairing">
+			<matching-similarity>
+				<product>
+					<jaccard />
+					<BB19-cat-sim />
+				</product>
+			</matching-similarity>
+			<pre-filter>
+				<types>Microorganism,Habitat,Phenotype</types>
+			</pre-filter>
+			<scoring name="Standard scoring">
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Habitats only">
+				<post-filter>
+					<types>Habitat</types>
+				</post-filter>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Habitats only (cap to human)">
+				<post-filter>
+					<types>Habitat</types>
+				</post-filter>
+				<similarity>
+					<wang-sim-human19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Habitats only (food only)">
+				<post-filter>
+					<and>
+						<types>Habitat</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-sim-food19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Habitats only (new in dev)">
+				<post-filter>
+					<and>
+						<types>Habitat</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-new-in-dev />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Habitats only (new in test)">
+				<post-filter>
+					<and>
+						<types>Habitat</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-new-in-test />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Phenotypes only">
+				<post-filter>
+					<types>Phenotype</types>
+				</post-filter>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Phenotypes only (new in dev)">
+				<post-filter>
+					<and>
+						<types>Phenotype</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-new-in-dev />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Phenotypes only (new in test)">
+				<post-filter>
+					<and>
+						<types>Phenotype</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-new-in-test />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Microorganisms only">
+				<post-filter>
+					<types>Microorganism</types>
+				</post-filter>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Ignore boundaries">
+				<similarity>
+					<BB19-cat-sim />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Ignore boundaries (Habitats)">
+				<post-filter>
+					<types>Habitat</types>
+				</post-filter>
+				<similarity>
+					<wang-sim19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Ignore boundaries (Microorganisms)">
+				<post-filter>
+					<types>Microorganism</types>
+				</post-filter>
+				<similarity>
+					<micro-sim />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Multiple normalizations">
+				<similarity>
+					<BB19-cat-sim />
+				</similarity>
+				<post-filter>
+					<or>
+						<backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
+						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+					</or>
+				</post-filter>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Multiple normalizations (Habitats)">
+				<post-filter>
+					<and>
+						<types>Habitat</types>
+						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-sim19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Multiple normalizations (Microorganisms)">
+				<post-filter>
+					<and>
+						<types>Microorganism</types>
+						<backreference-cardinality at-least="2">NCBI_Taxonomy</backreference-cardinality>
+					</and>
+				</post-filter>
+				<similarity>
+					<micro-sim />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+		</evaluation>
+		<evaluation name="Cap to species">
+			<matching-similarity>
+				<product>
+					<jaccard />
+					<micro-species-sim />
+				</product>
+			</matching-similarity>
+			<pre-filter>
+				<types>Microorganism</types>
+			</pre-filter>
+			<scoring name="Microorganisms only">
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Ignore boundaries (Microorganisms)">
+				<similarity>
+					<bact-species-sim />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+		</evaluation>
+		<evaluation name="Boundaries pairing">
+			<matching-similarity>
+				<jaccard />
+			</matching-similarity>
+			<pre-filter>
+				<types>Microorganism,Habitat,Phenotype</types>
+			</pre-filter>
+			<scoring name="Boundaries scoring">
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Habitats boundaries only">
+				<post-filter>
+					<types>Habitat</types>
+				</post-filter>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Phenotypes boundaries only">
+				<post-filter>
+					<types>Phenotype</types>
+				</post-filter>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Microorganisms boundaries only">
+				<post-filter>
+					<types>Microorganism</types>
+				</post-filter>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+		</evaluation>
+		<train zipresource="org/bionlpst/data/EMPTY" />
+		<dev zipresource="org/bionlpst/data/EMPTY" />
+		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
+	</task>
+
+	<task name="BB19-event+ner">
+		<description>Bacteria Biotope named entity recognition and binary event extraction.</description>
+		<schema>
+			<BB-event-schema />
+		</schema>
+		<evaluation name="Standard pairing">
+			<pre-filter>
+				<types>Lives_In,Exhibits</types>
+			</pre-filter>
+			<pairing-algorithm>
+				<custom>org.bionlpst.evaluation.BB19EventPairing</custom>
+			</pairing-algorithm>
+			<matching-similarity>
+				<product>
+					<argument role="Microorganism">
+						<equivalence>
+							<product>
+								<type />
+								<jaccard />
+							</product>
+						</equivalence>
+					</argument>
+					<type-dispatch>
+						<argument type="Lives_In" role="Location">
+							<equivalence>
+								<product>
+									<type />
+									<jaccard />
+								</product>
+							</equivalence>
+						</argument>
+						<argument type="Exhibits" role="Phenotype">
+							<equivalence>
+								<product>
+									<type />
+									<jaccard />
+								</product>
+							</equivalence>
+						</argument>
+					</type-dispatch>
+				</product>
+			</matching-similarity>
+			<scoring name="Lives_In and Exhibits">
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In (Habitat)">
+				<post-filter>
+					<and>
+						<types>Lives_In</types>
+						<argument role="Location">
+							<types>Habitat</types>
+						</argument>
+					</and>
+				</post-filter>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In (Geographical)">
+				<post-filter>
+					<and>
+						<types>Lives_In</types>
+						<argument role="Location">
+							<types>Geographical</types>
+						</argument>
+					</and>
+				</post-filter>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Exhibits">
+				<post-filter>
+					<types>Exhibits</types>
+				</post-filter>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In and Exhibits (inside sentences)">
+				<post-filter>
+					<same-sentence jar="org/bionlpst/data/EMPTY" />
+				</post-filter>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In (inside sentences)">
+				<post-filter>
+					<and>
+						<types>Lives_In</types>
+						<same-sentence jar="org/bionlpst/data/EMPTY" />
+					</and>
+				</post-filter>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Exhibits (inside sentences)">
+				<post-filter>
+					<and>
+						<types>Exhibits</types>
+						<same-sentence jar="org/bionlpst/data/EMPTY" />
+					</and>
+				</post-filter>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In and Exhibits (ignore boundaries)">
+				<similarity>
+					<constant>1</constant>
+				</similarity>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In (ignore boundaries)">
+				<post-filter>
+					<types>Lives_In</types>
+				</post-filter>
+				<similarity>
+					<constant>1</constant>
+				</similarity>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In (Habitat, ignore boundaries)">
+				<similarity>
+					<constant>1</constant>
+				</similarity>
+				<post-filter>
+					<and>
+						<types>Lives_In</types>
+						<argument role="Location">
+							<types>Habitat</types>
+						</argument>
+					</and>
+				</post-filter>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Lives_In (Geographical, ignore boundaries)">
+				<similarity>
+					<constant>1</constant>
+				</similarity>
+				<post-filter>
+					<and>
+						<types>Lives_In</types>
+						<argument role="Location">
+							<types>Geographical</types>
+						</argument>
+					</and>
+				</post-filter>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Exhibits (ignore boundaries)">
+				<post-filter>
+					<types>Exhibits</types>
+				</post-filter>
+				<similarity>
+					<constant>1</constant>
+				</similarity>
+				<f1-measures />
+				<ser-measures />
+				<measure>predictions</measure>
+			</scoring>
+		</evaluation>
+		<train zipresource="org/bionlpst/data/EMPTY" />
+		<dev zipresource="org/bionlpst/data/EMPTY" />
+		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
+	</task>
+
 	<task name="BB-cat">
 		<description>Bacteria Biotope entity categorization.</description>
 		<description><em>Bacteria</em> entities are categorized in the NCBI Taxonomy, <em>Habitat</em> entities are categorized in the OntoBiotope ontology.</description>
@@ -1940,7 +2505,8 @@
 			<text-bound type="Habitat" />
 			<text-bound type="Phenotype" />
 			<text-bound type="Geographical" />
-			<Lives_In />
+			<Lives_In19 />
+			<Exhibits />
 		</BB19-event-schema>
 
 		<Lives_In>
@@ -1966,7 +2532,7 @@
 				<roles>Bacteria,Property</roles>
 				<mandatory-arguments>Microorganism,Phenotype</mandatory-arguments>
 				<argument-types role="Microorganism">Microorganism</argument-types>
-				<argument-types role="Location">Habitat,Geographical </argument-types>
+				<argument-types role="Phenotype">Phenotype </argument-types>
 			</relation>
 		</Exhibits>
 
