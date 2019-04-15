@@ -1044,6 +1044,27 @@
 		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
 	</task>
 
+	<task name="BB19-kb">
+		<description>Bacteria Biotope entity categorization and binary event extraction.</description>
+		<description><em>Microorganism</em> entities are categorized in the NCBI Taxonomy, <em>Habitat</em> and <em>Phenotype</em> entities are categorized in the OntoBiotope ontology.</description>
+		<description>Submissions are evaluated from the knowledge base population point of view.</description>
+		<schema>
+			<BB19-cat-schema />
+			<Lives_In19 />
+			<Exhibits />
+		</schema>
+		<post-processing>org.bionlpst.app.BB19KBPostprocessing</post-processing>
+		<evaluation name="Standard pairing">
+			<BB19-kb-eval-standard />
+		</evaluation>
+		<evaluation name="Cap to species">
+			<BB19-kb-eval-species />
+		</evaluation>
+		<train zipresource="org/bionlpst/data/EMPTY" />
+		<dev zipresource="org/bionlpst/data/EMPTY" />
+		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
+	</task>
+
 	<task name="BB19-cat+ner">
 		<description>Bacteria Biotope named entity recognition and categorization.</description>
 		<description><em>Microorganism</em> entities are categorized in the NCBI Taxonomy, <em>Habitat</em> and <em>Phenotype</em> entities are categorized in the OntoBiotope ontology.</description>
@@ -1504,6 +1525,27 @@
 				<ser-measures />
 				<measure>predictions</measure>
 			</scoring>
+		</evaluation>
+		<train zipresource="org/bionlpst/data/EMPTY" />
+		<dev zipresource="org/bionlpst/data/EMPTY" />
+		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
+	</task>
+
+	<task name="BB19-kb+ner">
+		<description>Bacteria Biotope entity recognition and categorization, and binary event extraction.</description>
+		<description><em>Microorganism</em> entities are categorized in the NCBI Taxonomy, <em>Habitat</em> and <em>Phenotype</em> entities are categorized in the OntoBiotope ontology.</description>
+		<description>Submissions are evaluated from the knowledge base population point of view.</description>
+		<schema>
+			<BB19-cat-schema />
+			<Lives_In19 />
+			<Exhibits />
+		</schema>
+		<post-processing>org.bionlpst.app.BB19KBPostprocessing</post-processing>
+		<evaluation name="Standard pairing">
+			<BB19-kb-eval-standard />
+		</evaluation>
+		<evaluation name="Cap to species">
+			<BB19-kb-eval-species />
 		</evaluation>
 		<train zipresource="org/bionlpst/data/EMPTY" />
 		<dev zipresource="org/bionlpst/data/EMPTY" />
@@ -2520,7 +2562,7 @@
 
 		<Lives_In19>
 			<relation type="Lives_In">
-				<roles>Bacteria,Location</roles>
+				<roles>Microorganism,Location</roles>
 				<mandatory-arguments>Microorganism,Location</mandatory-arguments>
 				<argument-types role="Microorganism">Microorganism</argument-types>
 				<argument-types role="Location">Habitat,Geographical </argument-types>
@@ -2543,6 +2585,13 @@
 			</product>
 		</BB-kb-sim>
 
+		<BB19-kb-sim>
+			<product>
+				<wang-sim19 />
+				<micro-sim />
+			</product>
+		</BB19-kb-sim>
+
 		<BB-kb-eval-standard>
 			<pre-filter>
 				<types>KB_Lives_In</types>
@@ -2560,6 +2609,23 @@
 			</scoring>
 		</BB-kb-eval-standard>
 
+		<BB19-kb-eval-standard>
+			<pre-filter>
+				<types>KB_Relation</types>
+			</pre-filter>
+			<pairing-algorithm>
+				<references false-negatives="true" />
+			</pairing-algorithm>
+			<matching-similarity>
+				<BB19-kb-sim />
+			</matching-similarity>
+			<scoring name="Standard scoring">
+				<measure>mean-references</measure>
+				<measure>predictions</measure>
+				<measure>false-negatives</measure>
+			</scoring>
+		</BB19-kb-eval-standard>
+
 		<BB-kb-eval-species>
 			<pre-filter>
 				<types>KB_Lives_In_Cap_To_Species</types>
@@ -2576,5 +2642,22 @@
 				<measure>false-negatives</measure>
 			</scoring>
 		</BB-kb-eval-species>
+
+		<BB19-kb-eval-species>
+			<pre-filter>
+				<types>KB_Relation_Cap_To_Species</types>
+			</pre-filter>
+			<pairing-algorithm>
+				<references false-negatives="true" />
+			</pairing-algorithm>
+			<matching-similarity>
+				<BB19-kb-sim />
+			</matching-similarity>
+			<scoring name="Standard scoring">
+				<measure>mean-references</measure>
+				<measure>predictions</measure>
+				<measure>false-negatives</measure>
+			</scoring>
+		</BB19-kb-eval-species>
 	</aliases>
 </task-definition>
