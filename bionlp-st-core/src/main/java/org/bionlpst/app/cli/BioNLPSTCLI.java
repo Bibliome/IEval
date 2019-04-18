@@ -152,6 +152,8 @@ public class BioNLPSTCLI {
 	}
 
 	private void doEvaluate(Task task, Corpus corpus) {
+		logger.information(COMMAND_LINE_LOCATION, "postprocessing");
+		task.getCorpusPostprocessing().postprocess(corpus);
 		logger.information(COMMAND_LINE_LOCATION, "evaluation");
 		flushLogger();
 		if (detailedEvaluation) {
