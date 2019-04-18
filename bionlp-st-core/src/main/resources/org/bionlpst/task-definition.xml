@@ -1035,7 +1035,7 @@
 		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
 	</task>
 
-	<task name="BB19-cat+ner">
+	<task name="BB19-norm+ner">
 		<description>Bacteria Biotope named entity recognition and categorization.</description>
 		<description><em>Microorganism</em> entities are categorized in the NCBI Taxonomy, <em>Habitat</em> and <em>Phenotype</em> entities are categorized in the OntoBiotope ontology.</description>
 		<schema>
@@ -1074,7 +1074,7 @@
 					</and>
 				</post-filter>
 				<similarity>
-					<wang-new-in-dev />
+					<wang-new-in-dev19 />
 				</similarity>
 				<ser-measures />
 				<measure>recall</measure>
@@ -1089,7 +1089,7 @@
 					</and>
 				</post-filter>
 				<similarity>
-					<wang-new-in-test />
+					<wang-new-in-test19 />
 				</similarity>
 				<ser-measures />
 				<measure>recall</measure>
@@ -1113,7 +1113,7 @@
 					</and>
 				</post-filter>
 				<similarity>
-					<wang-new-in-dev />
+					<wang-new-in-dev19 />
 				</similarity>
 				<ser-measures />
 				<measure>recall</measure>
@@ -1128,7 +1128,7 @@
 					</and>
 				</post-filter>
 				<similarity>
-					<wang-new-in-test />
+					<wang-new-in-test19 />
 				</similarity>
 				<ser-measures />
 				<measure>recall</measure>
@@ -1264,8 +1264,8 @@
 				<measure>predictions</measure>
 			</scoring>
 		</evaluation>
-		<train zipresource="org/bionlpst/data/EMPTY" />
-		<dev zipresource="org/bionlpst/data/EMPTY" />
+		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-norm+ner_train.zip" />
+		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-norm+ner_dev.zip" />
 		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
 	</task>
 
