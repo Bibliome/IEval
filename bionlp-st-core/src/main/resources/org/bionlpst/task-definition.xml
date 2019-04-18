@@ -1027,11 +1027,8 @@
 		<evaluation name="Standard pairing">
 			<BB19-kb-eval-standard />
 		</evaluation>
-		<evaluation name="Cap to species">
-			<BB19-kb-eval-species />
-		</evaluation>
-		<train zipresource="org/bionlpst/data/EMPTY" />
-		<dev zipresource="org/bionlpst/data/EMPTY" />
+		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-kb_train.zip" />
+		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-kb_dev.zip" />
 		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
 	</task>
 
@@ -1460,9 +1457,6 @@
 		<post-processing>org.bionlpst.app.BB19KBPostprocessing</post-processing>
 		<evaluation name="Standard pairing">
 			<BB19-kb-eval-standard />
-		</evaluation>
-		<evaluation name="Cap to species">
-			<BB19-kb-eval-species />
 		</evaluation>
 		<train zipresource="org/bionlpst/data/EMPTY" />
 		<dev zipresource="org/bionlpst/data/EMPTY" />
@@ -2544,22 +2538,5 @@
 				<measure>false-negatives</measure>
 			</scoring>
 		</BB-kb-eval-species>
-
-		<BB19-kb-eval-species>
-			<pre-filter>
-				<types>KB_Relation_Cap_To_Species</types>
-			</pre-filter>
-			<pairing-algorithm>
-				<references false-negatives="true" />
-			</pairing-algorithm>
-			<matching-similarity>
-				<BB19-kb-sim />
-			</matching-similarity>
-			<scoring name="Standard scoring">
-				<measure>mean-references</measure>
-				<measure>predictions</measure>
-				<measure>false-negatives</measure>
-			</scoring>
-		</BB19-kb-eval-species>
 	</aliases>
 </task-definition>

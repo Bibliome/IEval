@@ -107,7 +107,7 @@ public class BB19KBPostprocessing implements CorpusPostprocessing {
 			String microorganismForm = getForm(rel, "Microorganism");
 			String mfid = "N" + nIds.incrementAndGet();
 			new Normalization(logger, aset, rel.getLocation(), mfid, "Microorganism_Form", tid, microorganismForm);
-			String obtForm = getForm(rel, "Location", "Phenotype");
+			String obtForm = getForm(rel, "Location", "Property");
 			String ofid = "N" + nIds.incrementAndGet();
 			new Normalization(logger, aset, rel.getLocation(), ofid, "OntoBiotope_Form", tid, obtForm);
 		}
@@ -116,13 +116,12 @@ public class BB19KBPostprocessing implements CorpusPostprocessing {
 	private static String getForm(Relation rel, String... roles) {
 		Annotation a = null;
 		for (String role : roles) {
-			a = rel.getArgument(role);
-			if (a == null) {
-				continue;
-			}
-			TextBound tb = a.asTextBound();
-			if (tb != null) {
-				return tb.getForm();
+			if (rel.hasArgument(role)) {
+				a = rel.getArgument(role);
+				TextBound tb = a.asTextBound();
+				if (tb != null) {
+					return tb.getForm();
+				}
 			}
 		}
 		return "??? " + a;
@@ -143,13 +142,19 @@ public class BB19KBPostprocessing implements CorpusPostprocessing {
 			return;
 		}
 		for (String ncbi : getNormalizations(rel, "Microorganism", "NCBI_Taxonomy")) {
-			for (String ontobiotope : getNormalizations(rel, "Location", "OntoBiotope")) {
-				KBRelation kbli = ensure(kb, ncbi, ontobiotope);
-				kbli.sources.add(rel);
-			}
-			for (String ontobiotope : getNormalizations(rel, "Phenotype", "OntoBiotope")) {
-				KBRelation kbli = ensure(kb, ncbi, ontobiotope);
-				kbli.sources.add(rel);
+			switch (rel.getType()) {
+				case "Lives_In":
+					for (String ontobiotope : getNormalizations(rel, "Location", "OntoBiotope")) {
+						KBRelation kbli = ensure(kb, ncbi, ontobiotope);
+						kbli.sources.add(rel);
+					}
+					break;
+				case "Exhibits":
+					for (String ontobiotope : getNormalizations(rel, "Property", "OntoBiotope")) {
+						KBRelation kbli = ensure(kb, ncbi, ontobiotope);
+						kbli.sources.add(rel);
+					}
+					break;
 			}
 		}
 	}
@@ -168,7 +173,7 @@ public class BB19KBPostprocessing implements CorpusPostprocessing {
 		Annotation a = rel.getArgument(role);
 		for (Annotation bref : a.getBackReferences()) {
 			Normalization norm = bref.asNormalization();
-			if (norm != null && norm.getType().equals(normalizationType)) {
+			if ((norm != null) && (norm.getType().equals(normalizationType)) && (norm.getAnnotationSet() == rel.getAnnotationSet())) {
 				String referent = norm.getReferent();
 				result.add(referent);
 			}
@@ -192,7 +197,7 @@ public class BB19KBPostprocessing implements CorpusPostprocessing {
 				break;
 			}
 			case "Exhibits": {
-				if (!result.hasArgument("Phenotype")) {
+				if (!result.hasArgument("Property")) {
 					return null;
 				}
 				break;
