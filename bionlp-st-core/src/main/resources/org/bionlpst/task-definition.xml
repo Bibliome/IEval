@@ -1458,8 +1458,8 @@
 		<evaluation name="Standard pairing">
 			<BB19-kb-eval-standard />
 		</evaluation>
-		<train zipresource="org/bionlpst/data/EMPTY" />
-		<dev zipresource="org/bionlpst/data/EMPTY" />
+		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-kb+ner_train.zip" />
+		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-kb+ner_dev.zip" />
 		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
 	</task>
 
