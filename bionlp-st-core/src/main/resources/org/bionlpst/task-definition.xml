@@ -1269,10 +1269,10 @@
 		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
 	</task>
 
-	<task name="BB19-event+ner">
+	<task name="BB19-rel+ner">
 		<description>Bacteria Biotope named entity recognition and binary event extraction.</description>
 		<schema>
-			<BB-event-schema />
+			<BB19-event-schema />
 		</schema>
 		<evaluation name="Standard pairing">
 			<pre-filter>
@@ -1300,7 +1300,7 @@
 								</product>
 							</equivalence>
 						</argument>
-						<argument type="Exhibits" role="Phenotype">
+						<argument type="Exhibits" role="Property">
 							<equivalence>
 								<product>
 									<type />
@@ -1352,7 +1352,7 @@
 			</scoring>
 			<scoring name="Lives_In and Exhibits (inside sentences)">
 				<post-filter>
-					<same-sentence jar="org/bionlpst/data/EMPTY" />
+					<same-sentence jar="org/bionlpst/data/BB19-rel_sentences.txt" />
 				</post-filter>
 				<f1-measures />
 				<ser-measures />
@@ -1362,7 +1362,7 @@
 				<post-filter>
 					<and>
 						<types>Lives_In</types>
-						<same-sentence jar="org/bionlpst/data/EMPTY" />
+						<same-sentence jar="org/bionlpst/data/BB19-rel_sentences.txt" />
 					</and>
 				</post-filter>
 				<f1-measures />
@@ -1373,7 +1373,7 @@
 				<post-filter>
 					<and>
 						<types>Exhibits</types>
-						<same-sentence jar="org/bionlpst/data/EMPTY" />
+						<same-sentence jar="org/bionlpst/data/BB19-rel_sentences.txt" />
 					</and>
 				</post-filter>
 				<f1-measures />
@@ -1443,8 +1443,8 @@
 				<measure>predictions</measure>
 			</scoring>
 		</evaluation>
-		<train zipresource="org/bionlpst/data/EMPTY" />
-		<dev zipresource="org/bionlpst/data/EMPTY" />
+		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-rel+ner_train.zip" />
+		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-rel+ner_dev.zip" />
 		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
 	</task>
 
