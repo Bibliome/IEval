@@ -915,7 +915,7 @@
 		<!-- <test zipresource="" with-reference="true" /> -->
 	</task>
 
-	<task name="BB19-event">
+	<task name="BB19-rel">
 		<description>Bacteria Biotope binary event extraction.</description>
 		<schema>
 			<BB19-event-schema />
@@ -937,7 +937,7 @@
 								<same />
 							</equivalence>
 						</argument>
-						<argument type="Exhibits" role="Phenotype">
+						<argument type="Exhibits" role="Property">
 							<equivalence>
 								<same />
 							</equivalence>
@@ -985,7 +985,7 @@
 				<post-filter>
 					<and>
 						<types>Lives_In</types>
-						<same-sentence jar="org/bionlpst/data/EMPTY" />
+						<same-sentence jar="org/bionlpst/data/BB19-rel_sentences.txt" />
 					</and>
 				</post-filter>
 				<f1-measures />
@@ -1002,15 +1002,15 @@
 				<post-filter>
 					<and>
 						<types>Exhibits</types>
-						<same-sentence jar="org/bionlpst/data/EMPTY" />
+						<same-sentence jar="org/bionlpst/data/BB19-rel_sentences.txt" />
 					</and>
 				</post-filter>
 				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 		</evaluation>
-		<train zipresource="org/bionlpst/data/EMPTY" />
-		<dev zipresource="org/bionlpst/data/EMPTY" />
+		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-rel_train.zip" />
+		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-rel_dev.zip" />
 		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
 	</task>
 
@@ -2467,16 +2467,16 @@
 				<roles>Microorganism,Location</roles>
 				<mandatory-arguments>Microorganism,Location</mandatory-arguments>
 				<argument-types role="Microorganism">Microorganism</argument-types>
-				<argument-types role="Location">Habitat,Geographical </argument-types>
+				<argument-types role="Location">Habitat,Geographical,Microorganism</argument-types>
 			</relation>
 		</Lives_In19>
 
 		<Exhibits>
 			<relation type="Exhibits">
-				<roles>Bacteria,Property</roles>
-				<mandatory-arguments>Microorganism,Phenotype</mandatory-arguments>
+				<roles>Microorganism,Property</roles>
+				<mandatory-arguments>Microorganism,Property</mandatory-arguments>
 				<argument-types role="Microorganism">Microorganism</argument-types>
-				<argument-types role="Phenotype">Phenotype </argument-types>
+				<argument-types role="Property">Phenotype </argument-types>
 			</relation>
 		</Exhibits>
 

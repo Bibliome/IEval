@@ -166,7 +166,7 @@ public class BB19EventPairing implements PairingAlgorithm<Annotation> {
 				}
 				break;
 			case "Exhibits":
-				if (!result.hasArgument("Phenotype")) {
+				if (!result.hasArgument("Property")) {
 					return null;
 				}
 				break;
