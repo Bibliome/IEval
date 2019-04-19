@@ -10,3 +10,4 @@ bionlp-st-web/.classpath
 bionlp-st-web/.project
 bionlp-st-web/.settings/
 bionlp-st-core/src/main/resources/org/bionlpst/data/*_test_WITH_ANSWERS.zip
+test-files
