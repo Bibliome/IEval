@@ -786,7 +786,7 @@
 				<post-filter>
 					<and>
 						<types>Habitat</types>
-						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+						<referent-filter jar="org/bionlpst/data/BB19-norm+ner_new-in-dev.txt">OntoBiotope</referent-filter>
 					</and>
 				</post-filter>
 				<similarity>
@@ -828,7 +828,7 @@
 				<post-filter>
 					<and>
 						<types>Phenotype</types>
-						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+						<referent-filter jar="org/bionlpst/data/BB19-norm+ner_new-in-dev.txt">OntoBiotope</referent-filter>
 					</and>
 				</post-filter>
 				<similarity>
@@ -1067,7 +1067,7 @@
 				<post-filter>
 					<and>
 						<types>Habitat</types>
-						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+						<referent-filter jar="org/bionlpst/data/BB19-norm+ner_new-in-dev.txt">OntoBiotope</referent-filter>
 					</and>
 				</post-filter>
 				<similarity>
@@ -1106,7 +1106,7 @@
 				<post-filter>
 					<and>
 						<types>Phenotype</types>
-						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+						<referent-filter jar="org/bionlpst/data/BB19-norm+ner_new-in-dev.txt">OntoBiotope</referent-filter>
 					</and>
 				</post-filter>
 				<similarity>
@@ -2357,8 +2357,8 @@
 		<wang-new-in-dev19>
 			<wang type="Habitat" weight="0.65"
 				normalization-type="OntoBiotope"
-				jar="org/bionlpst/data/EMPTY" />
-			<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+				jar="org/bionlpst/data/OntoBiotope_BioNLP-OST-2019_parents.txt" />
+			<referent-filter jar="org/bionlpst/data/BB19-norm+ner_new-in-dev.txt">OntoBiotope</referent-filter>
 		</wang-new-in-dev19>
 
 		<wang-new-in-test19>
@@ -2377,7 +2377,7 @@
 		<pheno-wang-new-in-dev>
 			<wang type="Phenotype" weight="0.65"
 				normalization-type="OntoBiotope"
-				jar="org/bionlpst/data/EMPTY" />
+				jar="org/bionlpst/data/OntoBiotope_BioNLP-OST-2019_parents.txt" />
 			<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
 		</pheno-wang-new-in-dev>
 
@@ -2385,7 +2385,7 @@
 			<wang type="Phenotype" weight="0.65"
 				normalization-type="OntoBiotope"
 				jar="org/bionlpst/data/EMPTY" />
-			<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+			<referent-filter jar="org/bionlpst/data/BB19-norm+ner_new-in-dev.txt">OntoBiotope</referent-filter>
 		</pheno-wang-new-in-test>
 
 		<pheno-exact-sim>
