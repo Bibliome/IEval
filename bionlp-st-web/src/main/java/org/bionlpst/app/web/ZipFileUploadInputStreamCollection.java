@@ -3,13 +3,13 @@ package org.bionlpst.app.web;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.bionlpst.app.source.ZipCorpusSource;
+import org.bionlpst.corpus.source.bionlpst.AbstractZipInputStreamCollection;
 
-class ZipFileUploadCorpusSource extends ZipCorpusSource {
+class ZipFileUploadInputStreamCollection extends AbstractZipInputStreamCollection {
 	private final InputStream inputStream;
 	private final String name;
 	
-	ZipFileUploadCorpusSource(InputStream inputStream, String name) {
+	ZipFileUploadInputStreamCollection(InputStream inputStream, String name) {
 		super();
 		this.inputStream = inputStream;
 		this.name = name;

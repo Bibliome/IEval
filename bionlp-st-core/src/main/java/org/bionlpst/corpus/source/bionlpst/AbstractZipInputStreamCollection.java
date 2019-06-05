@@ -1,4 +1,4 @@
-package org.bionlpst.app.source;
+package org.bionlpst.corpus.source.bionlpst;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,21 +6,21 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public abstract class ZipCorpusSource extends CorpusSource {
+public abstract class AbstractZipInputStreamCollection implements InputStreamCollection {
 	@Override
-	protected EntryIterator getEntries() throws IOException {
+	public InputStreamIterator getIterator() throws IOException {
 		InputStream is = getInputStream();
 		ZipInputStream zis = new ZipInputStream(is);
-		return new ZipEntryIterator(zis);
+		return new ZipInputStreamIterator(zis);
 	}
 	
 	protected abstract InputStream getInputStream() throws IOException;
 
-	private class ZipEntryIterator implements EntryIterator {
+	private class ZipInputStreamIterator implements InputStreamIterator {
 		private final ZipInputStream zis;
 		private ZipEntry currentEntry = null;
 		
-		private ZipEntryIterator(ZipInputStream zis) {
+		private ZipInputStreamIterator(ZipInputStream zis) {
 			super();
 			this.zis = zis;
 		}
@@ -42,7 +42,7 @@ public abstract class ZipCorpusSource extends CorpusSource {
 
 		@Override
 		public String getName() {
-			return ZipCorpusSource.this.getName() + File.separator + currentEntry.getName();
+			return AbstractZipInputStreamCollection.this.getName() + File.separator + currentEntry.getName();
 		}
 
 		@Override

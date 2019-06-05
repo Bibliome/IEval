@@ -35,7 +35,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.Task;
-import org.bionlpst.app.source.CorpusSource;
 import org.bionlpst.app.web.json.CheckMessageJsonConverter;
 import org.bionlpst.app.web.json.EvaluationResultJsonConverter;
 import org.bionlpst.app.web.json.JsonConverter;
@@ -45,6 +44,9 @@ import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
 import org.bionlpst.corpus.DocumentCollection;
+import org.bionlpst.corpus.source.PredictionSource;
+import org.bionlpst.corpus.source.bionlpst.BioNLPSTSource;
+import org.bionlpst.corpus.source.bionlpst.InputStreamCollection;
 import org.bionlpst.evaluation.BootstrapConfig;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
@@ -207,8 +209,9 @@ public class BioNLPSTRest {
 		if (task == null || corpus == null) {
 			return;
 		}
-		CorpusSource predictionSource = new ZipFileUploadCorpusSource(zipStream, zipInfo.getFileName());
-		predictionSource.getPredictions(logger, corpus);
+		InputStreamCollection predictionInputStreamCollection = new ZipFileUploadInputStreamCollection(zipStream, zipInfo.getFileName());
+		PredictionSource predictionParser = new BioNLPSTSource(predictionInputStreamCollection);
+		predictionParser.fillPredictions(logger, corpus);
 		corpus.resolveReferences(logger);
 		Task.checkParsedPredictions(logger, corpus, zipInfo.getFileName());
 		task.checkSchema(logger, corpus);

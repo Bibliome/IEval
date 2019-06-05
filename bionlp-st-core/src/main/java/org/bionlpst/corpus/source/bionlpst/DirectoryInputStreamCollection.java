@@ -1,4 +1,4 @@
-package org.bionlpst.app.source;
+package org.bionlpst.corpus.source.bionlpst;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,22 +6,22 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class DirectoryCorpusSource extends CorpusSource {
+public class DirectoryInputStreamCollection implements InputStreamCollection {
 	private final File directory;
 	
-	public DirectoryCorpusSource(File directory) {
+	public DirectoryInputStreamCollection(File directory) {
 		super();
 		this.directory = directory;
 	}
 	
-	public DirectoryCorpusSource(String directory) {
+	public DirectoryInputStreamCollection(String directory) {
 		this(new File(directory));
 	}
 
 	@Override
-	protected EntryIterator getEntries() {
+	public InputStreamIterator getIterator() {
 		String[] files = directory.list();
-		return new DirectoryEntryIterator(files);
+		return new DirectoryInputStreamIterator(files);
 	}
 
 	@Override
@@ -29,12 +29,12 @@ public class DirectoryCorpusSource extends CorpusSource {
 		return directory.getPath();
 	}
 
-	private class DirectoryEntryIterator implements EntryIterator {
+	private class DirectoryInputStreamIterator implements InputStreamIterator {
 		private final String[] files;
 		private int currentIndex = -1;
 		private InputStream currentStream = null;
 		
-		private DirectoryEntryIterator(String[] files) {
+		private DirectoryInputStreamIterator(String[] files) {
 			super();
 			this.files = files;
 		}

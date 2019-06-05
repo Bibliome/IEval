@@ -1,6 +1,8 @@
 package org.bionlpst.util;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,6 +75,13 @@ public enum Util {
 			result.append(buf, 0, n);
 		}
 		return result.toString();
+	}
+	
+	public static final String readWholeStream(InputStream is) throws IOException {
+		notnull(is);
+		try (Reader r = new InputStreamReader(is)) {
+			return readWholeStream(r);
+		}
 	}
 	
 	/**

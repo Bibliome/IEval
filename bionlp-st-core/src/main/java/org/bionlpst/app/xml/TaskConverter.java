@@ -3,8 +3,8 @@ package org.bionlpst.app.xml;
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.CorpusPostprocessing;
 import org.bionlpst.app.Task;
-import org.bionlpst.app.source.CorpusSource;
 import org.bionlpst.corpus.Corpus;
+import org.bionlpst.corpus.source.ContentAndReferenceSource;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.xml.EvaluationConverter;
 import org.bionlpst.schema.Schema;
@@ -16,20 +16,20 @@ import org.w3c.dom.Element;
 
 public class TaskConverter implements DOMElementConverter<Task> {
 	private final ClassLoader classLoader;
-	private final CorpusSourceConverter corpusSourceConverter;
+	private final ContentAndReferenceSourceConverter corpusAndReferenceParserConverter;
 	
 	public TaskConverter(ClassLoader classLoader) {
 		Util.notnull(classLoader);
 		this.classLoader = classLoader;
-		this.corpusSourceConverter = new CorpusSourceConverter(classLoader);
+		this.corpusAndReferenceParserConverter = new ContentAndReferenceSourceConverter(classLoader);
 	}
 
 	public ClassLoader getClassLoader() {
 		return classLoader;
 	}
 
-	public CorpusSourceConverter getCorpusSourceConverter() {
-		return corpusSourceConverter;
+	public ContentAndReferenceSourceConverter getCorpusAndReferenceParserConverter() {
+		return corpusAndReferenceParserConverter;
 	}
 
 	@Override
@@ -65,29 +65,29 @@ public class TaskConverter implements DOMElementConverter<Task> {
 					break;
 				}
 				case "train": {
-					CorpusSource train = result.getTrainSource();
+					ContentAndReferenceSource train = result.getTrainSource();
 					if (train != null) {
 						throw new BioNLPSTException("duplicate train source");
 					}
-					train = corpusSourceConverter.convert(child);
+					train = corpusAndReferenceParserConverter.convert(child);
 					result.setTrainSource(train);
 					break;
 				}
 				case "dev": {
-					CorpusSource dev = result.getDevSource();
+					ContentAndReferenceSource dev = result.getDevSource();
 					if (dev != null) {
 						throw new BioNLPSTException("duplicate dev source");
 					}
-					dev = corpusSourceConverter.convert(child);
+					dev = corpusAndReferenceParserConverter.convert(child);
 					result.setDevSource(dev);
 					break;
 				}
 				case "test": {
-					CorpusSource test = result.getTestSource();
+					ContentAndReferenceSource test = result.getTestSource();
 					if (test != null) {
 						throw new BioNLPSTException("duplicate test source");
 					}
-					test = corpusSourceConverter.convert(child);
+					test = corpusAndReferenceParserConverter.convert(child);
 					result.setTestSource(test);
 					boolean hasReferenceAnnotations = DOMUtil.getBooleanAttribute(child, "with-reference", false);
 					result.setTestHasReferenceAnnotations(hasReferenceAnnotations);

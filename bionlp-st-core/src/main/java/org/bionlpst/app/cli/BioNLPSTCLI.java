@@ -13,12 +13,17 @@ import java.util.Map;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.Task;
-import org.bionlpst.app.source.CorpusSource;
-import org.bionlpst.app.source.DirectoryCorpusSource;
-import org.bionlpst.app.source.ZipFileCorpusSource;
 import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
+import org.bionlpst.corpus.source.ContentAndReferenceSource;
+import org.bionlpst.corpus.source.PredictionSource;
+import org.bionlpst.corpus.source.bionlpst.BioNLPSTSource;
+import org.bionlpst.corpus.source.bionlpst.DirectoryInputStreamCollection;
+import org.bionlpst.corpus.source.bionlpst.InputStreamCollection;
+import org.bionlpst.corpus.source.bionlpst.ZipFileInputStreamCollection;
+import org.bionlpst.corpus.source.pubannotation.FileInputStreamFactory;
+import org.bionlpst.corpus.source.pubannotation.PubAnnotationSource;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
@@ -37,9 +42,11 @@ public class BioNLPSTCLI {
 	private static final Location COMMAND_LINE_LOCATION = new Location("", -1);
 	private final CheckLogger logger = new CheckLogger();
 	private String taskName = null;
+	private Task task = null;
 	private String set = null;
-	private CorpusSource referenceSource = null;
-	private CorpusSource predictionSource = null;
+	private ContentAndReferenceSource referenceSource = null;
+	private PredictionSource predictionSource = null;
+	private boolean pubAnnotationPredictions = false;
 	private boolean detailedEvaluation = false;
 	private boolean alternateScores = false;
 	private boolean forceEvaluation = false;
@@ -80,7 +87,6 @@ public class BioNLPSTCLI {
 					doListTasks();
 				}
 				else {
-					Task task = getSelectedTask();
 					if (task != null) {
 						displayTask(task);
 					}
@@ -109,16 +115,15 @@ public class BioNLPSTCLI {
 	}
 
 	private void doCheckAndEvaluate(boolean evaluate) throws Exception {
-		Task task = getSelectedTask();
 		if (task == null) {
 			exit(1);
 		}
 		logger.information(COMMAND_LINE_LOCATION, "loading corpus and reference data");
-		Corpus corpus = loadReference(task, evaluate);
+		Corpus corpus = loadReference(evaluate);
 		flushLogger();
 
 		logger.information(COMMAND_LINE_LOCATION, "loading prediction data");
-		predictionSource.getPredictions(logger, corpus);
+		predictionSource.fillPredictions(logger, corpus);
 		flushLogger();
 		
 		logger.information(COMMAND_LINE_LOCATION, "resolving references");
@@ -142,7 +147,7 @@ public class BioNLPSTCLI {
 					exit(1);
 				}
 			}
-			doEvaluate(task, corpus);
+			doEvaluate(corpus);
 		}
 		else {
 			if (highestLevel != CheckMessageLevel.INFORMATION) {
@@ -151,20 +156,20 @@ public class BioNLPSTCLI {
 		}
 	}
 
-	private void doEvaluate(Task task, Corpus corpus) {
+	private void doEvaluate(Corpus corpus) {
 		logger.information(COMMAND_LINE_LOCATION, "postprocessing");
 		task.getCorpusPostprocessing().postprocess(corpus);
 		logger.information(COMMAND_LINE_LOCATION, "evaluation");
 		flushLogger();
 		if (detailedEvaluation) {
 			for (Document doc : corpus.getDocuments()) {
-				doEvaluateDocument(task, doc);
+				doEvaluateDocument(doc);
 			}
 		}
-		doEvaluateCorpus(task, corpus);
+		doEvaluateCorpus(corpus);
 	}
 
-	private void doEvaluateCorpus(Task task, Corpus corpus) {
+	private void doEvaluateCorpus(Corpus corpus) {
 		System.out.println("Evaluation for corpus " + getCorpusName());
 		if (alternateScores) {
 			Map<String,EvaluationResult<Annotation>> evalMap = task.evaluate(logger, corpus, false, null/*boostrap*/);
@@ -185,7 +190,7 @@ public class BioNLPSTCLI {
 		return set;
 	}
 
-	private void doEvaluateDocument(Task task, Document doc) {
+	private void doEvaluateDocument(Document doc) {
 		System.out.println("Evaluation for document " + doc.getId());
 		if (alternateScores) {
 			Map<String,EvaluationResult<Annotation>> evalMap = task.evaluate(logger, doc, true, null/*boostrap*/);
@@ -247,10 +252,10 @@ public class BioNLPSTCLI {
 			}
 		}
 	}
-	
-	private Corpus loadReference(Task task, boolean loadOutput) throws BioNLPSTException, IOException {
+
+	private Corpus loadReference(boolean loadOutput) throws BioNLPSTException, IOException {
 		if (referenceSource != null) {
-			return referenceSource.getCorpusAndReference(logger, loadOutput);
+			return referenceSource.fillContentAndReference(logger, loadOutput);
 		}
 		switch (set) {
 			case "train": return task.getTrainCorpus(logger);
@@ -312,6 +317,14 @@ public class BioNLPSTCLI {
 						logger.serious(COMMAND_LINE_LOCATION, "duplicate option: -task");
 					}
 					taskName = requireArgument(argsIt, opt, taskName);
+					if (taskName != null) {
+						try {
+							task = getSelectedTask();
+						}
+						catch (Exception e) {
+							logger.serious(COMMAND_LINE_LOCATION, "something went wrong while loading task definitions: " + e.getMessage());
+						}
+					}
 					break;
 				}
 				case "-train":
@@ -339,8 +352,18 @@ public class BioNLPSTCLI {
 					}
 					String arg = requireArgument(argsIt, opt, null);
 					if (arg != null) {
-						referenceSource = getSource(arg);
+						referenceSource = new BioNLPSTSource(getInputStreamCollection(arg));
 					}
+					break;
+				}
+				case "-pubannotation": {
+					if (pubAnnotationPredictions) {
+						logger.suspicious(COMMAND_LINE_LOCATION, "duplicate option: " + opt);
+					}
+					if (predictionSource != null) {
+						logger.suspicious(COMMAND_LINE_LOCATION, "option -pubannotation occurs after -prediction");
+					}
+					pubAnnotationPredictions = true;
 					break;
 				}
 				case "-prediction": {
@@ -349,7 +372,12 @@ public class BioNLPSTCLI {
 					}
 					String arg = requireArgument(argsIt, opt, null);
 					if (arg != null) {
-						predictionSource = getSource(arg);
+						if (pubAnnotationPredictions) {
+							predictionSource = new PubAnnotationSource(new FileInputStreamFactory(new File(arg)));
+						}
+						else {
+							predictionSource = new BioNLPSTSource(getInputStreamCollection(arg));
+						}
 					}
 					break;
 				}
@@ -403,12 +431,12 @@ public class BioNLPSTCLI {
 		return defaultValue;
 	}
 	
-	private static CorpusSource getSource(String arg) {
+	private static InputStreamCollection getInputStreamCollection(String arg) {
 		File f = new File(arg);
 		if (f.isDirectory()) {
-			return new DirectoryCorpusSource(f);
+			return new DirectoryInputStreamCollection(f);
 		}
-		return new ZipFileCorpusSource(f);
+		return new ZipFileInputStreamCollection(f);
 	}
 
 	private boolean finishArgs() {
@@ -419,6 +447,11 @@ public class BioNLPSTCLI {
 		if (taskName == null) {
 			logger.serious(COMMAND_LINE_LOCATION, "option -task is mandatory");
 			result = false;
+		}
+		else {
+			if (task == null) {
+				result = false;
+			}
 		}
 		if (set == null && referenceSource == null) {
 			logger.serious(COMMAND_LINE_LOCATION, "either one of these options is required: -train -dev -test -reference");

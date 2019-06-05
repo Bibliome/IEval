@@ -1,7 +1,5 @@
 package org.bionlpst.corpus;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -68,22 +66,6 @@ public class Document implements DocumentCollection {
 	public Document(Corpus corpus, String id, InputStream is) throws IOException, BioNLPSTException
 	{
 		this(corpus, id, Util.readWholeStream(new InputStreamReader(is)));
-	}
-	
-	/**
-	 * Creates a new document. The text contents is read from the specified file. The identifier is determined by the name of the specified file that must follow BioNLP-ST file name conventions.
-	 * @param corpus collection to which belongs this document.
-	 * @param file file containing the text contents.
-	 * @throws BioNLPSTException if the specified corpus already contains a document with the same identifier as this document.
-	 * @throws IOException if there is an I/O error reading the file.
-	 */
-	public Document(Corpus corpus, File file) throws IOException, BioNLPSTException {
-		try (Reader reader = new FileReader(file)) {
-			this.corpus = corpus;
-			this.id = Corpus.getDocumentIdFromPath(file);
-			this.contents = Util.readWholeStream(reader);
-		}
-		corpus.addDocument(this);
 	}
 
 	/**
