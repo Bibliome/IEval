@@ -34,7 +34,7 @@
 			<scoring name="Wang">
 				<similarity>
 					<wang weight="0.65" normalization-type="MESH"
-						jar="org/bionlpst/data/MESH_parents.txt" />
+						jar="org/bionlpst/data/CTD_diseases_parents.txt" />
 				</similarity>
 				<measure>precision</measure>
 			</scoring>
