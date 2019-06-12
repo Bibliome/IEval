@@ -39,3 +39,5 @@ Options:
 	-list-tasks
 		print a list of supported tasks with their evaluations and exit, if -task is provided diplay evaluations of the specified task
 
+	-write DIR
+		write text and annotations (input and reference)
