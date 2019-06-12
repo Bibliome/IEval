@@ -24,6 +24,7 @@ import org.bionlpst.corpus.source.bionlpst.InputStreamCollection;
 import org.bionlpst.corpus.source.bionlpst.ZipFileInputStreamCollection;
 import org.bionlpst.corpus.source.pubannotation.FileInputStreamFactory;
 import org.bionlpst.corpus.source.pubannotation.PubAnnotationSource;
+import org.bionlpst.corpus.writer.BioNLPSTWriter;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
@@ -51,12 +52,14 @@ public class BioNLPSTCLI {
 	private boolean alternateScores = false;
 	private boolean forceEvaluation = false;
 	private Action action = Action.EVALUATE;
+	private File outputDir = null;
 
 	private static enum Action {
 		EVALUATE,
 		CHECK,
 		HELP,
-		LIST_TASKS;
+		LIST_TASKS,
+		WRITE;
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -94,9 +97,30 @@ public class BioNLPSTCLI {
 				exit(0);
 				break;
 			}
+			case WRITE: {
+				doWrite();
+				exit(0);
+				break;
+			}
 		}
 	}
 	
+	private void doWrite() throws BioNLPSTException, IOException {
+		if (task == null) {
+			exit(1);
+		}
+		logger.information(COMMAND_LINE_LOCATION, "loading corpus and reference data");
+		Corpus corpus = loadReference(true);
+		flushLogger();
+		
+		logger.information(COMMAND_LINE_LOCATION, "resolving references");
+		corpus.resolveReferences(logger);
+		flushLogger();
+		
+		logger.information(COMMAND_LINE_LOCATION, "writing annotations into " + outputDir);
+		BioNLPSTWriter.write(corpus, outputDir);
+	}
+
 	private static void doHelp() {
 		try (InputStream is = BioNLPSTCLI.class.getResourceAsStream("BioNLPSTCLIHelp.txt")) {
 			Reader r = new InputStreamReader(is);
@@ -400,6 +424,12 @@ public class BioNLPSTCLI {
 					action = Action.LIST_TASKS;
 					break;
 				}
+				case "-write": {
+					action = Action.WRITE;
+					String arg = requireArgument(argsIt, opt, null);
+					outputDir = new File(arg);
+					break;
+				}
 				case "-alternate": {
 					alternateScores = true;
 					break;
@@ -457,16 +487,19 @@ public class BioNLPSTCLI {
 			logger.serious(COMMAND_LINE_LOCATION, "either one of these options is required: -train -dev -test -reference");
 			result = false;
 		}
-		if (predictionSource == null) {
-			logger.serious(COMMAND_LINE_LOCATION, "option -prediction is mandatory");
-			result = false;
-		}
 		if (referenceSource != null) {
 			set = null;
 		}
 		else if (set != null && set.equals("test") && detailedEvaluation) {
 			logger.tolerable(COMMAND_LINE_LOCATION, "option -detailed is not compatible with test evaluation");
 			detailedEvaluation = false;
+		}
+		if (action == Action.WRITE) {
+			return result;
+		}
+		if (predictionSource == null) {
+			logger.serious(COMMAND_LINE_LOCATION, "option -prediction is mandatory");
+			result = false;
 		}
 		return result;
 	}
