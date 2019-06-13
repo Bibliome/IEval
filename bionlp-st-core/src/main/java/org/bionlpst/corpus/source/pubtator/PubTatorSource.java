@@ -31,8 +31,8 @@ import org.bionlpst.util.message.CheckLogger;
 
 public class PubTatorSource implements ContentAndReferenceSource {
 	private static final Pattern CONTENT_LINE = Pattern.compile("(?<pmid>\\d+)\\|(?<sec>.+)\\|(?<txt>.+)");
-	private static final Pattern TEXT_BOUND_LINE = Pattern.compile("(?<pmid>\\d*)\t(?<start>\\d+)\t(?<end>\\d+)\t(?<form>[^\t]+)\t(?<type>[^\t]+)\t(?<ref>[^\t]+)?");
-	private static final Pattern RELATION_LINE = Pattern.compile("(?<pmid>\\d*)\t(?<type>[^\t]+)\t(?<left>[^\t]+)\\t(?<right>[^\\t]+)");
+	private static final Pattern TEXT_BOUND_LINE = Pattern.compile("(?<pmid>\\d*)\t(?<start>\\d+)\t(?<end>\\d+)\t(?<form>[^\t]+)\t(?<type>[^\t]+)\t(?<ref>[^\t]+)(?:\t.*)?");
+	private static final Pattern RELATION_LINE = Pattern.compile("(?<pmid>\\d*)\t(?<type>[^\t]+)\t(?<left>[^\t]+)\t(?<right>[^\t]+)");
 	private static final String[] DEFAULT_ROLES = new String[] { "Left", "Right" };
 
 	private final InputStreamCollection inputStreamCollection;
@@ -253,8 +253,8 @@ public class PubTatorSource implements ContentAndReferenceSource {
 					return true;
 				}
 				TextBound tb = new TextBound(logger, aset, location, nextTextBoundId(), type, Collections.singletonList(new ImmutableFragment(start, end)));
-				String ref = m.group("ref");
-				if (ref.isEmpty()) {
+				String refStr = m.group("ref");
+				if (refStr.isEmpty()) {
 					return true;
 				}
 				if (!normalizationTypes.containsKey(type)) {
@@ -266,7 +266,9 @@ public class PubTatorSource implements ContentAndReferenceSource {
 				if (aset == null) {
 					return true;
 				}
-				new Normalization(logger, aset, location, nextNormalizationId(), normType, tb.getId(), ref);
+				for (String ref : refStr.split("\\|")) {
+					new Normalization(logger, aset, location, nextNormalizationId(), normType, tb.getId(), ref);
+				}
 				return true;
 			}
 			return false;
