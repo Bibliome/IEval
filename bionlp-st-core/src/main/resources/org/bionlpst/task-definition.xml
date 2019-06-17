@@ -2,8 +2,7 @@
 
 <task-definition>
 	<task name="BioCreative5-CDR">
-		<description>BioCreative V Chemical-Disease Relation task (CDR).
-		</description>
+		<description>BioCreative V Chemical-Disease Relation task (CDR).</description>
 		<description>Evaluation only on Disease normalization.</description>
 		<schema>
 			<text-bound type="Title" />
@@ -45,6 +44,12 @@
 				<measure>precision</measure>
 			</scoring>
 		</evaluation>
+
+		<train zipresource="org/bionlpst/data/BioCreativeV-CDR_train.zip" />
+		<dev zipresource="org/bionlpst/data/BioCreativeV-CDR_dev.zip" />
+		<test zipresource="org/bionlpst/data/BioCreativeV-CDR_test.zip" with-reference="true"/>
+
+	<!-- 
 		<train
 			zipresource="org/bionlpst/data/CDR_TrainingSet.PubTator.zip"
 			format="pubtator"
@@ -75,6 +80,7 @@
 			normalization-types="Disease=MESH,Chemical=MESH"
 			relation-roles="CID=Chemical/Disease"
 		/>
+		 -->
 	</task>
 	
 	<task name="SeeDev-full">
