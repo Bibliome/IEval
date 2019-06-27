@@ -20,6 +20,8 @@ public interface Filter<T> {
 	 */
 	boolean accept(T item);
 	
+	void init();
+	
 	/**
 	 * Reduces this filter. May return this filter if it is not reducable.
 	 * @return an equivalent reduced form of this filter.
@@ -42,6 +44,10 @@ public interface Filter<T> {
 		public Filter<T> reduce() {
 			return this;
 		}
+
+		@Override
+		public void init() {
+		}
 	}
 	
 	/**
@@ -59,6 +65,10 @@ public interface Filter<T> {
 		@Override
 		public Filter<T> reduce() {
 			return this;
+		}
+
+		@Override
+		public void init() {
 		}
 	}
 	
@@ -92,6 +102,11 @@ public interface Filter<T> {
 				return new AcceptAll<T>();
 			}
 			return new Inverse<T>(filter);
+		}
+
+		@Override
+		public void init() {
+			filter.init();
 		}
 	}
 
@@ -133,6 +148,13 @@ public interface Filter<T> {
 		 */
 		public void addFilter(Filter<T> filter) {
 			filters.add(Util.notnull(filter));
+		}
+
+		@Override
+		public void init() {
+			for (Filter<T> f : filters) {
+				f.init();
+			}
 		}
 	}
 	

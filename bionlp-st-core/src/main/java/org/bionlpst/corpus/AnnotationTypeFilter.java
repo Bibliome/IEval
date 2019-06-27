@@ -60,4 +60,8 @@ public class AnnotationTypeFilter<T extends Annotation> implements Filter<T> {
 		}
 		return this;
 	}
+
+	@Override
+	public void init() {
+	}
 }

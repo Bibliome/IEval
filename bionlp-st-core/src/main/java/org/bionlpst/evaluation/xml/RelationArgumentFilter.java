@@ -35,4 +35,9 @@ public class RelationArgumentFilter implements Filter<Annotation> {
 	public Filter<Annotation> reduce() {
 		return new RelationArgumentFilter(role, filter.reduce(), acceptNotRelation, acceptNoArg);
 	}
+
+	@Override
+	public void init() {
+		filter.init();
+	}
 }

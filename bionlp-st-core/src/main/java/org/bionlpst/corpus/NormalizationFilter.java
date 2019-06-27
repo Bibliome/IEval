@@ -47,4 +47,8 @@ public class NormalizationFilter<T extends Annotation> implements Filter<T> {
 	public Filter<T> reduce() {
 		return new NormalizationFilter<T>(type, acceptedReferents.reduce());
 	}
+
+	@Override
+	public void init() {
+	}
 }

@@ -33,4 +33,9 @@ public class PairFilter<T> implements Filter<Pair<T>> {
 		}
 		return new PairFilter<T>(filter);
 	}
+
+	@Override
+	public void init() {
+		filter.init();
+	}
 }

@@ -46,4 +46,8 @@ public class CollectionFilter implements Filter<String> {
 		}
 		return this;
 	}
+
+	@Override
+	public void init() {
+	}
 }

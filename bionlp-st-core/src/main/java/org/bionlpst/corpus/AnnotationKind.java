@@ -42,4 +42,8 @@ public enum AnnotationKind implements Filter<Annotation> {
 	public Filter<Annotation> reduce() {
 		return this;
 	}
+
+	@Override
+	public void init() {
+	}
 }
