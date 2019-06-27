@@ -11,8 +11,7 @@
 			<text-bound type="Disease" />
 			<normalization type="MESH">
 				<annotation-types>Chemical,Disease</annotation-types>
-				<!-- <reference-vocabulary jar="org/bionlpst/data/OntoBiotope_BioNLP-OST-2019_ids.txt" 
-					/> -->
+				<reference-vocabulary jar="org/bionlpst/data/CTD_diseases.txt" />
 			</normalization>
 			<relation type="CID">
 				<roles>Chemical,Disease</roles>
