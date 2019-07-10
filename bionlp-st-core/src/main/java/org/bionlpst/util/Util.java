@@ -95,6 +95,7 @@ public enum Util {
 		notnull(filter);
 		notnull(source);
 		notnull(target);
+		filter.init();
 		for (T item : source) {
 			if (filter.accept(item)) {
 				target.add(item);
