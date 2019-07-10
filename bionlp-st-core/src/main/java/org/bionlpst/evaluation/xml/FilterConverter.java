@@ -11,6 +11,7 @@ import org.bionlpst.corpus.BackReferenceCardinalityFilter;
 import org.bionlpst.corpus.IdFilter;
 import org.bionlpst.corpus.NormalizationFilter;
 import org.bionlpst.corpus.SameSentenceFilter;
+import org.bionlpst.corpus.UniqueFormAndNormalizationFilter;
 import org.bionlpst.util.Filter;
 import org.bionlpst.util.SourceStream;
 import org.bionlpst.util.Util;
@@ -100,6 +101,11 @@ public class FilterConverter implements DOMElementConverter<Filter<Annotation>> 
 				try (BufferedReader r = source.openBufferedReader()) {
 					return new SameSentenceFilter(r);
 				}
+			}
+			case "unique-form-norm": {
+				String textBoundType = DOMUtil.getMandatoryAttribute(element, "text-bound-type");
+				String normalizationType = DOMUtil.getMandatoryAttribute(element, "normalization-type");
+				return new UniqueFormAndNormalizationFilter(textBoundType, normalizationType);
 			}
 			case "identifiers": {
 				SourceStreamConverter converter = new SourceStreamConverter(classLoader);
