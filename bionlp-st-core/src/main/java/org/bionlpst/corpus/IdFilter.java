@@ -8,14 +8,12 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.bionlpst.evaluation.Pair;
 import org.bionlpst.util.Filter;
 import org.bionlpst.util.Util;
 
 public class IdFilter implements Filter<Annotation> {
 	private final Map<String,Collection<String>> annotationIds;
 	private final boolean excludeIds;
-	private final Collection<Pair<String>> formNormPairs = new LinkedHashSet<Pair<String>>();
 
 	public IdFilter(Map<String, Collection<String>> annotationIds, boolean excludeIds) {
 		super();
@@ -87,6 +85,5 @@ public class IdFilter implements Filter<Annotation> {
 
 	@Override
 	public void init() {
-		formNormPairs.clear();
 	}
 }
