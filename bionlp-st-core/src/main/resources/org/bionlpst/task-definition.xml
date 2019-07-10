@@ -249,7 +249,7 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_dev.zip" />
-		<!-- <test zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-full_test_WITH_ANSWERS.zip" with-reference="true" /> -->
+		<test zipresource="org/bionlpst/data/BioNLP-ST-2019_SeeDev-full_test.zip" with-reference="false" />
 	</task>
 
 	<task name="SeeDev-binary">
@@ -745,7 +745,7 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_dev.zip" />
-		<!-- <test zipresource="org/bionlpst/data/BioNLP-ST-2016_SeeDev-binary_test_WITH_ANSWERS.zip" with-reference="true" /> -->
+		<test zipresource="org/bionlpst/data/BioNLP-ST-2019_SeeDev-binary_test.zip" with-reference="false" />
 	</task>
 
 	<task name="BB19-norm">
