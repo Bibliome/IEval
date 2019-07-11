@@ -1558,7 +1558,7 @@
 				<post-filter>
 					<and>
 						<types>Habitat</types>
-						<referent-filter jar="org/bionlpst/data/Habitats_new-in-test.txt">OntoBiotope</referent-filter>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
 					</and>
 				</post-filter>
 				<similarity>
@@ -1805,7 +1805,7 @@
 				<post-filter>
 					<and>
 						<types>Habitat</types>
-						<referent-filter jar="org/bionlpst/data/Habitats_new-in-test.txt">OntoBiotope</referent-filter>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
 					</and>
 				</post-filter>
 				<similarity>
