@@ -1,5 +1,6 @@
 package org.bionlpst.corpus;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -113,6 +114,24 @@ public abstract class Annotation {
 	 */
 	public Collection<Annotation> getBackReferences() {
 		return Collections.unmodifiableCollection(backReferences);
+	}
+	
+	public Collection<Normalization> getNormalizationBackReferences(String type) {
+		Collection<Normalization> result = new ArrayList<Normalization>();
+		for (Annotation a : backReferences) {
+			Normalization norm = a.asNormalization();
+			if (norm == null) {
+				continue;
+			}
+			if ((type == null) || (type.equals(norm.getType()))) {
+				result.add(norm);
+			}
+		}
+		return result;
+	}
+	
+	public Collection<Normalization> getNormalizationBackReferences() {
+		return getNormalizationBackReferences(null);
 	}
 	
 	private void addBackReference(Annotation ann) {

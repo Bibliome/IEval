@@ -88,4 +88,8 @@ public class BackReferenceCardinalityFilter<T extends Annotation> implements Fil
 	public Filter<T> reduce() {
 		return this;
 	}
+
+	@Override
+	public void init() {
+	}
 }

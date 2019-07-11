@@ -114,4 +114,8 @@ public class SameSentenceFilter implements Filter<Annotation>, AnnotationVisitor
 	public Void visit(DummyAnnotation dummy, Collection<Fragment> param) {
 		return null;
 	}
+
+	@Override
+	public void init() {
+	}
 }

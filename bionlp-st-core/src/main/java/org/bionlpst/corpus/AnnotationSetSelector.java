@@ -45,4 +45,8 @@ public enum AnnotationSetSelector implements Filter<Annotation> {
 	public Filter<Annotation> reduce() {
 		return this;
 	}
+
+	@Override
+	public void init() {
+	}
 }
