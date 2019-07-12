@@ -2409,7 +2409,7 @@
 			<wang type="Habitat" weight="0.65"
 				normalization-type="OntoBiotope"
 				jar="org/bionlpst/data/OntoBiotope_BioNLP-ST-2016_parents.txt" >
-				<referent-filter jar="org/bionlpst/data/Habitats_new-in-test.txt">OntoBiotope</referent-filter>
+				<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
 			</wang>
 		</wang-new-in-test>
 
