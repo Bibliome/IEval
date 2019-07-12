@@ -27,11 +27,7 @@ import org.bionlpst.corpus.source.pubannotation.PubAnnotationSource;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
-import org.bionlpst.evaluation.MeasureResult;
-import org.bionlpst.evaluation.Pair;
 import org.bionlpst.evaluation.Scoring;
-import org.bionlpst.evaluation.ScoringResult;
-import org.bionlpst.evaluation.similarity.Similarity;
 import org.bionlpst.util.Location;
 import org.bionlpst.util.Util;
 import org.bionlpst.util.message.CheckLogger;
@@ -51,6 +47,7 @@ public class BioNLPSTCLI {
 	private boolean alternateScores = false;
 	private boolean forceEvaluation = false;
 	private Action action = Action.EVALUATE;
+	private EvaluationResultWriter evalWriter = StandardEvaluationResultWriter.INSTANCE;
 
 	private static enum Action {
 		EVALUATE,
@@ -170,63 +167,30 @@ public class BioNLPSTCLI {
 	}
 
 	private void doEvaluateCorpus(Corpus corpus) {
-		System.out.println("Evaluation for corpus " + getCorpusName());
+		evalWriter.displayCorpusHeader(referenceSource, set);
 		if (alternateScores) {
 			Map<String,EvaluationResult<Annotation>> evalMap = task.evaluate(logger, corpus, false, null/*boostrap*/);
 			for (EvaluationResult<Annotation> eval : evalMap.values()) {
-				displayEvaluationResult(eval, false);
+				evalWriter.displayEvaluationResult(eval, false);
 			}
 		}
 		else {
 			EvaluationResult<Annotation> eval = task.evaluateMain(logger, corpus, false, null/*boostrap*/);
-			displayEvaluationResult(eval, false);
+			evalWriter.displayEvaluationResult(eval, false);
 		}
-	}
-	
-	private String getCorpusName() {
-		if (referenceSource != null) {
-			return referenceSource.getName();
-		}
-		return set;
 	}
 
 	private void doEvaluateDocument(Document doc) {
-		System.out.println("Evaluation for document " + doc.getId());
+		evalWriter.displayDocumentHeader(doc);
 		if (alternateScores) {
 			Map<String,EvaluationResult<Annotation>> evalMap = task.evaluate(logger, doc, true, null/*boostrap*/);
 			for (EvaluationResult<Annotation> eval : evalMap.values()) {
-				displayEvaluationResult(eval, detailedEvaluation);
+				evalWriter.displayEvaluationResult(eval, detailedEvaluation);
 			}
 		}
 		else {
 			EvaluationResult<Annotation> eval = task.evaluateMain(logger, doc, true, null/*boostrap*/);
-			displayEvaluationResult(eval, detailedEvaluation);
-		}
-	}
-	
-	private static String getAnnotationId(Annotation ann) {
-		if (ann == null) {
-			return "--";
-		}
-		return ann.getId();
-	}
-
-	private static void displayEvaluationResult(EvaluationResult<Annotation> eval, boolean detailedEvaluation) {
-		System.out.printf("  %s\n", eval.getEvaluation().getName());
-		if (detailedEvaluation) {
-			System.out.println("    Pairing");
-			Similarity<Annotation> sim = eval.getEvaluation().getMatchingSimilarity();
-			for (Pair<Annotation> pair : eval.getPairs()) {
-				Annotation ref = pair.getReference();
-				Annotation pred = pair.getPrediction();
-				System.out.printf("      %-4s %-4s %.4f\n", getAnnotationId(ref), getAnnotationId(pred), pair.hasBoth() ? sim.compute(ref, pred) : 0);
-			}
-		}
-		for (ScoringResult<Annotation> scoring : eval.getScoringResults()) {
-			System.out.printf("    %s\n", scoring.getScoring().getName());
-			for (MeasureResult measure : scoring.getMeasureResults()) {
-				System.out.printf("      %s: %s\n", measure.getMeasure().getName(), measure.getResult());
-			}
+			evalWriter.displayEvaluationResult(eval, detailedEvaluation);
 		}
 	}
 
@@ -386,6 +350,13 @@ public class BioNLPSTCLI {
 						logger.suspicious(COMMAND_LINE_LOCATION, "duplicate option: " + opt);
 					}
 					detailedEvaluation = true;
+					break;
+				}
+				case "-tabular": {
+					if (evalWriter != StandardEvaluationResultWriter.INSTANCE) {
+						logger.suspicious(COMMAND_LINE_LOCATION, "duplicate option: " + opt);
+					}
+					evalWriter = new TabularEvaluationResultWriter();
 					break;
 				}
 				case "-check": {

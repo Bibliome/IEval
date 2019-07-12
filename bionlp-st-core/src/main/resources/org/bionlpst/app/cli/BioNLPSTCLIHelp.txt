@@ -32,6 +32,9 @@ Options:
 
 	-force
 		evaluate even if the data fails the check
+		
+	-tabular
+		tabular display of evaluation results
 
 	-check
 		do not evaluate, only check
