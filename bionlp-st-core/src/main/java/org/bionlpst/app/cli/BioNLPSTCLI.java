@@ -25,6 +25,7 @@ import org.bionlpst.corpus.source.bionlpst.ZipFileInputStreamCollection;
 import org.bionlpst.corpus.source.pubannotation.FileInputStreamFactory;
 import org.bionlpst.corpus.source.pubannotation.PubAnnotationSource;
 import org.bionlpst.corpus.writer.BioNLPSTWriter;
+import org.bionlpst.corpus.writer.PubAnnotationWriter;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
@@ -38,6 +39,7 @@ import org.bionlpst.util.Util;
 import org.bionlpst.util.message.CheckLogger;
 import org.bionlpst.util.message.CheckMessage;
 import org.bionlpst.util.message.CheckMessageLevel;
+import org.codehaus.jettison.json.JSONException;
 
 public class BioNLPSTCLI {
 	private static final Location COMMAND_LINE_LOCATION = new Location("", -1);
@@ -53,6 +55,7 @@ public class BioNLPSTCLI {
 	private boolean forceEvaluation = false;
 	private Action action = Action.EVALUATE;
 	private File outputDir = null;
+	private String sourcedb = null;
 
 	private static enum Action {
 		EVALUATE,
@@ -105,7 +108,7 @@ public class BioNLPSTCLI {
 		}
 	}
 	
-	private void doWrite() throws BioNLPSTException, IOException {
+	private void doWrite() throws BioNLPSTException, IOException, JSONException {
 		if (task == null) {
 			exit(1);
 		}
@@ -117,8 +120,17 @@ public class BioNLPSTCLI {
 		corpus.resolveReferences(logger);
 		flushLogger();
 		
-		logger.information(COMMAND_LINE_LOCATION, "writing annotations into " + outputDir);
-		BioNLPSTWriter.write(corpus, outputDir);
+		if (outputDir != null) {
+			logger.information(COMMAND_LINE_LOCATION, "writing annotations in BioNLP-ST format into " + outputDir);
+			BioNLPSTWriter.write(corpus, outputDir);
+		}
+		
+		if (sourcedb != null) {
+			logger.information(COMMAND_LINE_LOCATION, "writing annotations in PubAnnotation format into standard output");
+			PubAnnotationWriter.write(corpus, sourcedb);
+		}
+		
+		flushLogger();
 	}
 
 	private static void doHelp() {
@@ -424,10 +436,15 @@ public class BioNLPSTCLI {
 					action = Action.LIST_TASKS;
 					break;
 				}
-				case "-write": {
+				case "-write-bionlpst": {
 					action = Action.WRITE;
 					String arg = requireArgument(argsIt, opt, null);
 					outputDir = new File(arg);
+					break;
+				}
+				case "-write-pubannotation": {
+					action = Action.WRITE;
+					sourcedb = requireArgument(argsIt, opt, null);
 					break;
 				}
 				case "-alternate": {
