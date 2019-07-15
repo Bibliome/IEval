@@ -40,7 +40,7 @@ public class IdFilter implements Filter<Annotation> {
 			if (line == null) {
 				break;
 			}
-			List<String> cols = Util.split(line, '\t');
+			List<String> cols = Util.split(line.trim(), '\t');
 			String docId = cols.get(0);
 			Collection<String> ids = ensureIds(result, docId);
 			String annId = cols.get(1);
@@ -60,7 +60,7 @@ public class IdFilter implements Filter<Annotation> {
 
 	@Override
 	public boolean accept(Annotation item) {
-		return find(item) == excludeIds;
+		return find(item) != excludeIds;
 	}
 	
 	private boolean find(Annotation item) {
