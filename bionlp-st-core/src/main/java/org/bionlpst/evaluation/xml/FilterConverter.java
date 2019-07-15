@@ -8,6 +8,7 @@ import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.AnnotationKind;
 import org.bionlpst.corpus.AnnotationTypeFilter;
 import org.bionlpst.corpus.BackReferenceCardinalityFilter;
+import org.bionlpst.corpus.DocumentIdFilter;
 import org.bionlpst.corpus.IdFilter;
 import org.bionlpst.corpus.NormalizationFilter;
 import org.bionlpst.corpus.SameSentenceFilter;
@@ -110,8 +111,17 @@ public class FilterConverter implements DOMElementConverter<Filter<Annotation>> 
 			case "identifiers": {
 				SourceStreamConverter converter = new SourceStreamConverter(classLoader);
 				SourceStream source = converter.convert(element);
+				boolean excludeIds = DOMUtil.getBooleanAttribute(element, "exclude", false);
 				try (BufferedReader r = source.openBufferedReader()) {
-					return new IdFilter(r);
+					return new IdFilter(r, excludeIds);
+				}
+			}
+			case "doc-identifiers": {
+				SourceStreamConverter converter = new SourceStreamConverter(classLoader);
+				SourceStream source = converter.convert(element);
+				boolean excludeIds = DOMUtil.getBooleanAttribute(element, "exclude", false);
+				try (BufferedReader r = source.openBufferedReader()) {
+					return new DocumentIdFilter(r, excludeIds);
 				}
 			}
 			case "backreference-cardinality": {
