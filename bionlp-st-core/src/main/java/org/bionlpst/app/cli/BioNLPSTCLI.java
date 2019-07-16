@@ -29,7 +29,6 @@ import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
 import org.bionlpst.evaluation.Scoring;
 import org.bionlpst.util.Location;
-import org.bionlpst.util.Util;
 import org.bionlpst.util.message.CheckLogger;
 import org.bionlpst.util.message.CheckMessage;
 import org.bionlpst.util.message.CheckMessageLevel;
@@ -243,12 +242,11 @@ public class BioNLPSTCLI {
 	}
 	
 	private Task getSelectedTask() throws Exception {
-		Map<String,Task> taskMap = Task.loadTasks();
-		if (taskMap.containsKey(taskName)) {
-			return taskMap.get(taskName);
+		Task result = Task.loadTask(taskName);
+		if (result == null) {
+			logger.serious(COMMAND_LINE_LOCATION, "unknown task: " + taskName);
 		}
-		logger.serious(COMMAND_LINE_LOCATION, "unknown task: " + taskName + " (" + Util.join(taskMap.keySet(), ", ") + ")");
-		return null;
+		return result;
 	}
 	
 	private void exit(int retval) {
