@@ -11,7 +11,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+
 import org.bionlpst.BioNLPSTException;
+import org.bionlpst.app.xml.TaskConverter;
 import org.bionlpst.app.xml.TaskMapConverter;
 import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.AnnotationSet;
@@ -26,8 +29,10 @@ import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.schema.Schema;
 import org.bionlpst.util.Location;
 import org.bionlpst.util.Util;
+import org.bionlpst.util.dom.DOMAliases;
 import org.bionlpst.util.dom.DOMUtil;
 import org.bionlpst.util.message.CheckLogger;
+import org.w3c.dom.Element;
 
 public class Task {
 	private final String name;
@@ -241,13 +246,7 @@ public class Task {
 
 	public static Map<String,Task> loadTasks(ClassLoader classLoader) throws Exception {
 		TaskMapConverter converter = new TaskMapConverter(classLoader);
-		Enumeration<URL> urlEnum;
-		if (classLoader == null) {
-			urlEnum = ClassLoader.getSystemResources(TASK_DEFINITION_RESOURCE_NAME);
-		}
-		else {
-			urlEnum = classLoader.getResources(TASK_DEFINITION_RESOURCE_NAME);
-		}
+		Enumeration<URL> urlEnum = getURLEnum(classLoader);
 		while (urlEnum.hasMoreElements()) {
 			URL url = urlEnum.nextElement();
 			try (InputStream is = url.openStream()) {
@@ -255,5 +254,38 @@ public class Task {
 			}
 		}
 		return converter.getResult();
+	}
+	
+	private static Enumeration<URL> getURLEnum(ClassLoader classLoader) throws IOException {
+		if (classLoader == null) {
+			return ClassLoader.getSystemResources(TASK_DEFINITION_RESOURCE_NAME);
+		}
+		return classLoader.getResources(TASK_DEFINITION_RESOURCE_NAME);
+	}
+	
+	public static Task loadTask(ClassLoader classLoader, String taskName) throws Exception {
+		Enumeration<URL> urlEnum = getURLEnum(classLoader);
+		while (urlEnum.hasMoreElements()) {
+			URL url = urlEnum.nextElement();
+			try (InputStream is = url.openStream()) {
+				DocumentBuilder docBuilder = DOMUtil.createDocumentBuilder();
+				org.w3c.dom.Document doc = docBuilder.parse(is);
+				DOMAliases aliases = DOMUtil.createAliases(doc);
+				Element element = doc.getDocumentElement();
+				aliases.replace(element);
+				for (Element child : DOMUtil.getChildrenElements(element, false)) {
+					String name = child.getAttribute("name");
+					if (taskName.equals(name)) {
+						TaskConverter converter = new TaskConverter(classLoader);
+						return converter.convert(child);
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
+	public static Task loadTask(String taskName) throws Exception {
+		return loadTask(Task.class.getClassLoader(), taskName);
 	}
 }
