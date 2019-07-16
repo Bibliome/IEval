@@ -182,7 +182,7 @@ public enum DOMUtil {
 		t.transform(source, result);		
 	}
 	
-	private static DOMAliases createAliases(Document doc) {
+	public static DOMAliases createAliases(Document doc) {
 		DOMAliases result = new DOMAliases();
 		Element element = doc.getDocumentElement();
 		for (Element child : getChildrenElements(element, true)) {
@@ -206,7 +206,7 @@ public enum DOMUtil {
 		return result;
 	}
 	
-	private static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
+	public static DocumentBuilder createDocumentBuilder() throws ParserConfigurationException {
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
 		return docBuilderFactory.newDocumentBuilder();
 	}
