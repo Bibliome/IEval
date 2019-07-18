@@ -29,6 +29,15 @@ Options:
 	
 	-alternate
 		compute alternate scores
+		
+	-resamples N
+		compute confidence interval for each score using the specified number of resamples
+		
+	-confidence P
+		confidence of the interval (default: 0.95)
+		
+	-bootstrap-seed SEED
+		random seed for resamples (use clock by default)
 
 	-force
 		evaluate even if the data fails the check
