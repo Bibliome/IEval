@@ -48,15 +48,14 @@ public class MeasureResult {
 		if (resamples.isEmpty()) {
 			return null;
 		}
-		List<Double> diff = new ArrayList<Double>(resamples.size());
+		List<Double> copy = new ArrayList<Double>(resamples.size());
 		for (Number n : resamples) {
-			Double d = n.doubleValue() - result.doubleValue();
-			diff.add(d);
+			copy.add(n.doubleValue());
 		}
-		Collections.sort(diff);
+		Collections.sort(copy);
 		int confidenceN = (int) Math.round(p * resamples.size());
 		int loN = (resamples.size() - confidenceN) / 2;
 		int hiN = loN + confidenceN;
-		return new ConfidenceInterval(p, result.doubleValue() - resamples.get(hiN).doubleValue(), result.doubleValue() - resamples.get(loN).doubleValue());
+		return new ConfidenceInterval(p, copy.get(loN).doubleValue(), copy.get(hiN).doubleValue());
 	}
 }
