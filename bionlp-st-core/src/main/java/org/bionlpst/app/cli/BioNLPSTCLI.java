@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.Task;
@@ -25,6 +26,7 @@ import org.bionlpst.corpus.source.bionlpst.ZipFileInputStreamCollection;
 import org.bionlpst.corpus.source.pubannotation.FileInputStreamFactory;
 import org.bionlpst.corpus.source.pubannotation.PubAnnotationSource;
 import org.bionlpst.evaluation.AnnotationEvaluation;
+import org.bionlpst.evaluation.BootstrapConfig;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
 import org.bionlpst.evaluation.Scoring;
@@ -47,6 +49,10 @@ public class BioNLPSTCLI {
 	private boolean forceEvaluation = false;
 	private Action action = Action.EVALUATE;
 	private EvaluationResultWriter evalWriter = StandardEvaluationResultWriter.INSTANCE;
+	private Integer bootstrapResamples = null;
+	private double confidenceIntervalP = 0.95;
+	private long bootstrapRandomSeed = System.currentTimeMillis();
+	private BootstrapConfig bootstrapConfig = null;
 
 	private static enum Action {
 		EVALUATE,
@@ -156,6 +162,10 @@ public class BioNLPSTCLI {
 		logger.information(COMMAND_LINE_LOCATION, "postprocessing");
 		task.getCorpusPostprocessing().postprocess(corpus);
 		logger.information(COMMAND_LINE_LOCATION, "evaluation");
+		if (bootstrapResamples != null) {
+			logger.information(COMMAND_LINE_LOCATION, String.format("bootstrap configuration: resamples = %d, confidence = %.2f, seed = %d", bootstrapResamples, confidenceIntervalP, bootstrapRandomSeed));
+			bootstrapConfig = new BootstrapConfig(new Random(bootstrapRandomSeed), bootstrapResamples);
+		}
 		flushLogger();
 		if (detailedEvaluation) {
 			for (Document doc : corpus.getDocuments()) {
@@ -168,28 +178,28 @@ public class BioNLPSTCLI {
 	private void doEvaluateCorpus(Corpus corpus) {
 		evalWriter.displayCorpusHeader(referenceSource, set);
 		if (alternateScores) {
-			Map<String,EvaluationResult<Annotation>> evalMap = task.evaluate(logger, corpus, false, null/*boostrap*/);
+			Map<String,EvaluationResult<Annotation>> evalMap = task.evaluate(logger, corpus, false, bootstrapConfig);
 			for (EvaluationResult<Annotation> eval : evalMap.values()) {
-				evalWriter.displayEvaluationResult(eval, false);
+				evalWriter.displayEvaluationResult(eval, false, (bootstrapConfig == null ? -1.0 : confidenceIntervalP));
 			}
 		}
 		else {
-			EvaluationResult<Annotation> eval = task.evaluateMain(logger, corpus, false, null/*boostrap*/);
-			evalWriter.displayEvaluationResult(eval, false);
+			EvaluationResult<Annotation> eval = task.evaluateMain(logger, corpus, false, bootstrapConfig);
+			evalWriter.displayEvaluationResult(eval, false, (bootstrapConfig == null ? -1.0 : confidenceIntervalP));
 		}
 	}
 
 	private void doEvaluateDocument(Document doc) {
 		evalWriter.displayDocumentHeader(doc);
 		if (alternateScores) {
-			Map<String,EvaluationResult<Annotation>> evalMap = task.evaluate(logger, doc, true, null/*boostrap*/);
+			Map<String,EvaluationResult<Annotation>> evalMap = task.evaluate(logger, doc, true, bootstrapConfig);
 			for (EvaluationResult<Annotation> eval : evalMap.values()) {
-				evalWriter.displayEvaluationResult(eval, detailedEvaluation);
+				evalWriter.displayEvaluationResult(eval, detailedEvaluation, (bootstrapConfig == null ? -1.0 : confidenceIntervalP));
 			}
 		}
 		else {
-			EvaluationResult<Annotation> eval = task.evaluateMain(logger, doc, true, null/*boostrap*/);
-			evalWriter.displayEvaluationResult(eval, detailedEvaluation);
+			EvaluationResult<Annotation> eval = task.evaluateMain(logger, doc, true, bootstrapConfig);
+			evalWriter.displayEvaluationResult(eval, detailedEvaluation, (bootstrapConfig == null ? -1.0 : confidenceIntervalP));
 		}
 	}
 
@@ -375,6 +385,51 @@ public class BioNLPSTCLI {
 				}
 				case "-force": {
 					forceEvaluation = true;
+					break;
+				}
+				case "-resamples": {
+					if (bootstrapResamples != null) {
+						logger.suspicious(COMMAND_LINE_LOCATION, "duplicate option: " + opt);
+					}
+					String arg = requireArgument(argsIt, opt, null);
+					if (arg != null) {
+						try {
+							bootstrapResamples = Integer.parseInt(arg);
+							if (bootstrapResamples < 0) {
+								logger.serious(COMMAND_LINE_LOCATION, opt + " expects a positive non-zero integer");
+							}
+						}
+						catch (NumberFormatException e) {
+							logger.serious(COMMAND_LINE_LOCATION, opt + " expects a positive non-zero integer");
+						}
+					}
+					break;
+				}
+				case "-bootstrap-seed": {
+					String arg = requireArgument(argsIt, opt, null);
+					if (arg != null) {
+						try {
+							bootstrapRandomSeed = Long.parseLong(arg);
+						}
+						catch (NumberFormatException e) {
+							logger.serious(COMMAND_LINE_LOCATION, opt + " expects an integer");
+						}
+					}
+					break;
+				}
+				case "-confidence": {
+					String arg = requireArgument(argsIt, opt, null);
+					if (arg != null) {
+						try {
+							confidenceIntervalP = Double.parseDouble(arg);
+							if (confidenceIntervalP < 0) {
+								logger.serious(COMMAND_LINE_LOCATION, opt + " expects a probability");
+							}
+						}
+						catch (NumberFormatException e) {
+							logger.serious(COMMAND_LINE_LOCATION, opt + " expects a probability");
+						}
+					}
 					break;
 				}
 				default: {

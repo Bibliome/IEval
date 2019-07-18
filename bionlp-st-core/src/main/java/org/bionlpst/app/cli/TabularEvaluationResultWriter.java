@@ -4,6 +4,7 @@ import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.Document;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.MeasureResult;
+import org.bionlpst.evaluation.MeasureResult.ConfidenceInterval;
 import org.bionlpst.evaluation.ScoringResult;
 import org.bionlpst.util.Named;
 
@@ -11,7 +12,7 @@ public class TabularEvaluationResultWriter implements EvaluationResultWriter {
 	private String target;
 
 	@Override
-	public void displayEvaluationResult(EvaluationResult<Annotation> eval, boolean detailedEvaluation) {
+	public void displayEvaluationResult(EvaluationResult<Annotation> eval, boolean detailedEvaluation, double confidence) {
 		String evalName = eval.getEvaluation().getName();
 		if (detailedEvaluation) {
 		}
@@ -19,10 +20,14 @@ public class TabularEvaluationResultWriter implements EvaluationResultWriter {
 			String scoringName = scoring.getScoring().getName();
 			for (MeasureResult measure : scoring.getMeasureResults()) {
 				String measureName = measure.getMeasure().getName();
-				System.out.printf("%s\t%s\t%s\t%s\t%s\n", target, evalName, scoringName, measureName, measure.getResult());
+				System.out.printf("%s\t%s\t%s\t%s\t%s", target, evalName, scoringName, measureName, measure.getResult());
+				if (confidence > 0.0) {
+					ConfidenceInterval inter = measure.getConfidenceInterval(confidence);
+					System.out.printf("\t%s\t%s", inter.lo, inter.hi);
+				}
+				System.out.println();
 			}
 		}
-
 	}
 
 	@Override

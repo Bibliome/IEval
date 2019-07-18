@@ -6,6 +6,7 @@ import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.MeasureResult;
 import org.bionlpst.evaluation.Pair;
 import org.bionlpst.evaluation.ScoringResult;
+import org.bionlpst.evaluation.MeasureResult.ConfidenceInterval;
 import org.bionlpst.evaluation.similarity.Similarity;
 import org.bionlpst.util.Named;
 
@@ -13,7 +14,7 @@ public enum StandardEvaluationResultWriter implements EvaluationResultWriter {
 	INSTANCE;
 
 	@Override
-	public void displayEvaluationResult(EvaluationResult<Annotation> eval, boolean detailedEvaluation) {
+	public void displayEvaluationResult(EvaluationResult<Annotation> eval, boolean detailedEvaluation, double confidence) {
 		System.out.printf("  %s\n", eval.getEvaluation().getName());
 		if (detailedEvaluation) {
 			System.out.println("    Pairing");
@@ -27,7 +28,12 @@ public enum StandardEvaluationResultWriter implements EvaluationResultWriter {
 		for (ScoringResult<Annotation> scoring : eval.getScoringResults()) {
 			System.out.printf("    %s\n", scoring.getScoring().getName());
 			for (MeasureResult measure : scoring.getMeasureResults()) {
-				System.out.printf("      %s: %s\n", measure.getMeasure().getName(), measure.getResult());
+				System.out.printf("      %s: %s", measure.getMeasure().getName(), measure.getResult());
+				if (confidence > 0.0) {
+					ConfidenceInterval inter = measure.getConfidenceInterval(confidence);
+					System.out.printf(" (%s-%s)", inter.lo, inter.hi);
+				}
+				System.out.println();
 			}
 		}
 	}
