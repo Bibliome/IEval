@@ -936,7 +936,7 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-norm_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-norm_dev.zip" />
-		<!-- <test zipresource="" with-reference="true" /> -->
+		<test zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-norm_test.zip" with-reference="false" />
 	</task>
 
 	<task name="BB19-rel">
@@ -1035,7 +1035,7 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-rel_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-rel_dev.zip" />
-		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
+		<test zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-rel_test.zip" with-reference="false" />
 	</task>
 
 	<task name="BB19-kb">
@@ -1053,7 +1053,7 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-kb_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-kb_dev.zip" />
-		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
+		<test zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-kb_test.zip" with-reference="false" />
 	</task>
 
 	<task name="BB19-norm+ner">
@@ -1287,7 +1287,7 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-norm+ner_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-norm+ner_dev.zip" />
-		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
+		<test zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-norm+ner_test.zip" with-reference="false" />
 	</task>
 
 	<task name="BB19-rel+ner">
@@ -1466,7 +1466,7 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-rel+ner_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-rel+ner_dev.zip" />
-		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
+		<test zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-rel+ner_test.zip" with-reference="true" />
 	</task>
 
 	<task name="BB19-kb+ner">
@@ -1484,7 +1484,7 @@
 		</evaluation>
 		<train zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-kb+ner_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-kb+ner_dev.zip" />
-		<!-- <test zipresource="org/bionlpst/data/EMPTY" with-reference="true" /> -->
+		<test zipresource="org/bionlpst/data/BioNLP-OST-2019_BB-kb+ner_test.zip" with-reference="false" />
 	</task>
 
 	<task name="BB-cat">
