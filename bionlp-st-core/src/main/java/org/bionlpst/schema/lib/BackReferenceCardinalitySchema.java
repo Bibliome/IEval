@@ -75,7 +75,7 @@ public class BackReferenceCardinalitySchema<T extends Annotation> implements Sch
 		AnnotationSet aset = item.getAnnotationSet();
 		switch (aset.getSelector()) {
 		case INPUT: {
-			check(logger, item, referenceBackRefs);
+			//check(logger, item, referenceBackRefs);
 			check(logger, item, predictionBackRefs);
 			break;
 		}
@@ -84,7 +84,7 @@ public class BackReferenceCardinalitySchema<T extends Annotation> implements Sch
 			break;
 		}
 		case REFERENCE: {
-			check(logger, item, referenceBackRefs);
+			//check(logger, item, referenceBackRefs);
 			break;
 		}
 		}
