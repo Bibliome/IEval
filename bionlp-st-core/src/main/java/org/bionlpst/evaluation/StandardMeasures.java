@@ -293,6 +293,27 @@ public enum StandardMeasures implements Measure {
 			return MeasureDirection.LOWER_IS_BETTER;
 		}
 	},
+	
+	/**
+	 * Computes SER.
+	 */
+	INVERTED_SLOT_ERROR_RATE {
+		@Override
+		public <T> Number compute(Similarity<T> similarity, Collection<Pair<T>> pairs) {
+			double ser = SLOT_ERROR_RATE.compute(similarity, pairs).doubleValue();
+			return 1.0 / (ser + 1);
+		}
+
+		@Override
+		public String getName() {
+			return "ISER";
+		}
+
+		@Override
+		public MeasureDirection getMeasureDirection() {
+			return MeasureDirection.HIGHER_IS_BETTER;
+		}
+	},
 
 	/**
 	 * Computes F1 score.
@@ -327,6 +348,7 @@ public enum StandardMeasures implements Measure {
 	public static Collection<? extends Measure> getSERMeasures() {
 		return Arrays.asList(
 				SLOT_ERROR_RATE,
+				INVERTED_SLOT_ERROR_RATE,
 				MISMATCHES,
 				MATCHES,
 				INSERTIONS,
