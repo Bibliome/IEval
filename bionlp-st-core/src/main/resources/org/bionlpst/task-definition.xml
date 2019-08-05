@@ -1345,8 +1345,8 @@
 				</product>
 			</matching-similarity>
 			<scoring name="Lives_In and Exhibits">
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Lives_In (Habitat)">
@@ -1358,8 +1358,8 @@
 						</argument>
 					</and>
 				</post-filter>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Lives_In (Geographical)">
@@ -1371,24 +1371,24 @@
 						</argument>
 					</and>
 				</post-filter>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Exhibits">
 				<post-filter>
 					<types>Exhibits</types>
 				</post-filter>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Lives_In and Exhibits (inside sentences)">
 				<post-filter>
 					<same-sentence jar="org/bionlpst/data/BB19-rel_sentences.txt" />
 				</post-filter>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Lives_In (inside sentences)">
@@ -1398,8 +1398,8 @@
 						<same-sentence jar="org/bionlpst/data/BB19-rel_sentences.txt" />
 					</and>
 				</post-filter>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Exhibits (inside sentences)">
@@ -1409,16 +1409,16 @@
 						<same-sentence jar="org/bionlpst/data/BB19-rel_sentences.txt" />
 					</and>
 				</post-filter>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Lives_In and Exhibits (ignore boundaries)">
 				<similarity>
 					<constant>1</constant>
 				</similarity>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Lives_In (ignore boundaries)">
@@ -1428,8 +1428,8 @@
 				<similarity>
 					<constant>1</constant>
 				</similarity>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Lives_In (Habitat, ignore boundaries)">
@@ -1444,8 +1444,8 @@
 						</argument>
 					</and>
 				</post-filter>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Lives_In (Geographical, ignore boundaries)">
@@ -1460,8 +1460,8 @@
 						</argument>
 					</and>
 				</post-filter>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 			<scoring name="Exhibits (ignore boundaries)">
@@ -1471,8 +1471,8 @@
 				<similarity>
 					<constant>1</constant>
 				</similarity>
-				<f1-measures />
 				<ser-measures />
+				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
 		</evaluation>
