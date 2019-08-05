@@ -1186,6 +1186,18 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
+			<scoring name="Ignore boundaries (Phenotypes)">
+				<post-filter>
+					<types>Phenotype</types>
+				</post-filter>
+				<similarity>
+					<wang-sim19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
 			<scoring name="Ignore boundaries (Microorganisms)">
 				<post-filter>
 					<types>Microorganism</types>
