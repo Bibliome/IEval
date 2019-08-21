@@ -26,7 +26,7 @@ public class UniqueFormAndNormalizationFilter implements Filter<Annotation> {
 		if (tb == null) {
 			return false;
 		}
-		if (!tb.getType().equals(textBoundType)) {
+		if ((textBoundType != null) && !tb.getType().equals(textBoundType)) {
 			return false;
 		}
 		if (tb.getAnnotationSet().getSelector() == AnnotationSetSelector.PREDICTION) {

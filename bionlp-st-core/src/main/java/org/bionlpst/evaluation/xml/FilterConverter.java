@@ -104,7 +104,7 @@ public class FilterConverter implements DOMElementConverter<Filter<Annotation>> 
 				}
 			}
 			case "unique-form-norm": {
-				String textBoundType = DOMUtil.getMandatoryAttribute(element, "text-bound-type");
+				String textBoundType = DOMUtil.getAttribute(element, "text-bound-type", null);
 				String normalizationType = DOMUtil.getMandatoryAttribute(element, "normalization-type");
 				return new UniqueFormAndNormalizationFilter(textBoundType, normalizationType);
 			}

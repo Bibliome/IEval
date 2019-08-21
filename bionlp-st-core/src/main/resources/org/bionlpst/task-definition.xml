@@ -872,7 +872,70 @@
 				</similarity>
 				<measure>precision</measure>
 			</scoring>
-			<scoring name="Microorganisms only">
+			<scoring name="Habitats and Phenotypes">
+				<post-filter>
+					<types>Habitat,Phenotype</types>
+				</post-filter>
+				<similarity>
+					<BB19-cat-sim />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Habitats and Phenotypes (exact)">
+				<post-filter>
+					<types>Phenotype</types>
+				</post-filter>
+				<similarity>
+					<type-dispatch>
+						<habitat-exact-sim />
+						<pheno-exact-sim />
+					</type-dispatch>
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Habitats and Phenotypes (new in dev)">
+				<post-filter>
+					<and>
+						<types>Habitat,Phenotype</types>
+						<referent-filter jar="org/bionlpst/data/BB19-norm+ner_new-in-dev.txt">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<type-dispatch>
+						<wang-new-in-dev19 />
+						<pheno-wang-new-in-dev />
+					</type-dispatch>
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Habitats and Phenotypes (new in test)">
+				<post-filter>
+					<and>
+						<types>Habitat,Phenotype</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<type-dispatch>
+						<wang-new-in-test19 />
+						<pheno-wang-new-in-test />
+					</type-dispatch>
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Habitats and Phenotypes (only unique form-normalization)">
+				<post-filter>
+					<and>
+						<types>Habitat,Phenotype</types>
+						<unique-form-norm normalization-type="OntoBiotope"/>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-sim19 />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Microorganisms">
 				<post-filter>
 					<types>Microorganism</types>
 				</post-filter>
