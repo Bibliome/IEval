@@ -1415,6 +1415,16 @@
 				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
+			<scoring name="Lives_In">
+				<post-filter>
+					<and>
+						<types>Lives_In</types>
+					</and>
+				</post-filter>
+				<ser-measures />
+				<f1-measures />
+				<measure>predictions</measure>
+			</scoring>
 			<scoring name="Lives_In (Habitat)">
 				<post-filter>
 					<and>
