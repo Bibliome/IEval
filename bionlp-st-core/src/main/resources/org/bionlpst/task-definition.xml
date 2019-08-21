@@ -1034,6 +1034,9 @@
 			</matching-similarity>
 			
 			<scoring name="Lives_In and Exhibits">
+				<post-filter>
+					<types>Lives_In,Exhibits</types>
+				</post-filter>
 				<f1-measures />
 				<measure>predictions</measure>
 			</scoring>
