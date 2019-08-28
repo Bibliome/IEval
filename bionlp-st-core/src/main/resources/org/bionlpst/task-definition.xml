@@ -1375,7 +1375,7 @@
 			<scoring name="Multiple normalizations (Habitat and Phenotypes)">
 				<post-filter>
 					<and>
-						<types>Phenotype</types>
+						<types>Habitat,Phenotype</types>
 						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
 					</and>
 				</post-filter>
