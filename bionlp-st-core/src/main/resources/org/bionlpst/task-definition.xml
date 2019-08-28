@@ -1144,7 +1144,7 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
-			<scoring name="Habitats only">
+			<scoring name="Habitats">
 				<post-filter>
 					<types>Habitat</types>
 				</post-filter>
@@ -1153,7 +1153,7 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
-			<scoring name="Habitats only (new in dev)">
+			<scoring name="Habitats (new in dev)">
 				<post-filter>
 					<and>
 						<types>Habitat</types>
@@ -1168,7 +1168,7 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
-			<scoring name="Habitats only (new in test)">
+			<scoring name="Habitats (new in test)">
 				<post-filter>
 					<and>
 						<types>Habitat</types>
@@ -1183,7 +1183,7 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
-			<scoring name="Phenotypes only">
+			<scoring name="Phenotypes">
 				<post-filter>
 					<types>Phenotype</types>
 				</post-filter>
@@ -1192,7 +1192,7 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
-			<scoring name="Phenotypes only (new in dev)">
+			<scoring name="Phenotypes (new in dev)">
 				<post-filter>
 					<and>
 						<types>Phenotype</types>
@@ -1207,7 +1207,7 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
-			<scoring name="Phenotypes only (new in test)">
+			<scoring name="Phenotypes (new in test)">
 				<post-filter>
 					<and>
 						<types>Phenotype</types>
@@ -1222,7 +1222,46 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
-			<scoring name="Microorganisms only">
+			<scoring name="Habitats and Phenotypes">
+				<post-filter>
+					<types>Habitat,Phenotype</types>
+				</post-filter>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Habitat and Phenotypes (new in dev)">
+				<post-filter>
+					<and>
+						<types>Habitat,Phenotype</types>
+						<referent-filter jar="org/bionlpst/data/BB19-norm+ner_new-in-dev.txt">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-new-in-dev19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Habitat and Phenotypes (new in test)">
+				<post-filter>
+					<and>
+						<types>Habitat,Phenotype</types>
+						<referent-filter jar="org/bionlpst/data/EMPTY">OntoBiotope</referent-filter>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-new-in-test19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Microorganisms">
 				<post-filter>
 					<types>Microorganism</types>
 				</post-filter>
@@ -1255,6 +1294,18 @@
 			<scoring name="Ignore boundaries (Phenotypes)">
 				<post-filter>
 					<types>Phenotype</types>
+				</post-filter>
+				<similarity>
+					<wang-sim19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Ignore boundaries (Habitats and Phenotypes)">
+				<post-filter>
+					<types>Habitat,Phenotype</types>
 				</post-filter>
 				<similarity>
 					<wang-sim19 />
@@ -1306,6 +1357,36 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
+			<scoring name="Multiple normalizations (Phenotypes)">
+				<post-filter>
+					<and>
+						<types>Phenotype</types>
+						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-sim19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Multiple normalizations (Habitat and Phenotypes)">
+				<post-filter>
+					<and>
+						<types>Phenotype</types>
+						<backreference-cardinality at-least="2">OntoBiotope</backreference-cardinality>
+					</and>
+				</post-filter>
+				<similarity>
+					<wang-sim19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
 			<scoring name="Multiple normalizations (Microorganisms)">
 				<post-filter>
 					<and>
@@ -1335,7 +1416,7 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
-			<scoring name="Habitats boundaries only">
+			<scoring name="Habitat boundaries">
 				<post-filter>
 					<types>Habitat</types>
 				</post-filter>
@@ -1344,7 +1425,7 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
-			<scoring name="Phenotypes boundaries only">
+			<scoring name="Phenotype boundaries">
 				<post-filter>
 					<types>Phenotype</types>
 				</post-filter>
@@ -1353,7 +1434,16 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
-			<scoring name="Microorganisms boundaries only">
+			<scoring name="Habitat and Phenotype boundaries">
+				<post-filter>
+					<types>Habitat,Phenotype</types>
+				</post-filter>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Microorganism boundaries">
 				<post-filter>
 					<types>Microorganism</types>
 				</post-filter>
