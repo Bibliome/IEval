@@ -1153,6 +1153,21 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
+			<scoring name="Habitats (exact)">
+				<post-filter>
+					<types>Habitat</types>
+				</post-filter>
+				<similarity>
+					<product>
+						<jaccard />
+						<habitat-exact-sim />
+					</product>
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
 			<scoring name="Habitats (new in dev)">
 				<post-filter>
 					<and>
@@ -1192,6 +1207,21 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
+			<scoring name="Phenotypes (exact)">
+				<post-filter>
+					<types>Phenotype</types>
+				</post-filter>
+				<similarity>
+					<product>
+						<jaccard />
+						<pheno-exact-sim />
+					</product>
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
 			<scoring name="Phenotypes (new in dev)">
 				<post-filter>
 					<and>
@@ -1226,6 +1256,24 @@
 				<post-filter>
 					<types>Habitat,Phenotype</types>
 				</post-filter>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Habitats and Phenotypes (exact)">
+				<post-filter>
+					<types>Habitat,Phenotype</types>
+				</post-filter>
+				<similarity>
+					<product>
+						<jaccard />
+						<type-dispatch>
+							<habitat-exact-sim />
+							<pheno-exact-sim />
+						</type-dispatch>
+					</product>
+				</similarity>
 				<ser-measures />
 				<measure>recall</measure>
 				<measure>precision</measure>
@@ -1291,6 +1339,18 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
+			<scoring name="Ignore boundaries (Habitats exact)">
+				<post-filter>
+					<types>Habitat</types>
+				</post-filter>
+				<similarity>
+					<habitat-exact-sim />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
 			<scoring name="Ignore boundaries (Phenotypes)">
 				<post-filter>
 					<types>Phenotype</types>
@@ -1303,12 +1363,39 @@
 				<measure>precision</measure>
 				<measure>predictions</measure>
 			</scoring>
+			<scoring name="Ignore boundaries (Phenotypes exact)">
+				<post-filter>
+					<types>Phenotype</types>
+				</post-filter>
+				<similarity>
+					<pheno-exact-sim/>
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
 			<scoring name="Ignore boundaries (Habitats and Phenotypes)">
 				<post-filter>
 					<types>Habitat,Phenotype</types>
 				</post-filter>
 				<similarity>
 					<wang-sim19 />
+				</similarity>
+				<ser-measures />
+				<measure>recall</measure>
+				<measure>precision</measure>
+				<measure>predictions</measure>
+			</scoring>
+			<scoring name="Ignore boundaries (Habitats and Phenotypes exact)">
+				<post-filter>
+					<types>Habitat,Phenotype</types>
+				</post-filter>
+				<similarity>
+					<type-dispatch>
+						<habitat-exact-sim />
+						<pheno-exact-sim />
+					</type-dispatch>
 				</similarity>
 				<ser-measures />
 				<measure>recall</measure>
