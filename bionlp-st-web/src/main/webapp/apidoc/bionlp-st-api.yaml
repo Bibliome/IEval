@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: BioNLP-ST Evaluation API
+  description: API to access evaluation for several tasks of BioNLP-ST 2016 and BioNLP-OST 2019
+  version: 0.0.1
+
+servers:
+  - url: http://127.0.0.1:8080/bionlp-st-web/api
+    description: local Maven-Jetty server
+  - url: http://bibliome.jouy.inra.fr/demo/BioNLP-ST-2016-Evaluation/api
+    description: official server with evaluation on test data
+    
+paths:
+  /list-tasks:
+    get:
+      summary: Returns the list of supported tasks
+      operationId: listTasks
+      responses:
+        '200':
+          description: OK
+  /task/{taskName}/{set}/check:
+    post:
+      summary: Checks the correctness of a submission given as a zip archive
+      operationId: checkSubmission
+      requestBody:
+        $ref: "#/components/requestBodies/ZipFile"
+      parameters:
+        - $ref: "#/components/parameters/TaskName"
+        - $ref: "#/components/parameters/DocumentSet"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+  /task/{taskName}/{set}/evaluate:
+    post:
+      summary: Evaluates a submission given as a zip archive
+      operationId: evaluateSubmission
+      requestBody:
+        $ref: "#/components/requestBodies/ZipFile"
+      parameters:
+        - $ref: "#/components/parameters/TaskName"
+        - $ref: "#/components/parameters/DocumentSet"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+          
+components:
+  parameters:
+    TaskName:
+      name: taskName
+      in: path
+      required: true
+      description: task identifier
+      schema:
+        type: string
+        enum: [ SeeDev-full, SeeDev-binary, BB19-norm, BB19-rel, BB19-kb, BB19-norm+ner, BB19-rel+ner, BB19-kb+ner, BB-cat, BB-event, BB-kb, BB-cat+ner, BB-event+ner, BB-kb+ner ]
+
+    DocumentSet:
+      name: set
+      in: path
+      required: true
+      description: document set
+      schema:
+        type: string
+        enum: [ train, dev, test ]
+
+  requestBodies:
+    ZipFile:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              zipfile:
+                type: string
+                format: binary
