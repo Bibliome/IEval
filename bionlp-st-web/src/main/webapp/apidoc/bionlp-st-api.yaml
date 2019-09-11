@@ -18,12 +18,24 @@ paths:
       responses:
         '200':
           description: OK
+          
   /task/{taskName}/{set}/check:
     post:
       summary: Checks the correctness of a submission given as a zip archive
       operationId: checkSubmission
       requestBody:
-        $ref: "#/components/requestBodies/ZipFile"
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                zipfile:
+                  type: string
+                  format: binary
+                  description: Zip archive containing the predictions
+                resamples:
+                  type: integer
+                  description: If specified, computes the confidence interval with bootstrap resampling 
       parameters:
         - $ref: "#/components/parameters/TaskName"
         - $ref: "#/components/parameters/DocumentSet"
@@ -34,12 +46,31 @@ paths:
             application/json:
               schema:
                 type: object
+                
   /task/{taskName}/{set}/evaluate:
     post:
       summary: Evaluates a submission given as a zip archive
       operationId: evaluateSubmission
       requestBody:
-        $ref: "#/components/requestBodies/ZipFile"
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                zipfile:
+                  type: string
+                  format: binary
+                  description: Zip archive containing the predictions
+                resamples:
+                  type: integer
+                  description: If specified, computes the confidence interval with bootstrap resampling 
+                detailed:
+                  type: boolean
+                  description: If true, shows pairings and errors (only for sets train and dev)
+                alternate:
+                  type: boolean
+                  description: If false, computes only the first scoring
+              required: [ zipfile ]
       parameters:
         - $ref: "#/components/parameters/TaskName"
         - $ref: "#/components/parameters/DocumentSet"
@@ -70,14 +101,3 @@ components:
       schema:
         type: string
         enum: [ train, dev, test ]
-
-  requestBodies:
-    ZipFile:
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              zipfile:
-                type: string
-                format: binary
