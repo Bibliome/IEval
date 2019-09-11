@@ -236,7 +236,7 @@ public class BioNLPSTRest {
 			@FormDataParam("zipfile") FormDataContentDisposition zipInfo,
 			@FormDataParam("detailed") @DefaultValue("false") Boolean detailed,
 			@FormDataParam("alternate") @DefaultValue("true") Boolean alternate,
-			@FormDataParam("resamples") @DefaultValue("") Integer resamples,
+			@FormDataParam("resamples") @DefaultValue("0") Integer resamples,
 			@FormDataParam("token") @DefaultValue("") String token
 			) throws Exception {
 		checkToken(token);
@@ -360,7 +360,7 @@ public class BioNLPSTRest {
 			@FormDataParam("detailed") @DefaultValue("false") Boolean detailed,
 			@FormDataParam("alternate") @DefaultValue("false") Boolean alternate,
 			@FormDataParam("action") @DefaultValue("evaluate") String action,
-			@FormDataParam("resamples") @DefaultValue("") Integer resamples,
+			@FormDataParam("resamples") @DefaultValue("0") Integer resamples,
 			@FormDataParam("token") @DefaultValue("") String token
 			) throws Exception {
 		switch (action) {
