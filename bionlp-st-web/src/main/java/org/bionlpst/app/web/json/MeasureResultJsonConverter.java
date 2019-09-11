@@ -18,9 +18,13 @@ public enum MeasureResultJsonConverter implements JsonConverter<MeasureResult> {
 		MeasureResult.ConfidenceInterval confInterval = measureResult.getConfidenceInterval(confidenceIntervalProbability);
 		if (confInterval != null) {
 			JSONObject ci = new JSONObject();
-			ci.put("min", confInterval.lo);
-			ci.put("max", confInterval.hi);
-			result.put("interval", ci);
+			if (Double.isFinite(confInterval.lo)) {
+				ci.put("min", confInterval.lo);
+			}
+			if (Double.isFinite(confInterval.hi)) {
+				ci.put("max", confInterval.hi);
+			}
+			result.put("confidence-interval", ci);
 		}
 		return result;
 	}
