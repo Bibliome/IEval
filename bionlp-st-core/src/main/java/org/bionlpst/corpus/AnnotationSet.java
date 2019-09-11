@@ -3,7 +3,7 @@ package org.bionlpst.corpus;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,7 +21,7 @@ public class AnnotationSet {
 	private final Document document;
 	private final AnnotationSetSelector selector;
 	private final AnnotationSet parent;
-	private final Map<String,Annotation> annotations = new HashMap<String,Annotation>();
+	private final Map<String,Annotation> annotations = new LinkedHashMap<String,Annotation>();
 	private boolean parsed = false;
 	
 	/**

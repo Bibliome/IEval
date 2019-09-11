@@ -25,6 +25,8 @@ import org.bionlpst.corpus.source.bionlpst.InputStreamCollection;
 import org.bionlpst.corpus.source.bionlpst.ZipFileInputStreamCollection;
 import org.bionlpst.corpus.source.pubannotation.FileInputStreamFactory;
 import org.bionlpst.corpus.source.pubannotation.PubAnnotationSource;
+import org.bionlpst.corpus.writer.BioNLPSTWriter;
+import org.bionlpst.corpus.writer.PubAnnotationWriter;
 import org.bionlpst.evaluation.AnnotationEvaluation;
 import org.bionlpst.evaluation.BootstrapConfig;
 import org.bionlpst.evaluation.EvaluationResult;
@@ -34,6 +36,7 @@ import org.bionlpst.util.Location;
 import org.bionlpst.util.message.CheckLogger;
 import org.bionlpst.util.message.CheckMessage;
 import org.bionlpst.util.message.CheckMessageLevel;
+import org.codehaus.jettison.json.JSONException;
 
 public class BioNLPSTCLI {
 	private static final Location COMMAND_LINE_LOCATION = new Location("", -1);
@@ -53,12 +56,15 @@ public class BioNLPSTCLI {
 	private double confidenceIntervalP = 0.95;
 	private long bootstrapRandomSeed = System.currentTimeMillis();
 	private BootstrapConfig bootstrapConfig = null;
+	private File outputDir = null;
+	private String sourcedb = null;
 
 	private static enum Action {
 		EVALUATE,
 		CHECK,
 		HELP,
-		LIST_TASKS;
+		LIST_TASKS,
+		WRITE;
 	}
 	
 	public static void main(String[] args) throws Exception {
@@ -96,9 +102,39 @@ public class BioNLPSTCLI {
 				exit(0);
 				break;
 			}
+			case WRITE: {
+				doWrite();
+				exit(0);
+				break;
+			}
 		}
 	}
 	
+	private void doWrite() throws BioNLPSTException, IOException, JSONException {
+		if (task == null) {
+			exit(1);
+		}
+		logger.information(COMMAND_LINE_LOCATION, "loading corpus and reference data");
+		Corpus corpus = loadReference(true);
+		flushLogger();
+		
+		logger.information(COMMAND_LINE_LOCATION, "resolving references");
+		corpus.resolveReferences(logger);
+		flushLogger();
+		
+		if (outputDir != null) {
+			logger.information(COMMAND_LINE_LOCATION, "writing annotations in BioNLP-ST format into " + outputDir);
+			BioNLPSTWriter.write(corpus, outputDir);
+		}
+		
+		if (sourcedb != null) {
+			logger.information(COMMAND_LINE_LOCATION, "writing annotations in PubAnnotation format into standard output");
+			PubAnnotationWriter.write(corpus, sourcedb);
+		}
+		
+		flushLogger();
+	}
+
 	private static void doHelp() {
 		try (InputStream is = BioNLPSTCLI.class.getResourceAsStream("BioNLPSTCLIHelp.txt")) {
 			Reader r = new InputStreamReader(is);
@@ -379,6 +415,17 @@ public class BioNLPSTCLI {
 					action = Action.LIST_TASKS;
 					break;
 				}
+				case "-write-bionlpst": {
+					action = Action.WRITE;
+					String arg = requireArgument(argsIt, opt, null);
+					outputDir = new File(arg);
+					break;
+				}
+				case "-write-pubannotation": {
+					action = Action.WRITE;
+					sourcedb = requireArgument(argsIt, opt, null);
+					break;
+				}
 				case "-alternate": {
 					alternateScores = true;
 					break;
@@ -481,16 +528,19 @@ public class BioNLPSTCLI {
 			logger.serious(COMMAND_LINE_LOCATION, "either one of these options is required: -train -dev -test -reference");
 			result = false;
 		}
-		if (predictionSource == null) {
-			logger.serious(COMMAND_LINE_LOCATION, "option -prediction is mandatory");
-			result = false;
-		}
 		if (referenceSource != null) {
 			set = null;
 		}
 		else if (set != null && set.equals("test") && detailedEvaluation) {
 			logger.tolerable(COMMAND_LINE_LOCATION, "option -detailed is not compatible with test evaluation");
 			detailedEvaluation = false;
+		}
+		if (action == Action.WRITE) {
+			return result;
+		}
+		if (predictionSource == null) {
+			logger.serious(COMMAND_LINE_LOCATION, "option -prediction is mandatory");
+			result = false;
 		}
 		return result;
 	}

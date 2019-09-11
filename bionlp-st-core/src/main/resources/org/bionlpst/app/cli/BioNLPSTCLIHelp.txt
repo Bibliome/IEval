@@ -51,3 +51,8 @@ Options:
 	-list-tasks
 		print a list of supported tasks with their evaluations and exit, if -task is provided diplay evaluations of the specified task
 
+	-write-bionlpst DIR
+		write text and annotations (input and reference) in BioNLP-ST format to files in the specified directory
+
+	-write-pubannotation SOURCEDB
+		write text and annotations (input and reference) in PubAnnotation JSON format to standard output

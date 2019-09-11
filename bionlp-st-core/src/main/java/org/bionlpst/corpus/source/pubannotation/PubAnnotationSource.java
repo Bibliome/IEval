@@ -23,14 +23,19 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+/*
+ * TODO import relations, normalizations, and modifiers
+ * TODO test
+ */
 public class PubAnnotationSource implements PredictionSource {
 	private final InputStreamFactory inputStreamFactory;
-	private final Location location = new Location(getName(), -1);
+	private final Location location;
 	private final Random idGenerator = new Random();
 	
 	public PubAnnotationSource(InputStreamFactory inputStreamFactory) {
 		super();
 		this.inputStreamFactory = inputStreamFactory;
+		this.location = new Location(getName(), -1);
 	}
 
 	@Override
