@@ -228,14 +228,14 @@ public class BioNLPSTRest {
 	@POST
 	@Path("task/{taskName}/{set:train|dev|traindev|test}/evaluate")
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Produces(MediaType.TEXT_HTML)
+	@Produces(MediaType.APPLICATION_JSON)
 	public String evaluateSubmission(
 			@PathParam("taskName") String taskName,
 			@PathParam("set") String set,
 			@FormDataParam("zipfile") InputStream zipStream,
 			@FormDataParam("zipfile") FormDataContentDisposition zipInfo,
 			@FormDataParam("detailed") @DefaultValue("false") Boolean detailed,
-			@FormDataParam("alternate") @DefaultValue("false") Boolean alternate,
+			@FormDataParam("alternate") @DefaultValue("true") Boolean alternate,
 			@FormDataParam("resamples") @DefaultValue("") Integer resamples,
 			@FormDataParam("token") @DefaultValue("") String token
 			) throws Exception {
