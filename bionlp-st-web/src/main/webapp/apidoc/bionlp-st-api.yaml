@@ -62,11 +62,11 @@ paths:
                 resamples:
                   type: integer
                   description: If specified, computes the confidence interval with bootstrap resampling
-                  example: 0
+                  example: "0"
                 detailed:
                   type: boolean
                   description: If true, shows pairings and errors (only for sets train and dev)
-                  example: false
+                  example: "false"
                 alternate:
                   type: boolean
                   description: If false, computes only the first scoring
