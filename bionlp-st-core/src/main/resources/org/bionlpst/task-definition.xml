@@ -1,87 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <task-definition>
-	<task name="BioCreative5-CDR">
-		<description>BioCreative V Chemical-Disease Relation task (CDR).</description>
-		<description>Evaluation only on Disease normalization.</description>
-		<schema>
-			<text-bound type="Title" />
-			<text-bound type="Abstract" />
-			<text-bound type="Chemical" />
-			<text-bound type="Disease" />
-			<normalization type="MESH">
-				<annotation-types>Chemical,Disease</annotation-types>
-				<reference-vocabulary jar="org/bionlpst/data/CTD_diseases.txt" />
-			</normalization>
-			<relation type="CID">
-				<roles>Chemical,Disease</roles>
-				<mandatory-arguments>Chemical,Disease</mandatory-arguments>
-				<argument-types role="Chemical">Chemical</argument-types>
-				<argument-types role="Disease">Disease</argument-types>
-			</relation>
-		</schema>
-		
-		<evaluation name="Disease Normalization" input-iteration="true">
-			<pre-filter>
-				<types>Disease</types>
-			</pre-filter>
-			<matching-similarity>
-				<wang weight="0.65" normalization-type="MESH"
-					jar="org/bionlpst/data/CTD_diseases_parents.txt" />
-			</matching-similarity>
-			<scoring name="Wang">
-				<similarity>
-					<wang weight="0.65" normalization-type="MESH"
-						jar="org/bionlpst/data/CTD_diseases_parents.txt" />
-				</similarity>
-				<measure>precision</measure>
-			</scoring>
-			<scoring name="Exact">
-				<similarity>
-					<normalization normalization-type="MESH" />
-				</similarity>
-				<measure>precision</measure>
-			</scoring>
-		</evaluation>
-
-		<train zipresource="org/bionlpst/data/BioCreativeV-CDR_train.zip" />
-		<dev zipresource="org/bionlpst/data/BioCreativeV-CDR_dev.zip" />
-		<test zipresource="org/bionlpst/data/BioCreativeV-CDR_test.zip" with-reference="true"/>
-
-	<!-- 
-		<train
-			zipresource="org/bionlpst/data/CDR_TrainingSet.PubTator.zip"
-			format="pubtator"
-			ignore-relations="true"
-			sections="t=Title,a=Abstract"
-			input-types="Chemical,Disease,CID"
-			output-types="MESH"
-			normalization-types="Disease=MESH,Chemical=MESH"
-			relation-roles="CID=Chemical/Disease"
-		/>
-		<dev
-			zipresource="org/bionlpst/data/CDR_DevelopmentSet.PubTator.zip"
-			format="pubtator"
-			ignore-relations="true"
-			sections="t=Title,a=Abstract"
-			input-types="Chemical,Disease,CID"
-			output-types="MESH"
-			normalization-types="Disease=MESH,Chemical=MESH"
-			relation-roles="CID=Chemical/Disease"
-		/>
-		<test
-			zipresource="org/bionlpst/data/CDR_TestSet.PubTator.zip" with-reference="true"
-			format="pubtator"
-			ignore-relations="true"
-			sections="t=Title,a=Abstract"
-			input-types="Chemical,Disease,CID"
-			output-types="MESH"
-			normalization-types="Disease=MESH,Chemical=MESH"
-			relation-roles="CID=Chemical/Disease"
-		/>
-		 -->
-	</task>
-	
 	<task name="SeeDev-full">
 		<description>N-ary event extraction of genetic and molecular mechanisms involved in plant seed development.</description>
 		<schema>
@@ -2457,6 +2376,54 @@
 		<train zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_train.zip" />
 		<dev zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_dev.zip" />
 		<!-- <test zipresource="org/bionlpst/data/BioNLP-ST-2016_BB-kb+ner_test_WITH_ANSWERS.zip" with-reference="true" /> -->
+	</task>
+	
+	<task name="BioCreative5-CDR">
+		<description>BioCreative V Chemical-Disease Relation task (CDR).</description>
+		<description>Evaluation only on Disease normalization.</description>
+		<schema>
+			<text-bound type="Title" />
+			<text-bound type="Abstract" />
+			<text-bound type="Chemical" />
+			<text-bound type="Disease" />
+			<normalization type="MESH">
+				<annotation-types>Chemical,Disease</annotation-types>
+				<reference-vocabulary jar="org/bionlpst/data/CTD_diseases.txt" />
+			</normalization>
+			<relation type="CID">
+				<roles>Chemical,Disease</roles>
+				<mandatory-arguments>Chemical,Disease</mandatory-arguments>
+				<argument-types role="Chemical">Chemical</argument-types>
+				<argument-types role="Disease">Disease</argument-types>
+			</relation>
+		</schema>
+		
+		<evaluation name="Disease Normalization" input-iteration="true">
+			<pre-filter>
+				<types>Disease</types>
+			</pre-filter>
+			<matching-similarity>
+				<wang weight="0.65" normalization-type="MESH"
+					jar="org/bionlpst/data/CTD_diseases_parents.txt" />
+			</matching-similarity>
+			<scoring name="Wang">
+				<similarity>
+					<wang weight="0.65" normalization-type="MESH"
+						jar="org/bionlpst/data/CTD_diseases_parents.txt" />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+			<scoring name="Exact">
+				<similarity>
+					<normalization normalization-type="MESH" />
+				</similarity>
+				<measure>precision</measure>
+			</scoring>
+		</evaluation>
+
+		<train zipresource="org/bionlpst/data/BioCreativeV-CDR_train.zip" />
+		<dev zipresource="org/bionlpst/data/BioCreativeV-CDR_dev.zip" />
+		<test zipresource="org/bionlpst/data/BioCreativeV-CDR_test.zip" with-reference="true"/>
 	</task>
 	
 	<aliases>
