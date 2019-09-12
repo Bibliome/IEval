@@ -92,7 +92,7 @@ components:
       description: task identifier
       schema:
         type: string
-        enum: [ SeeDev-full, SeeDev-binary, BB19-norm, BB19-rel, BB19-kb, BB19-norm+ner, BB19-rel+ner, BB19-kb+ner, BB-cat, BB-event, BB-kb, BB-cat+ner, BB-event+ner, BB-kb+ner, BioCreative5-CDR ]
+        enum: [SeeDev-full, SeeDev-binary, BB19-norm, BB19-rel, BB19-kb, BB19-norm+ner, BB19-rel+ner, BB19-kb+ner, BB-cat, BB-event, BB-kb, BB-cat+ner, BB-event+ner, BB-kb+ner, BioCreative5-CDR ]
 
     DocumentSet:
       name: set
