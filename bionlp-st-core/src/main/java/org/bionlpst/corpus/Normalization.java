@@ -11,6 +11,7 @@ import org.bionlpst.util.message.CheckLogger;
  */
 public class Normalization extends SingleReferenceAnnotation {
 	private final String referent;
+	private String label = null;
 	
 	/**
 	 * Creates a new single normalization annotation.
@@ -37,6 +38,14 @@ public class Normalization extends SingleReferenceAnnotation {
 	 */
 	public String getReferent() {
 		return referent;
+	}
+
+	public String getLabel() {
+		return label;
+	}
+
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	@Override

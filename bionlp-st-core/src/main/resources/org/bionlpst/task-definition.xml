@@ -2681,6 +2681,7 @@
 			<normalization type="OntoBiotope">
 				<annotation-types>Habitat,Phenotype</annotation-types>
 				<reference-vocabulary jar="org/bionlpst/data/OntoBiotope_BioNLP-OST-2019_ids.txt" />
+				<labels jar="org/bionlpst/data/OntoBiotope_BioNLP-OST-2019_labels.txt" />
 			</normalization>
 			<normalization type="NCBI_Taxonomy">
 				<annotation-types>Microorganism</annotation-types>

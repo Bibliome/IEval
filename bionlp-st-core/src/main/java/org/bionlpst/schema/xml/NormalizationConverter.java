@@ -2,13 +2,16 @@ package org.bionlpst.schema.xml;
 
 import java.io.BufferedReader;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.corpus.Normalization;
 import org.bionlpst.schema.CompositeSchema;
 import org.bionlpst.schema.Schema;
 import org.bionlpst.schema.lib.BackReferenceCardinalitySchema;
+import org.bionlpst.schema.lib.NormalizationLabelSchema;
 import org.bionlpst.schema.lib.NormalizationVocabularySchema;
 import org.bionlpst.schema.lib.SingleReferenceAnnotationTypecheckSchema;
 import org.bionlpst.util.SourceStream;
@@ -69,6 +72,27 @@ public class NormalizationConverter implements DOMElementConverter<Schema<Normal
 						}
 					}
 					Schema<Normalization> schema = new NormalizationVocabularySchema(allowedValues);
+					result.addCompound(schema);
+					break;
+				}
+				case "labels": {
+					SourceStream source = new SourceStreamConverter(classLoader).convert(child);
+					Map<String,String> labels = new HashMap<String,String>();
+					try (BufferedReader r = source.openBufferedReader()) {
+						while (true) {
+							String line = r.readLine();
+							if (line == null) {
+								break;
+							}
+							int tab = line.indexOf('\t');
+							if (tab != -1) {
+								String ref = line.substring(0, tab);
+								String label =  line.substring(tab+1);
+								labels.put(ref, label);
+							}
+						}
+					}
+					Schema<Normalization> schema = new NormalizationLabelSchema(labels);
 					result.addCompound(schema);
 					break;
 				}

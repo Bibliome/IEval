@@ -102,7 +102,14 @@ public enum StandardEvaluationResultWriter implements EvaluationResultWriter {
 			else {
 				notFirst = true;
 			}
-			System.out.print(norm.getReferent());
+			String ref = norm.getReferent();
+			String label = norm.getLabel();
+			if (label == null) {
+				System.out.print(ref);
+			}
+			else {
+				System.out.format("%s (%s)", ref, label);
+			}
 		}
 	}
 }
