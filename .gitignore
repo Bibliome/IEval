@@ -1,6 +1,5 @@
 bionlp-st-core/target/
 bionlp-st-web/target/
-lib/
 .project
 .settings/
 bionlp-st-core/.classpath
