@@ -47,15 +47,16 @@ public enum StandardEvaluationResultWriter implements EvaluationResultWriter {
 	}
 	
 	private static void displayPairing(EvaluationResult<Annotation> eval) {
-		System.out.println("    Pairing");
+		System.out.println("    <Pairing>");
 		Similarity<Annotation> sim = eval.getEvaluation().getMatchingSimilarity();
 		for (Pair<Annotation> pair : eval.getPairs()) {
 			System.out.print("      ");
 			System.out.print(getPairType(sim, pair));
-			displayAnnotation(pair.getReference(), AnnotationSetSelector.REFERENCE, 20);
-			displayAnnotation(pair.getPrediction(), AnnotationSetSelector.PREDICTION, 20);
+			displayAnnotation(null, pair.getReference(), AnnotationSetSelector.REFERENCE, 20);
+			displayAnnotation(pair.getReference(), pair.getPrediction(), AnnotationSetSelector.PREDICTION, 20);
 			System.out.println();
 		}
+		System.out.println("    </Pairing>");
 	}
 
 	private static String getPairType(Similarity<Annotation> sim, Pair<Annotation> pair) {
@@ -72,24 +73,26 @@ public enum StandardEvaluationResultWriter implements EvaluationResultWriter {
 		return "FP";
 	}
 	
-	private static void displayAnnotation(Annotation ann, AnnotationSetSelector sel, int wsz) {
+	private static void displayAnnotation(Annotation ex, Annotation ann, AnnotationSetSelector sel, int wsz) {
 		if (ann == null) {
-			System.out.print("\t\t\t\t");
+			System.out.print("\t\t\t\t\t");
 			return;
 		}
-		ImmutableFragment frag = TextBoundCollector.INSTANCE.getGlobalFragment(ann);
-		String text = ann.getDocument().getContents().replace('\n', ' ');
-		String before = text.substring(Math.max(0, frag.getStart() - wsz), frag.getStart());
-		String in = text.substring(frag.getStart(), frag.getEnd());
-		String after = text.substring(frag.getEnd(), Math.min(text.length(), frag.getEnd() + wsz));
-		System.out.print('\t');
-		System.out.print(ann.getId());
-		System.out.print('\t');
-		System.out.print(before);
-		System.out.print('\t');
-		System.out.print(in);
-		System.out.print('\t');
-		System.out.print(after);
+		if (ex != ann) {
+			ImmutableFragment frag = TextBoundCollector.INSTANCE.getGlobalFragment(ann);
+			String text = ann.getDocument().getContents().replace('\n', ' ');
+			String before = text.substring(Math.max(0, frag.getStart() - wsz), frag.getStart());
+			String in = text.substring(frag.getStart(), frag.getEnd());
+			String after = text.substring(frag.getEnd(), Math.min(text.length(), frag.getEnd() + wsz));
+			System.out.print('\t');
+			System.out.print(ann.getId());
+			System.out.print('\t');
+			System.out.print(before);
+			System.out.print('\t');
+			System.out.print(in);
+			System.out.print('\t');
+			System.out.print(after);
+		}
 		System.out.print('\t');
 		boolean notFirst = false;
 		for (Normalization norm : ann.getNormalizationBackReferences()) {
