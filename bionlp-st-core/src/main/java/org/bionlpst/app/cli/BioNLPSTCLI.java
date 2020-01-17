@@ -403,6 +403,14 @@ public class BioNLPSTCLI {
 					evalWriter = new TabularEvaluationResultWriter();
 					break;
 				}
+				case "-pairing": {
+					if (evalWriter != StandardEvaluationResultWriter.INSTANCE) {
+						logger.suspicious(COMMAND_LINE_LOCATION, "duplicate option: " + opt);
+					}
+					detailedEvaluation = true;
+					evalWriter = EvaluationPairingWriter.INSTANCE;
+					break;
+				}
 				case "-check": {
 					action = Action.CHECK;
 					break;

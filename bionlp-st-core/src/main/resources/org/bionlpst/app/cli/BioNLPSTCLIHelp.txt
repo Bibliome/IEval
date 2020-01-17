@@ -26,6 +26,9 @@ Options:
 	    
 	-detailed
 		output detailed error analysis, will not work with -test
+		
+	-pairing
+		output pairing instead of scores
 	
 	-alternate
 		compute alternate scores
