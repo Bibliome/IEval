@@ -4,15 +4,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.bionlpst.BioNLPSTException;
+import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.AnnotationKind;
 import org.bionlpst.corpus.AnnotationSet;
 import org.bionlpst.corpus.AnnotationSetSelector;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
+import org.bionlpst.corpus.Normalization;
+import org.bionlpst.corpus.Relation;
 import org.bionlpst.corpus.TextBound;
 import org.bionlpst.corpus.source.PredictionSource;
 import org.bionlpst.util.Location;
@@ -94,27 +99,10 @@ public class PubAnnotationSource implements PredictionSource {
 
 	private void getPredictions(CheckLogger logger, AnnotationSet aset, JSONObject jsDoc) {
 		convertDenotations(logger, aset, jsDoc);
+		convertRelations(logger, aset, jsDoc);
+		convertNormalizations(logger, aset, jsDoc);
 	}
-	
-	private void convertDenotations(CheckLogger logger, AnnotationSet aset, JSONObject jsDoc) {
-		if (!jsDoc.has("denotations")) {
-			return;
-		}
-		JSONArray denotations = jsDoc.optJSONArray("denotations");
-		if (denotations == null) {
-			logger.serious(location, "expected denotations as JSON array, skipping");
-			return;
-		}
-		for (int i = 0; i < denotations.length(); ++i) {
-			JSONObject denotation = denotations.optJSONObject(i);
-			if (denotation == null) {
-				logger.serious(location, "expected denotation as JSON object, skipping");
-				continue;
-			}
-			convertDenotation(logger, aset, denotation);
-		}
-	}
-	
+
 	private static String getAnnotationKindPrefix(AnnotationKind kind) {
 		switch (kind) {
 		case DUMMY: return "D";
@@ -154,6 +142,25 @@ public class PubAnnotationSource implements PredictionSource {
 		}
 		return id;
 	}
+	
+	private void convertDenotations(CheckLogger logger, AnnotationSet aset, JSONObject jsDoc) {
+		if (!jsDoc.has("denotations")) {
+			return;
+		}
+		JSONArray denotations = jsDoc.optJSONArray("denotations");
+		if (denotations == null) {
+			logger.serious(location, "expected denotations as JSON array, skipping");
+			return;
+		}
+		for (int i = 0; i < denotations.length(); ++i) {
+			JSONObject denotation = denotations.optJSONObject(i);
+			if (denotation == null) {
+				logger.serious(location, "expected denotation as JSON object, skipping");
+				continue;
+			}
+			convertDenotation(logger, aset, denotation);
+		}
+	}
 
 	private void convertDenotation(CheckLogger logger, AnnotationSet aset, JSONObject denotation) {
 		String id = getId(logger, AnnotationKind.TEXT_BOUND, denotation);
@@ -162,13 +169,26 @@ public class PubAnnotationSource implements PredictionSource {
 			logger.suspicious(location, "denotation has no type, skipping");
 			return;
 		}
-		if (!denotation.has("span")) {
-			logger.serious(location, "denotation is missing span, ignoring denotation");
-			return;
+		switch (id.charAt(0)) {
+			case 'T': {
+				if (!denotation.has("span")) {
+					logger.serious(location, "denotation is missing span, ignoring denotation");
+					return;
+				}
+				Object spans = denotation.opt("span");
+				List<ImmutableFragment> fragments = convertSpans(logger, spans);
+				new TextBound(logger, aset, location, id, type, fragments);
+				break;
+			}
+			case 'E': {
+				Map<String,String> emptyArgs = Collections.emptyMap();
+				new Relation(logger, aset, location, id, type, emptyArgs);
+				break;
+			}
+			default: {
+				logger.serious(location, "denotation (" + id + ") is supposed to have an id that starts with a 'T' of a 'E'");
+			}
 		}
-		Object spans = denotation.opt("span");
-		List<ImmutableFragment> fragments = convertSpans(logger, spans);
-		new TextBound(logger, aset, location, id, type, fragments);
 	}
 
 	private List<ImmutableFragment> convertSpans(CheckLogger logger, Object spans) {
@@ -215,5 +235,109 @@ public class PubAnnotationSource implements PredictionSource {
 			logger.serious(location, "expected fragment " + prop + " as integer, ignoring fragment");
 		}
 		return result;
+	}
+	
+	private void convertRelations(CheckLogger logger, AnnotationSet aset, JSONObject jsDoc) {
+		if (!jsDoc.has("relations")) {
+			return;
+		}
+		JSONArray relations = jsDoc.optJSONArray("relations");
+		if (relations == null) {
+			logger.serious(location, "expected relations as JSON array, skipping");
+			return;
+		}
+		for (int i = 0; i < relations.length(); ++i) {
+			JSONObject relation = relations.optJSONObject(i);
+			if (relation == null) {
+				logger.serious(location, "expected relation as JSON object, skipping");
+				continue;
+			}
+			convertRelation(logger, aset, relation);
+		}
+	}
+
+	private void convertRelation(CheckLogger logger, AnnotationSet aset, JSONObject relation) {
+		String id = getId(logger, AnnotationKind.RELATION, relation);
+		String type = relation.optString("pred", null);
+		if (type == null) {
+			logger.suspicious(location, "relation has no type, skipping");
+			return;
+		}
+		String subj = relation.optString("subj");
+		if (subj == null) {
+			logger.suspicious(location, "relation has no subject, skipping");
+			return;
+		}
+		String obj = relation.optString("obj");
+		if (obj == null) {
+			logger.suspicious(location, "relation has no object, skipping");
+			return;
+		}
+		switch (subj.charAt(0)) {
+			case 'T': {
+				Map<String,String> args = new LinkedHashMap<String,String>();
+				args.put("subj", subj);
+				args.put("obj", obj);
+				new Relation(logger, aset, location, id, type, args);
+				break;
+			}
+			case 'E': {
+				if (!aset.hasAnnotation(subj)) {
+					logger.serious(location, "event not found: " + subj + ", skipping");
+					return;
+				}
+				Annotation a = aset.getAnnotation(subj);
+				Relation rel = a.asRelation();
+				if (rel == null) {
+					logger.serious(location, subj + " is supposed to be an event");
+					return;
+				}
+				rel.setArgumentReference(logger, location, type, obj);
+				break;
+			}
+			default: {
+				logger.suspicious(location, "subject of relation " + id + " (" + subj + ") is supposed to have an id that starts with a 'T' of a 'E'");
+				break;
+			}
+		}
+	}
+	
+	private void convertNormalizations(CheckLogger logger, AnnotationSet aset, JSONObject jsDoc) {
+		if (!jsDoc.has("attributes")) {
+			return;
+		}
+		JSONArray normalizations = jsDoc.optJSONArray("attributes");
+		if (normalizations == null) {
+			logger.serious(location, "expected attributes/normalizations as JSON array, skipping");
+			return;
+		}
+		for (int i = 0; i < normalizations.length(); ++i) {
+			JSONObject normalization = normalizations.optJSONObject(i);
+			if (normalization == null) {
+				logger.serious(location, "expected normalization as JSON object, skipping");
+				continue;
+			}
+			convertNormalization(logger, aset, normalization);
+		}
+	}
+	
+	private void convertNormalization(CheckLogger logger, AnnotationSet aset, JSONObject normalization) {
+		String id = getId(logger, AnnotationKind.NORMALIZATION, normalization);
+		String type = normalization.optString("pred", null);
+		if (type == null) {
+			logger.suspicious(location, "normalization has no type, skipping");
+			return;
+		}
+		String annotation = normalization.optString("subj");
+		if (annotation == null) {
+			logger.suspicious(location, "relation has no annotation (subj), skipping");
+			return;
+		}
+		String ref = normalization.optString("obj");
+		if (ref == null) {
+			logger.suspicious(location, "relation has no referent (obj), skipping");
+			return;
+		}
+		new Normalization(logger, aset, location, id, type, annotation, ref);
 	}
 }
