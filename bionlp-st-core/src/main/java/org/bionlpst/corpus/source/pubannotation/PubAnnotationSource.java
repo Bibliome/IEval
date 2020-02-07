@@ -28,10 +28,6 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-/*
- * TODO import relations, normalizations, and modifiers
- * TODO test
- */
 public class PubAnnotationSource implements PredictionSource {
 	private final InputStreamFactory inputStreamFactory;
 	private final Location location;
@@ -57,7 +53,7 @@ public class PubAnnotationSource implements PredictionSource {
 				logger.serious(location, "expected document annotations as JSON object, skipping");
 				continue;
 			}
-			getPredictions(logger, corpus, jsDoc);
+			loadAnnotations(logger, corpus, jsDoc);
 		}
 	}
 	
@@ -78,7 +74,7 @@ public class PubAnnotationSource implements PredictionSource {
 		}
 	}
 	
-	private void getPredictions(CheckLogger logger, Corpus corpus, JSONObject jsDoc) {
+	private void loadAnnotations(CheckLogger logger, Corpus corpus, JSONObject jsDoc) {
 		if (!jsDoc.has("id")) {
 			logger.serious(location, "document object has no id");
 			return;

@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -41,17 +42,24 @@ import org.bionlpst.app.web.json.JsonConverter;
 import org.bionlpst.app.web.json.ListJsonConverter;
 import org.bionlpst.app.web.json.TaskJsonConverter;
 import org.bionlpst.corpus.Annotation;
+import org.bionlpst.corpus.AnnotationKind;
+import org.bionlpst.corpus.AnnotationSet;
+import org.bionlpst.corpus.AnnotationSetSelector;
 import org.bionlpst.corpus.Corpus;
 import org.bionlpst.corpus.Document;
 import org.bionlpst.corpus.DocumentCollection;
 import org.bionlpst.corpus.source.PredictionSource;
 import org.bionlpst.corpus.source.bionlpst.BioNLPSTSource;
 import org.bionlpst.corpus.source.bionlpst.InputStreamCollection;
+import org.bionlpst.corpus.source.pubannotation.DisposableInputStreamFactory;
+import org.bionlpst.corpus.source.pubannotation.PubAnnotationSource;
 import org.bionlpst.evaluation.BootstrapConfig;
 import org.bionlpst.evaluation.EvaluationResult;
 import org.bionlpst.evaluation.Measure;
 import org.bionlpst.evaluation.MeasureDirection;
 import org.bionlpst.evaluation.MeasureResult;
+import org.bionlpst.evaluation.Pair;
+import org.bionlpst.evaluation.Scoring;
 import org.bionlpst.evaluation.ScoringResult;
 import org.bionlpst.util.Location;
 import org.bionlpst.util.Util;
@@ -299,7 +307,7 @@ public class BioNLPSTRest {
 //					 "alg": "RS256",
 //					 "kid": "..."
 //					}
-	
+
 	private JSONObject doEvaluation(Task task, String set, Corpus corpus, boolean detailed, boolean alternate) throws Exception {
 		if (set.equals("test") && !task.isTestHasReferenceAnnotations()) {
 			logger.serious(REST_URL_LOCATION, "test set has no reference annotations for " + task.getName());
@@ -679,6 +687,148 @@ public class BioNLPSTRest {
 		try (InputStream is = BioNLPSTRest.class.getClassLoader().getResourceAsStream("org/bionlpst/app/web/createDB.sql")) {
 			Reader r = new InputStreamReader(is);
 			RunScript.execute(conn, r);
+		}
+	}
+	
+	//XXX
+	@POST
+	@Path("task/{taskName}/{set:train|dev|traindev|test}/evaluate-pubannotation")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public String evaluateSubmissionForPubAnnotation(
+			@PathParam("taskName") String taskName,
+			@PathParam("set") String set,
+			InputStream content
+			) throws Exception {
+		task = selectTask(taskName);
+		corpus = loadReference(set);
+		dataset = set;
+		if (task != null && corpus != null) {
+			PredictionSource predictionParser = new PubAnnotationSource(new DisposableInputStreamFactory("http://pubannotation.org/", content));
+			predictionParser.fillPredictions(logger, corpus);
+			corpus.resolveReferences(logger);
+			Task.checkParsedPredictions(logger, corpus, "http://pubannotation.org/");
+			task.checkSchema(logger, corpus);
+			task.getCorpusPostprocessing().postprocess(corpus);
+		}
+		bootstrapConfig = getBootstrapConfig(null, 0L);
+		return doEvaluationForPubAnnotation(task, set, corpus).toString(2);
+	}
+	
+	private JSONObject doEvaluationForPubAnnotation(Task task, String set, Corpus corpus) throws Exception {
+		if (set.equals("test") && !task.isTestHasReferenceAnnotations()) {
+			logger.serious(REST_URL_LOCATION, "test set has no reference annotations for " + task.getName());
+			return new JSONObject();
+		}
+		JSONObject result = new JSONObject();
+		List<EvaluationResult<Annotation>> evaluationResults = getEvaluationResults(task, true, corpus, true, bootstrapConfig);
+		result.put("counts", collectAnnotationTypesCount(corpus, evaluationResults.get(0)));
+		result.put("false_positives", new JSONArray());
+		result.put("false_negatives", new JSONArray());
+		result.put("measures", collectMeasures(evaluationResults));
+		return result;
+	}
+	
+	private JSONObject collectMeasures(List<EvaluationResult<Annotation>> evalResults) throws JSONException {
+		JSONObject result = new JSONObject();
+		for (EvaluationResult<Annotation> evalResult : evalResults) {
+			collectMeasures(evalResult, result);
+		}
+		return result;
+	}
+	
+	private void collectMeasures(EvaluationResult<Annotation> evalResult, JSONObject object) throws JSONException {
+		JSONObject result = getMeasureSectionObject(evalResult, object);
+		String evalName = evalResult.getEvaluation().getName();
+		for (ScoringResult<Annotation> scoringResult : evalResult.getScoringResults()) {
+			String scoringName = scoringResult.getScoring().getName();
+			String scoringLabel = String.format("%s - %s", evalName, scoringName);
+			for (MeasureResult measureResult : scoringResult.getMeasureResults()) {
+				String measureName = measureResult.getMeasure().getName();
+				JSONObject lvl1 = defaultGet(result, measureName);
+				double n = measureResult.getResult().doubleValue();
+				lvl1.put(scoringLabel, Double.isFinite(n) ? n : null);
+			}
+		}
+	}
+	
+	private JSONObject getMeasureSectionObject(EvaluationResult<Annotation> evalResult, JSONObject object) throws JSONException {
+		for (Pair<Annotation> pair : evalResult.getPairs()) {
+			if (pair.hasBoth()) {
+				Annotation ann = pair.getReference();
+				AnnotationKind kind = ann.getKind();
+				String measureSection = getMeasureSection(kind);
+				return defaultGet(object, measureSection);
+			}
+		}
+		throw new RuntimeException();
+	}
+	
+	private static JSONObject defaultGet(JSONObject object, String key) throws JSONException {
+		if (object.has(key)) {
+			return object.getJSONObject(key);
+		}
+		JSONObject result = new JSONObject();
+		object.put(key, result);
+		return result;
+	}
+
+	private static String getMeasureSection(AnnotationKind kind) {
+		switch (kind) {
+			case TEXT_BOUND: return "denotations";
+			case RELATION: return "relations";
+			case MODIFIER: return "attributes";
+			default:
+				throw new RuntimeException();
+		}
+	}
+
+	private JSONObject collectAnnotationTypesCount(Corpus corpus, EvaluationResult<Annotation> evalResult) throws JSONException {
+		JSONObject result = new JSONObject();
+		result.put("denotations", collectAnnotationTypesCount(AnnotationKind.TEXT_BOUND, corpus, evalResult));
+		result.put("relations", collectAnnotationTypesCount(AnnotationKind.RELATION, corpus, evalResult));
+		result.put("attributes", collectAnnotationTypesCount(AnnotationKind.NORMALIZATION, corpus, evalResult));
+		return result;
+	}
+	
+	private JSONObject collectAnnotationTypesCount(AnnotationKind kind, Corpus corpus, EvaluationResult<Annotation> evalResult) throws JSONException {
+		JSONObject result = new JSONObject();
+		result.put("study", countAnnotationTypes(corpus, kind, AnnotationSetSelector.PREDICTION));
+		result.put("reference", countAnnotationTypes(corpus, kind, AnnotationSetSelector.REFERENCE));
+		result.put("matched_study", countMatchedAnnotationTypes(evalResult, kind, Pair.Selector.PREDICTION));
+		result.put("matched_reference", countMatchedAnnotationTypes(evalResult, kind, Pair.Selector.REFERENCE));
+		return result;
+	}
+	
+	private JSONObject countAnnotationTypes(Corpus corpus, AnnotationKind kind, AnnotationSetSelector selector) throws JSONException {
+		JSONObject result = new JSONObject();
+		for (Document doc : corpus.getDocuments()) {
+			AnnotationSet aset = selector.getAnnotationSet(doc);
+			countAnnotationTypes(result, aset.getAnnotations(kind));
+		}
+		return result;
+	}
+	
+	private JSONObject countMatchedAnnotationTypes(EvaluationResult<Annotation> evalResult, AnnotationKind kind, Pair.Selector selector) throws JSONException {
+		List<Pair<Annotation>> pairs = evalResult.getPairs();
+		List<Annotation> annotations = new ArrayList<Annotation>(pairs.size());
+		for (Pair<Annotation> p : pairs) {
+			if (p.hasBoth()) {
+				Annotation a = selector.get(p);
+				if (kind.accept(a)) {
+					annotations.add(a);
+				}
+			}
+		}
+		JSONObject result = new JSONObject();
+		countAnnotationTypes(result, annotations);
+		return result;
+	}
+	
+	private void countAnnotationTypes(JSONObject counts, Collection<Annotation> annotations) throws JSONException {
+		for (Annotation a : annotations) {
+			String type = a.getType();
+			counts.put(type, 1 + counts.optInt(type, 0));
 		}
 	}
 }
