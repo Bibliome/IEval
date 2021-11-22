@@ -155,6 +155,9 @@ public class BioNLPSTRest {
 			@FormDataParam("zipfile") InputStream zipStream,
 			@FormDataParam("zipfile") FormDataContentDisposition zipInfo
 			) throws Exception {
+		if ("traindev".equals(set)) {
+			set = "train+dev";
+		}
 		start(taskName, set, zipStream, zipInfo, null, null);
 		return finish(new JSONObject());
 	}
@@ -240,6 +243,9 @@ public class BioNLPSTRest {
 			@FormDataParam("token") @DefaultValue("") String token
 			) throws Exception {
 		checkToken(token);
+		if ("traindev".equals(set)) {
+			set = "train+dev";
+		}
 		start(taskName, set, zipStream, zipInfo, resamples, null);
 		JSONObject result = new JSONObject();
 		if (task != null && corpus != null) {
