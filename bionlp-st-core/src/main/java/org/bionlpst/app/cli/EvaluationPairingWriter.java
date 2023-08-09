@@ -20,12 +20,21 @@ public enum EvaluationPairingWriter implements EvaluationResultWriter {
 			Similarity<Annotation> sim = eval.getEvaluation().getMatchingSimilarity();
 			for (Pair<Annotation> pair : eval.getPairs()) {
 				System.out.print(getDocumentId(pair));
-				System.out.format("\t%s\t%.4f", getPairType(sim, pair), sim.compute(pair.getReference(), pair.getPrediction()));
+				System.out.format("\t%s\t%.4f", getPairType(sim, pair), similarityCompute(sim, pair));
 				displayAnnotation(null, pair.getReference(), AnnotationSetSelector.REFERENCE, 20);
 				displayAnnotation(pair.getReference(), pair.getPrediction(), AnnotationSetSelector.PREDICTION, 20);
 				System.out.println();
 			}
 		}
+	}
+	
+	private static <T> double similarityCompute(Similarity<T> sim, Pair<T> pair) {
+		T ref = pair.getReference();
+		T pred = pair.getPrediction();
+		if ((ref == null) || (pred == null)) {
+			return 0.0;
+		}
+		return sim.compute(ref, pred);
 	}
 	
 	private static String getDocumentId(Pair<Annotation> pair) {
@@ -43,7 +52,7 @@ public enum EvaluationPairingWriter implements EvaluationResultWriter {
 	private static String getPairType(Similarity<Annotation> sim, Pair<Annotation> pair) {
 		if (pair.hasBoth()) {
 			double s = sim.compute(pair.getReference(), pair.getPrediction());
-			if (s == 1.0) {
+			if (Math.abs(s-1.0) <= 0.000001) {
 				return "TP";
 			}
 			return String.format("MM", s);
@@ -56,7 +65,7 @@ public enum EvaluationPairingWriter implements EvaluationResultWriter {
 	
 	private static void displayAnnotation(Annotation ex, Annotation ann, AnnotationSetSelector sel, int wsz) {
 		if (ann == null) {
-			System.out.print("\t\t\t\t\t\t");
+			System.out.print("\t\t\t\t\t\t\t");
 			return;
 		}
 		if (ex != ann) {
@@ -66,14 +75,6 @@ public enum EvaluationPairingWriter implements EvaluationResultWriter {
 			String in = text.substring(frag.getStart(), frag.getEnd());
 			String after = text.substring(frag.getEnd(), Math.min(text.length(), frag.getEnd() + wsz)).trim();
 			System.out.format("\t%s\t%d-%d\t%s\t%s\t%s\t%s", ann.getId(), frag.getStart(), frag.getEnd(), ann.getType(), before, in, after);
-			System.out.print('\t');
-			System.out.print(ann.getId());
-			System.out.print('\t');
-			System.out.print(before);
-			System.out.print('\t');
-			System.out.print(in);
-			System.out.print('\t');
-			System.out.print(after);
 		}
 		System.out.print('\t');
 		boolean notFirst = false;
@@ -100,6 +101,7 @@ public enum EvaluationPairingWriter implements EvaluationResultWriter {
 
 	@Override
 	public void displayCorpusHeader(Named named, String defaultName) {
+		System.out.print("doc_id\tpair_type\tsim\tref_id\tref_off\tref_type\tref_before\tref_form\tref_after\tref_norm\tpred_id\tpred_off\tpred_type\tpred_before\tpred_form\tpred_after\tpred_norm\n");
 	}
 
 	@Override
