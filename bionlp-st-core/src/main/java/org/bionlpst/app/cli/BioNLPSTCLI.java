@@ -203,12 +203,12 @@ public class BioNLPSTCLI {
 			bootstrapConfig = new BootstrapConfig(new Random(bootstrapRandomSeed), bootstrapResamples);
 		}
 		flushLogger();
+		doEvaluateCorpus(corpus);
 		if (detailedEvaluation) {
 			for (Document doc : corpus.getDocuments()) {
 				doEvaluateDocument(doc);
 			}
 		}
-		doEvaluateCorpus(corpus);
 	}
 
 	private void doEvaluateCorpus(Corpus corpus) {
