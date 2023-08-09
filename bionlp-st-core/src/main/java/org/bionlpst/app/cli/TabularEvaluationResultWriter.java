@@ -32,6 +32,7 @@ public class TabularEvaluationResultWriter implements EvaluationResultWriter {
 
 	@Override
 	public void displayCorpusHeader(Named named, String defaultName) {
+		System.out.println("target\tevaluation\tscoring\tmeasure\tvalue\n");
 		if (named == null) {
 			target = defaultName;
 		}
