@@ -1,6 +1,7 @@
-# Bacteria Biotope and SeeDev challenges tasks
+# IEval
 
-Evaluation software for BioNLP-ST 2016 and BioNLP-OST SeeDev and Bacteria Biotopes tasks.
+Evaluation software for Information Extraction tasks. Currently includes BioNLP-ST 2016 and BioNLP-OST 2019 SeeDev and Bacteria Biotopes tasks.
+Evaluation of TAEC and EPOP coming soon.
 
 * [BioNLP-OST 2019 website](https://2019.bionlp-ost.org/)
   * [Bacteria Biotopes 2019 task](https://sites.google.com/view/bb-2019)
