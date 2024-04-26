@@ -2,6 +2,7 @@ bionlp-st-core/target/
 bionlp-st-web/target/
 .project
 .classpath
+.idea
 .settings/
 bionlp-st-core/.classpath
 bionlp-st-core/.project

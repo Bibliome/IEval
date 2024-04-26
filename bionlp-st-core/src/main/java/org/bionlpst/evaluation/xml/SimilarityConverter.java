@@ -11,25 +11,7 @@ import java.util.Map;
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.corpus.Annotation;
 import org.bionlpst.corpus.CollectionFilter;
-import org.bionlpst.evaluation.similarity.AnnotationKindSimilarity;
-import org.bionlpst.evaluation.similarity.AnnotationTypeDispatchSimilarity;
-import org.bionlpst.evaluation.similarity.AnnotationTypeSimilarity;
-import org.bionlpst.evaluation.similarity.CompositeSimilarity;
-import org.bionlpst.evaluation.similarity.ConstantSimilarity;
-import org.bionlpst.evaluation.similarity.Identity;
-import org.bionlpst.evaluation.similarity.Max;
-import org.bionlpst.evaluation.similarity.MaxFromEquivalence;
-import org.bionlpst.evaluation.similarity.Min;
-import org.bionlpst.evaluation.similarity.NormalizationJaccard;
-import org.bionlpst.evaluation.similarity.NormalizationSimilarity;
-import org.bionlpst.evaluation.similarity.Product;
-import org.bionlpst.evaluation.similarity.RelationArgumentSimilarity;
-import org.bionlpst.evaluation.similarity.SameTypeAndArgumentsSimilarity;
-import org.bionlpst.evaluation.similarity.Similarity;
-import org.bionlpst.evaluation.similarity.SimilarityCutoff;
-import org.bionlpst.evaluation.similarity.SingleReferenceSimilarity;
-import org.bionlpst.evaluation.similarity.TextBoundJaccard;
-import org.bionlpst.evaluation.similarity.WangSimilarity;
+import org.bionlpst.evaluation.similarity.*;
 import org.bionlpst.util.Filter;
 import org.bionlpst.util.SourceStream;
 import org.bionlpst.util.Util;
@@ -77,6 +59,10 @@ public class SimilarityConverter implements DOMElementConverter<Similarity<Annot
 			}
 			case "same-kind": {
 				return AnnotationKindSimilarity.INSTANCE;
+			}
+			case "boundaries": {
+				double overlapSimilarity = DOMUtil.getDoubleAttribute(element, "overlap", 0);
+				return new TextBoundOverlap(overlapSimilarity);
 			}
 			case "jaccard": {
 				return TextBoundJaccard.INSTANCE;
