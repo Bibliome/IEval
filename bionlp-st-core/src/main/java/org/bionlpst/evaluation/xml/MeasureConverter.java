@@ -76,6 +76,8 @@ public enum MeasureConverter implements DOMElementConverter<Measure> {
 			case "inverted-slot-error-rate":
 			case "iser":
 				return StandardMeasures.INVERTED_SLOT_ERROR_RATE;
+			case "match-accuracy":
+				return StandardMeasures.MATCH_ACCURACY;
 			default: {
 				int dash = s.indexOf('-');
 				if (dash == -1) {

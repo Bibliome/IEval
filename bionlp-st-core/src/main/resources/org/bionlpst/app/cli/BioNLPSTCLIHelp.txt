@@ -10,6 +10,9 @@ Options:
 	-task TASK
 		select the task (mandatory)
 
+	-taskdefs
+	    additional task definition files (optional)
+
 	-train
 	-dev
 	-test
