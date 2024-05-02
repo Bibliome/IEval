@@ -111,7 +111,7 @@ public enum StandardMeasures implements Measure {
 		}
 		
 	},
-	
+
 	/**
 	 * Counts false positives.
 	 */
@@ -269,7 +269,31 @@ public enum StandardMeasures implements Measure {
 			return MeasureDirection.HIGHER_IS_BETTER;
 		}
 	},
-	
+
+	MATCH_ACCURACY {
+		@Override
+		public <T> Double compute(Similarity<T> similarity, Collection<Pair<T>> pairs) {
+			double matches = MATCHES.compute(similarity, pairs).doubleValue();
+			int both = 0;
+			for (Pair<T> p : pairs) {
+				if (p.hasBoth()) {
+					both++;
+				}
+			}
+			return matches / both;
+		}
+
+		@Override
+		public String getName() {
+			return "Match accuracy";
+		}
+
+		@Override
+		public MeasureDirection getMeasureDirection() {
+			return MeasureDirection.HIGHER_IS_BETTER;
+		}
+	},
+
 	/**
 	 * Computes SER.
 	 */

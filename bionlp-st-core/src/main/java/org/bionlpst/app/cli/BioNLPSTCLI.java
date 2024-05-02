@@ -6,11 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.Task;
@@ -58,6 +54,7 @@ public class BioNLPSTCLI {
 	private BootstrapConfig bootstrapConfig = null;
 	private File outputDir = null;
 	private String sourcedb = null;
+	private List<String> additionalTaskDefs = new ArrayList<String>();
 
 	private static enum Action {
 		EVALUATE,
@@ -241,7 +238,7 @@ public class BioNLPSTCLI {
 
 	@SuppressWarnings("static-method")
 	private void doListTasks() throws Exception {
-		Map<String,Task> taskMap = Task.loadTasks();
+		Map<String,Task> taskMap = Task.loadTasks(additionalTaskDefs);
 		for (Task task : taskMap.values()) {
 			displayTask(task);
 		}
@@ -288,7 +285,7 @@ public class BioNLPSTCLI {
 	}
 	
 	private Task getSelectedTask() throws Exception {
-		Task result = Task.loadTask(taskName);
+		Task result = Task.loadTask(additionalTaskDefs, taskName);
 		if (result == null) {
 			logger.serious(COMMAND_LINE_LOCATION, "unknown task: " + taskName);
 		}
@@ -333,6 +330,11 @@ public class BioNLPSTCLI {
 							logger.serious(COMMAND_LINE_LOCATION, "something went wrong while loading task definitions: " + e.getMessage());
 						}
 					}
+					break;
+				}
+				case "-taskdefs": {
+					String taskDefPath = requireArgument(argsIt, opt, null);
+					additionalTaskDefs.add(taskDefPath);
 					break;
 				}
 				case "-train":

@@ -1,8 +1,13 @@
 package org.bionlpst.app;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.bionlpst.BioNLPSTException;
 import org.bionlpst.app.xml.TaskConverter;
@@ -44,6 +50,7 @@ public class Task {
 	private ContentAndReferenceSource testSource;
 	private boolean testHasReferenceAnnotations;
 	private CorpusPostprocessing corpusPostprocessing = NullPostprocessing.INSTANCE;
+
 
 	public Task(String name) {
 		super();
@@ -239,17 +246,30 @@ public class Task {
 	}
 	
 	public static final String TASK_DEFINITION_RESOURCE_NAME = "org/bionlpst/task-definition.xml";
-	
+
 	public static Map<String,Task> loadTasks() throws Exception {
-		return loadTasks(Task.class.getClassLoader());
+		return loadTasks(Collections.<String>emptyList());
+	}
+
+	public static Map<String,Task> loadTasks(List<String> additionalTaskDefs) throws Exception {
+		return loadTasks(Task.class.getClassLoader(), additionalTaskDefs);
 	}
 
 	public static Map<String,Task> loadTasks(ClassLoader classLoader) throws Exception {
+		return loadTasks(classLoader, Collections.<String>emptyList());
+	}
+
+	public static Map<String,Task> loadTasks(ClassLoader classLoader, List<String> additionalTaskDefs) throws Exception {
 		TaskMapConverter converter = new TaskMapConverter(classLoader);
 		Enumeration<URL> urlEnum = getURLEnum(classLoader);
 		while (urlEnum.hasMoreElements()) {
 			URL url = urlEnum.nextElement();
 			try (InputStream is = url.openStream()) {
+				DOMUtil.convert(converter, is);
+			}
+		}
+		for (String tdf : additionalTaskDefs) {
+			try (InputStream is = Files.newInputStream(Paths.get(tdf))) {
 				DOMUtil.convert(converter, is);
 			}
 		}
@@ -262,29 +282,53 @@ public class Task {
 		}
 		return classLoader.getResources(TASK_DEFINITION_RESOURCE_NAME);
 	}
-	
-	public static Task loadTask(ClassLoader classLoader, String taskName) throws Exception {
-		Enumeration<URL> urlEnum = getURLEnum(classLoader);
-		while (urlEnum.hasMoreElements()) {
-			URL url = urlEnum.nextElement();
-			try (InputStream is = url.openStream()) {
-				DocumentBuilder docBuilder = DOMUtil.createDocumentBuilder();
-				org.w3c.dom.Document doc = docBuilder.parse(is);
-				DOMAliases aliases = DOMUtil.createAliases(doc);
-				Element element = doc.getDocumentElement();
-				aliases.replace(element);
-				for (Element child : DOMUtil.getChildrenElements(element, false)) {
-					String name = child.getAttribute("name");
-					if (taskName.equals(name)) {
-						TaskConverter converter = new TaskConverter(classLoader);
-						return converter.convert(child);
-					}
-				}
+
+	public static Task loadTask(ClassLoader classLoader, String taskName, InputStream is) throws Exception {
+		DocumentBuilder docBuilder = DOMUtil.createDocumentBuilder();
+		org.w3c.dom.Document doc = docBuilder.parse(is);
+		DOMAliases aliases = DOMUtil.createAliases(doc);
+		Element element = doc.getDocumentElement();
+		aliases.replace(element);
+		for (Element child : DOMUtil.getChildrenElements(element, false)) {
+			String name = child.getAttribute("name");
+			if (taskName.equals(name)) {
+				TaskConverter converter = new TaskConverter(classLoader);
+				return converter.convert(child);
 			}
 		}
 		return null;
 	}
 	
+	public static Task loadTask(ClassLoader classLoader, List<String> additionalTaskDefs, String taskName) throws Exception {
+		Enumeration<URL> urlEnum = getURLEnum(classLoader);
+		while (urlEnum.hasMoreElements()) {
+			URL url = urlEnum.nextElement();
+			try (InputStream is = url.openStream()) {
+				Task result = loadTask(classLoader, taskName, is);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+		for (String tdf : additionalTaskDefs) {
+			try (InputStream is = Files.newInputStream(Paths.get(tdf))) {
+				Task result = loadTask(classLoader, taskName, is);
+				if (result != null) {
+					return result;
+				}
+			}
+		}
+		return null;
+	}
+
+	public static Task loadTask(List<String> additionalTaskDefs, String taskName) throws Exception {
+		return loadTask(Task.class.getClassLoader(), additionalTaskDefs, taskName);
+	}
+
+	public static Task loadTask(ClassLoader classLoader, String taskName) throws Exception {
+		return loadTask(classLoader, Collections.<String>emptyList(), taskName);
+	}
+
 	public static Task loadTask(String taskName) throws Exception {
 		return loadTask(Task.class.getClassLoader(), taskName);
 	}
